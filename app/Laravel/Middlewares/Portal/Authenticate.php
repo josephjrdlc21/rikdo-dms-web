@@ -33,7 +33,7 @@ class Authenticate{
 	 */
 	public function handle($request, Closure $next, $guard = null){
         if(!auth('web')->check()){
-            return redirect()->route('portal.login');
+            return redirect()->route('portal.auth.login');
         }
 
         return $next($request);

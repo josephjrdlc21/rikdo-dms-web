@@ -14,7 +14,6 @@ class Controller extends BaseController{
 	public function __construct(){
 		self::set_current_route();
 		self::set_loggedin_user();
-		self::set_settings();
 		self::get_client_ip();
 	}
 
