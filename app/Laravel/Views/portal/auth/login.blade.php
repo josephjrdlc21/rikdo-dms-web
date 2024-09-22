@@ -12,6 +12,8 @@
             </div>
             <div class="card-body">
                 <form method="POST" action="" class="needs-validation" novalidate="">
+                    {!!csrf_field()!!}
+                    @include('portal._components.notification')
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
@@ -41,10 +43,10 @@
         </div>
         <div class="mt-5 text-muted text-center">
             Don't have an account? 
-            <a href="auth-register.html">Create One</a>
+            <a href="">Create One</a>
         </div>
         <div class="simple-footer">
-            Copyright &copy; Stisla 2018
+            Copyright &copy; RIKDO <script>document.write(new Date().getFullYear());</script>
         </div>
     </div>
 </div>

@@ -25,7 +25,7 @@ class AdminAccountSeeder extends Seeder
             $user->password = bcrypt("admin");
             $user->save();
     
-            $role = Role::firstOrCreate(['name' => 'super admin', 'guard_name' => 'portal']);
+            $role = Role::firstOrCreate(['name' => 'super admin', 'guard_name' => 'web']);
             $user->assignRole($role);
         }
     }
