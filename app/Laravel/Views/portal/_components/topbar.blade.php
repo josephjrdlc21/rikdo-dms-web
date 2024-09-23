@@ -41,13 +41,10 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">Logged in 5 min ago</div>
                 <a href="#" class="dropdown-item has-icon">
-                    <i class="far fa-user"></i> Profile
+                    <i class="fas fa-user"></i> Profile
                 </a>
                 <a href="#" class="dropdown-item has-icon">
-                    <i class="fas fa-bolt"></i> Activities
-                </a>
-                <a href="#" class="dropdown-item has-icon">
-                    <i class="fas fa-cog"></i> Settings
+                    <i class="fas fa-lock"></i> Change Password
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="{{route('portal.auth.logout')}}" class="dropdown-item has-icon text-danger">
