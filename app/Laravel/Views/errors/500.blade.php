@@ -1,7 +1,7 @@
 @extends('errors._layouts.main')
 
 @section('content')
-<h1>505</h1>
+<h1>500</h1>
 <div class="page-description">
     Whoopps, server error.
 </div>
