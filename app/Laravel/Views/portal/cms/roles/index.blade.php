@@ -105,6 +105,12 @@
                 </tbody>
             </table>
         </div>
+        @if($record->total() > 0)
+        <div class="d-sm-flex align-items-center justify-content-between px-4 mt-2 mb-2">
+            <div>Showing <strong>{{$record->firstItem()}}</strong> to <strong>{{$record->lastItem()}}</strong> of <strong>{{$record->total()}}</strong> entries</div>
+            <div>{!!$record->appends(request()->query())->render()!!}</div>
+        </div>
+        @endif
     </div>
 </div>
 @stop
