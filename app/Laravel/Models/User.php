@@ -53,4 +53,6 @@ class User extends Authenticatable{
     protected $casts = [];
 
     protected $appends = [];
+
+    protected $dates = ['last_login_at'];
 }

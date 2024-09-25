@@ -26,11 +26,13 @@ class AuthController extends Controller{
 	}
 
     public function authenticate(PageRequest $request){
-        $email = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL);
+		$email = Str::lower($request->input('email'));
         $password = $request->input('password');
         $remember_me = $request->input('remember', 0);
 
-        if(auth($this->guard)->attempt(['email' => $email, 'password' => $password], $remember_me)){
+        $field = filter_var($email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if(auth($this->guard)->attempt([$field => $email, 'password' => $password], $remember_me)){
             $account = auth($this->guard)->user();
             
             session()->flash('notification-status', "success");

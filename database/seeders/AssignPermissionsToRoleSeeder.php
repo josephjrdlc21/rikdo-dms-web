@@ -18,7 +18,7 @@ class AssignPermissionsToRoleSeeder extends Seeder
         
         if(!$role){
             // If the role does not exist, create it
-            $role = Role::create(['name' => 'super admin', 'guard_name' => 'web']);
+            $role = Role::create(['name' => 'super admin', 'guard_name' => 'web', 'status' => 'active']);
         }
         
         // Fetch all permissions

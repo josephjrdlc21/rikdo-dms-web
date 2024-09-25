@@ -67,5 +67,11 @@ class Kernel extends HttpKernel
 
         'portal.auth' => \App\Laravel\Middlewares\Portal\Authenticate::class,
         'portal.guest' => \App\Laravel\Middlewares\Portal\RedirectIfAuthenticated::class,
+        'portal.permission' => \App\Laravel\Middlewares\Portal\RolePermission::class,
+        'portal.status' => \App\Laravel\Middlewares\Portal\AccountStatus::class,
+
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
     ];
 }
