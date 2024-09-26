@@ -5,7 +5,7 @@ namespace App\Laravel\Controllers\Portal;
 use App\Laravel\Models\{Role,Permission};
 
 use App\Laravel\Requests\PageRequest;
-//use App\Laravel\Requests\Portal\RoleRequest;
+use App\Laravel\Requests\Portal\RoleRequest;
 
 use Carbon,DB,Str;
 
@@ -62,5 +62,91 @@ class RolesController extends Controller{
         ->paginate($this->per_page);
 
         return view('portal.cms.roles.index', $this->data);
+    }
+
+    public function create(PageRequest $request){
+        $this->data['page_title'] .= " - Create Role";
+        $this->data['permissions'] = Permission::all()->groupBy('module_name');
+
+        return view('portal.cms.roles.create', $this->data);
+    }
+
+    public function store(RoleRequest $request){
+        DB::beginTransaction();
+        try {
+            $role = new Role;
+            $role->guard_name = 'web';
+            $role->name = Str::lower($request->input('role'));
+            $role->status = Str::lower($request->input('status'));
+            $role->save();
+
+            $role->syncPermissions($request->input('permissions'));
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "New role has been created.");
+            return redirect()->route('portal.cms.roles.index');
+        }catch(\Exception $e){
+            DB::rollback();
+            
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        session()->flash('notification-status', "warning");
+        session()->flash('notification-msg', "Unable to create new role.");
+        return redirect()->back();
+    }
+
+    public function edit(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Update Role";
+        $this->data['role'] = Role::find($id);
+
+        if(!$this->data['role']){
+			session()->flash('notification-status',"failed");
+			session()->flash('notification-msg',"Record not found.");
+			return redirect()->route('portal.cms.roles.index');
+		}
+
+        $this->data['permissions'] = Permission::all()->groupBy('module_name');
+
+        return view('portal.cms.roles.edit', $this->data);
+    }
+
+    public function update(RoleRequest $request,$id = null){
+        $role = Role::find($id);
+
+        if(!$role){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.cms.roles.index');
+        }
+
+        DB::beginTransaction();
+        try {
+            $role->name = Str::lower($request->input('role'));
+            $role->status = Str::lower($request->input('status'));
+            $role->save();
+            
+            $role->syncPermissions($request->input('permissions'));
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "Role has been updated.");
+            return redirect()->route('portal.cms.roles.index');
+        }catch(\Exception $e){
+            DB::rollback();
+            
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        session()->flash('notification-status', "warning");
+        session()->flash('notification-msg', "Unable to update the role.");
+        return redirect()->back();
     }
 }

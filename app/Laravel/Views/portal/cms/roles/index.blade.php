@@ -58,7 +58,7 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Role</a>
+            <a href="{{route('portal.cms.roles.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Role</a>
         </div>
     </div>
     <div class="card-body p-0">
@@ -80,7 +80,7 @@
                     <tr>
                         <td>{{$loop->index + $record->firstItem()}}</td>
                         <td>
-                            <a href="#">{{Helper::capitalize_text($role->name)}}</a>
+                            <a href="{{route('portal.cms.roles.edit', [$role->id])}}">{{Helper::capitalize_text($role->name)}}</a>
                         </td>
                         <td class="text-center">{{$role->permissions->count()}}</td>
                         <td><span class="badge badge-{{Helper::badge_status($role->status)}}">{{$role->status}}</span></td>
@@ -92,7 +92,7 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="#">Edit Details</a>
+                                    <a class="dropdown-item" href="{{route('portal.cms.roles.edit', [$role->id])}}">Edit Details</a>
                                 </div>
                             </div> 
                         </td>

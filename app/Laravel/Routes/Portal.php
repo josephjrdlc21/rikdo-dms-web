@@ -15,6 +15,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){
             Route::group(['prefix' => "roles", 'as' => "roles."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "RolesController@index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "RolesController@create"]);
+                Route::post('/create', ['uses' => "RolesController@store"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "RolesController@edit"]);
+                Route::post('/edit/{id?}', ['uses' => "RolesController@update"]);
             });
 
             Route::group(['prefix' => "permissions", 'as' => "permissions."], function(){
