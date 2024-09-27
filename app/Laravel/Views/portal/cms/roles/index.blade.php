@@ -23,7 +23,7 @@
                 <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_keyword">Keyword</label>
-                        <input type="text" id="input_keyword" class="form-control" placeholder="eg. User Role" name="keyword"  value="{{$keyword}}">
+                        <input type="text" id="input_keyword" class="form-control" placeholder="eg. User Role" name="keyword" value="{{$keyword}}">
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3">

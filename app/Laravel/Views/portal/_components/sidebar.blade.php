@@ -61,6 +61,7 @@
                 <ul class="dropdown-menu">
                     <li class="{{request()->segment(2) == "roles" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.roles.index')}}">Roles</a></li>
                     <li class="{{request()->segment(2) == "permissions" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.permissions.index')}}">Permissions</a></li>
+                    <li class="{{request()->segment(2) == "departments" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.departments.index')}}">Departments</a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="#"><i class="fas fa-compass"></i> <span>Audit Trail</span></a></li>

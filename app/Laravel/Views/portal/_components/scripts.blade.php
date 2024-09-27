@@ -25,17 +25,13 @@
 <script src="{{asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
 <script src="{{asset('assets/libs/jquery-selectric/jquery.selectric.min.js')}}"></script>
 
+<script src="{{asset('assets/libs/sweetalert/sweetalert.min.js')}}"></script>
+
 <!-- Page Specific JS File -->
 <script src="{{asset('assets/js/page/index-0.js')}}"></script>
 <script src="{{asset('assets/js/page/forms-advanced-forms.js')}}"></script>
+<script src="{{asset('assets/js/page/modules-sweetalert.js')}}"></script>
 
 <!-- Template JS File -->
 <script src="{{asset('assets/js/scripts.js')}}"></script>
 <script src="{{asset('assets/js/custom.js')}}"></script>
-
-<!-- Custom Script -->
-<script type="text/javascript">
-    $(function(){
-        $('ul.pagination').addClass('pagination-sm');
-    });
-</script>

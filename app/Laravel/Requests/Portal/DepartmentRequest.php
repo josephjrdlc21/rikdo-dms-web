@@ -4,7 +4,7 @@ namespace App\Laravel\Requests\Portal;
 
 use App\Laravel\Requests\RequestManager;
 
-class RoleRequest extends RequestManager
+class DepartmentRequest extends RequestManager
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,8 @@ class RoleRequest extends RequestManager
         $id = $this->id ?? 0;
 
         $rules = [
-            'role' => "required|unique:roles,name,{$id},id",
-            'status' => "required",
-            'permissions' => "required|array"
+            'dept_code' => "required|unique:departments,dept_code,{$id},id",
+            'dept_name' => "required|unique:departments,dept_name,{$id},id"
         ];
 
         return $rules;
@@ -38,9 +37,8 @@ class RoleRequest extends RequestManager
     {
         return [
             'required' => "Field is required.",
-            'permissions.array' => "Please assign at least 1 permission.",
-            'permissions.required' => "Please assign at least 1 permission.",
-            'role' => "The Role has already been taken."        
+            'dept_code.unique' => "The department code has already taken.",
+            'dept_name.unique' => "The department name has already taken."
         ];
     }
 }

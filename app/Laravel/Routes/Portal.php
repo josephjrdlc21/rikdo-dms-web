@@ -24,6 +24,15 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::group(['prefix' => "permissions", 'as' => "permissions."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "PermissionsController@index"]);
             });
+
+            Route::group(['prefix' => "departments", 'as' => "departments."], function(){
+                Route::get('/', ['as' => "index", 'uses' => "DepartmentsController@index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "DepartmentsController@create"]);
+                Route::post('/create', ['uses' => "DepartmentsController@store"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "DepartmentsController@edit"]);
+                Route::post('/edit/{id?}', ['uses' => "DepartmentsController@update"]);
+                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "DepartmentsController@destroy"]);
+            });
         });
     });
 });
