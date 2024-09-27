@@ -20,3 +20,12 @@
 <!-- Template CSS -->
 <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 <link rel="stylesheet" href="{{asset('assets/css/components.css')}}">
+
+<style type="text/css">
+    ul.pagination,
+    ul.pagination li,
+    ul.pagination li a {
+        transition: none !important;
+        animation: none !important;
+    }
+</style>
