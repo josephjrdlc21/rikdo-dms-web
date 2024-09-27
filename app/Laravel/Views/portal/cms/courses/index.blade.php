@@ -2,10 +2,10 @@
 
 @section('breadcrumb')
 <div class="section-header">
-    <h1>CMS - Departments</h1>
+    <h1>CMS - Courses</h1>
     <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="#">CMS</a></div>
-        <div class="breadcrumb-item"><a href="#">Departments</a></div>
+        <div class="breadcrumb-item"><a href="#">Courses</a></div>
         <div class="breadcrumb-item">Data</div>
     </div>
 </div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-sm btn-primary">Apply Filter</button>
-            <a href="{{route('portal.cms.departments.index')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
+            <a href="{{route('portal.cms.courses.index')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
         </form>
     </div>
 </div>
@@ -52,7 +52,7 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="{{route('portal.cms.departments.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Department</a>
+            <a href="{{route('portal.cms.courses.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Course</a>
         </div>
     </div>
     <div class="card-body p-0">
@@ -69,21 +69,21 @@
                     </tr>
                 </thead>
                 <tbody>                         
-                    @forelse($record as $index => $department)
+                    @forelse($record as $index => $course)
                     <tr>
                         <td>{{$loop->index + $record->firstItem()}}</td>
-                        <td>{{strtoupper($department->dept_code)}}</td>
-                        <td>{{$department->dept_name}}</td>
-                        <td>{{$department->created_at->format("m/d/Y h:i A")}}</td>
-                        <td>{{$department->updated_at->format("m/d/Y h:i A")}}</td>
+                        <td>{{strtoupper($course->course_code)}}</td>
+                        <td>{{$course->course_name}}</td>
+                        <td>{{$course->created_at->format("m/d/Y h:i A")}}</td>
+                        <td>{{$course->updated_at->format("m/d/Y h:i A")}}</td>
                         <td>
                             <div class="btn-group mb-2">
                                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="{{route('portal.cms.departments.edit', [$department->id])}}">Edit Details</a>
-                                    <a class="dropdown-item delete-record" data-url="{{route('portal.cms.departments.delete', [$department->id])}}" type="button" style="cursor: pointer;">Delete Department</a>
+                                    <a class="dropdown-item" href="{{route('portal.cms.courses.edit', [$course->id])}}">Edit Details</a>
+                                    <a class="dropdown-item delete-record" data-url="{{route('portal.cms.courses.delete', [$course->id])}}" type="button" style="cursor: pointer;">Delete Course</a>
                                 </div>
                             </div> 
                         </td>

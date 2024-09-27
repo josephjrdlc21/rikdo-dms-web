@@ -33,6 +33,24 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
                 Route::post('/edit/{id?}', ['uses' => "DepartmentsController@update"]);
                 Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "DepartmentsController@destroy"]);
             });
+
+            Route::group(['prefix' => "courses", 'as' => "courses."], function(){
+                Route::get('/', ['as' => "index", 'uses' => "CoursesController@index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "CoursesController@create"]);
+                Route::post('/create', ['uses' => "CoursesController@store"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "CoursesController@edit"]);
+                Route::post('/edit/{id?}', ['uses' => "CoursesController@update"]);
+                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "CoursesController@destroy"]);
+            });
+
+            Route::group(['prefix' => "yearlevels", 'as' => "yearlevels."], function(){
+                Route::get('/', ['as' => "index", 'uses' => "YearlevelsController@index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "YearlevelsController@create"]);
+                Route::post('/create', ['uses' => "YearlevelsController@store"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "YearlevelsController@edit"]);
+                Route::post('/edit/{id?}', ['uses' => "YearlevelsController@update"]);
+                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "YearlevelsController@destroy"]);
+            });
         });
     });
 });

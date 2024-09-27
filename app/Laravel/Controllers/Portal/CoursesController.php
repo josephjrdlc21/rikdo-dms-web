@@ -2,29 +2,29 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\Department;
+use App\Laravel\Models\Course;
 
 use App\Laravel\Requests\PageRequest;
-use App\Laravel\Requests\Portal\DepartmentRequest;
+use App\Laravel\Requests\Portal\CourseRequest;
 
 use Carbon,DB;
 
-class DepartmentsController extends Controller{
+class CoursesController extends Controller{
     protected $data;
 
     public function __construct(){
         parent::__construct();
         array_merge($this->data?:[], parent::get_data());
-        $this->data['page_title'] .= " - Departments";
+        $this->data['page_title'] .= " - Courses";
         $this->per_page = env("DEFAULT_PER_PAGE", 10);
     }
 
     public function index(PageRequest $request){
-        $this->data['page_title'] .= " - List of Department";
+        $this->data['page_title'] .= " - List of Course";
 
         $this->data['keyword'] = strtolower($request->get('keyword'));
 
-        $first_record = Department::orderBy('created_at', 'ASC')->first();
+        $first_record = Course::orderBy('created_at', 'ASC')->first();
         $start_date = $request->get('start_date', now()->startOfMonth());
         if ($first_record) {
             $start_date = $request->get('start_date', $first_record->created_at->format("Y-m-d"));
@@ -33,11 +33,11 @@ class DepartmentsController extends Controller{
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
 
-        $this->data['record'] = Department::where(function ($query) {
+        $this->data['record'] = Course::where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 return $query
-                    ->whereRaw("LOWER(dept_code) LIKE '%{$this->data['keyword']}%'")
-                    ->orWhereRaw("LOWER(dept_name) LIKE '%{$this->data['keyword']}%'");
+                    ->whereRaw("LOWER(course_code) LIKE '%{$this->data['keyword']}%'")
+                    ->orWhereRaw("LOWER(course_name) LIKE '%{$this->data['keyword']}%'");
             }
         })
         ->where(function ($query) {
@@ -54,28 +54,28 @@ class DepartmentsController extends Controller{
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
 
-        return view('portal.cms.departments.index', $this->data);
+        return view('portal.cms.courses.index', $this->data);
     }
 
     public function create(PageRequest $request){
-        $this->data['page_title'] .= " - Create Department";
+        $this->data['page_title'] .= " - Create Course";
 
-        return view('portal.cms.departments.create', $this->data);
+        return view('portal.cms.courses.create', $this->data);
     }
 
-    public function store(DepartmentRequest $request){
+    public function store(CourseRequest $request){
         DB::beginTransaction();
         try {
-            $department = new Department;
-            $department->dept_code = $request->input('dept_code');
-            $department->dept_name = $request->input('dept_name');
-            $department->save();
+            $course = new Course;
+            $course->course_code = $request->input('course_code');
+            $course->course_name = $request->input('course_name');
+            $course->save();
 
             DB::commit();
 
             session()->flash('notification-status', "success");
-            session()->flash('notification-msg', "New department has been created.");
-            return redirect()->route('portal.cms.departments.index');
+            session()->flash('notification-msg', "New course has been created.");
+            return redirect()->route('portal.cms.courses.index');
         }catch(\Exception $e){
             DB::rollback();
             
@@ -85,43 +85,43 @@ class DepartmentsController extends Controller{
         }
 
         session()->flash('notification-status', "warning");
-        session()->flash('notification-msg', "Unable to create new department.");
+        session()->flash('notification-msg', "Unable to create new course.");
         return redirect()->back();
     }
-    
-    public function edit(PageRequest $request,$id = null){
-        $this->data['page_title'] .= " - Update Department";
-        $this->data['department'] = Department::find($id);
 
-        if(!$this->data['department']){
+    public function edit(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Update Course";
+        $this->data['course'] = Course::find($id);
+
+        if(!$this->data['course']){
 			session()->flash('notification-status', "failed");
 			session()->flash('notification-msg', "Record not found.");
-			return redirect()->route('portal.cms.departments.index');
+			return redirect()->route('portal.cms.courses.index');
 		}
 
-        return view('portal.cms.departments.edit', $this->data);
+        return view('portal.cms.courses.edit', $this->data);
     }
 
-    public function update(DepartmentRequest $request,$id = null){
-        $department = Department::find($id);
+    public function update(CourseRequest $request,$id = null){
+        $course = Course::find($id);
 
-        if(!$department){
+        if(!$course){
             session()->flash('notification-status', "failed");
             session()->flash('notification-msg', "Record not found.");
-            return redirect()->route('portal.cms.departments.index');
+            return redirect()->route('portal.cms.courses.index');
         }
 
         DB::beginTransaction();
         try{
-            $department->dept_code = $request->input('dept_code');
-            $department->dept_name = $request->input('dept_name');
-            $department->save();
+            $course->course_code = $request->input('course_code');
+            $course->course_name = $request->input('course_name');
+            $course->save();
 
             DB::commit();
 
             session()->flash('notification-status', "success");
-            session()->flash('notification-msg', "Department has been updated.");
-            return redirect()->route('portal.cms.departments.index');
+            session()->flash('notification-msg', "Course has been updated.");
+            return redirect()->route('portal.cms.courses.index');
         }catch(\Exception $e){
             DB::rollback();
 
@@ -131,22 +131,22 @@ class DepartmentsController extends Controller{
         }
 
         session()->flash('notification-status', "warning");
-        session()->flash('notification-msg', "Unable to update department.");
+        session()->flash('notification-msg', "Unable to update course.");
         return redirect()->back();
     }
 
     public function destroy(PageRequest $request,$id = null){
-        $department = Department::find($id);
+        $course = Course::find($id);
 
-        if(!$department){
+        if(!$course){
             session()->flash('notification-status', "failed");
             session()->flash('notification-msg', "Record not found.");
-            return redirect()->route('portal.cms.departments.index');
+            return redirect()->route('portal.cms.courses.index');
         }
 
-        if($department->delete()){
+        if($course->delete()){
             session()->flash('notification-status', 'success');
-            session()->flash('notification-msg', "Department has been deleted.");
+            session()->flash('notification-msg', "Course has been deleted.");
             return redirect()->back();
         }
     }
