@@ -24,7 +24,7 @@ class RolesController extends Controller{
         $this->data['page_title'] .= " - List of Roles";
 
         $this->data['keyword'] = strtolower($request->get('keyword'));
-        $this->data['selected_status'] = $request->input('status');
+        $this->data['selected_status'] = strtolower($request->input('status'));
 
         $first_record = Role::orderBy('created_at', 'ASC')->first();
         $start_date = $request->get('start_date', now()->startOfMonth());

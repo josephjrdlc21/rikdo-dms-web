@@ -12,6 +12,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
     Route::group(['middleware' => ["portal.auth", "portal.status"]], function(){
         Route::get('/', ['as' => 'index', 'uses' => "MainController@index"]);
 
+        Route::group(['prefix' => "users", 'as' => "users."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "UsersController@index"]);
+        });
+
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){
             Route::group(['prefix' => "roles", 'as' => "roles."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "RolesController@index"]);

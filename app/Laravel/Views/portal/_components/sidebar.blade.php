@@ -23,7 +23,7 @@
                     <li><a class="nav-link" href="#">Rejected</a></li>
                 </ul>
             </li>
-            <li><a class="nav-link" href="#"><i class="fas fa-users-cog"></i> <span>Account Management</span></a></li>
+            <li class="{{request()->segment(1) == "users" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users.index')}}"><i class="fas fa-users-cog"></i> <span>Account Management</span></a></li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-file"></i> <span>My Research</span></a>
                 <ul class="dropdown-menu">

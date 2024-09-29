@@ -55,4 +55,8 @@ class User extends Authenticatable{
     protected $appends = [];
 
     protected $dates = ['last_login_at'];
+
+    public function user_info(){
+		return $this->belongsTo('App\Laravel\Models\UserInfo', 'user_info_id', 'id');
+	}
 }
