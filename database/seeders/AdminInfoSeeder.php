@@ -24,7 +24,7 @@ class AdminInfoSeeder extends Seeder
             $user_info->role = "super admin";
             $user_info->firstname = "Super";
             $user_info->lastname = "Admin";
-            $user_info->contact_number = "0999999999";
+            $user_info->contact_number = "+639123456789";
             $user_info->email = "admin@gmail.com";
             $user_info->address = "1 1st Street New Asinan , Olongapo, Philippines";
             $user_info->birthdate = Carbon::now()->toDateString();
