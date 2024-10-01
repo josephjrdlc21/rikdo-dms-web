@@ -20,7 +20,7 @@ class AdminInfoSeeder extends Seeder
 
         if($cred){
             $user_info = new UserInfo;
-            $user_info->id_number = "1010101010";
+            $user_info->id_number = "10101010";
             $user_info->role = "super admin";
             $user_info->firstname = "Super";
             $user_info->lastname = "Admin";

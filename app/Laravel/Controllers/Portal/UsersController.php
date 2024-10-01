@@ -15,8 +15,8 @@ class UsersController extends Controller{
     public function __construct(){
         parent::__construct();
         array_merge($this->data?:[], parent::get_data());
-        $this->data['statuses'] = ['' => "-- Select Status -- ", 'active' => "Active", 'inactive' => "Inactive"];
-        $this->data['roles'] = ['' => "-- Select Role --"] + Role::where('status', 'active')->pluck('name', 'name')->toArray();
+        $this->data['statuses'] = ['' => "Select Status", 'active' => "Active", 'inactive' => "Inactive"];
+        $this->data['roles'] = ['' => "Select Role"] + Role::where('status', 'active')->pluck('name', 'name')->toArray();
         $this->data['departments'] = ['' => "Select Department"] + Department::pluck('dept_code', 'id')->toArray();
         $this->data['courses'] = ['' => "Select Courses"] + Course::pluck('course_code', 'id')->toArray();
         $this->data['yearlevels'] = ['' => "Select Yearlevel"] + Yearlevel::pluck('yearlevel_name', 'id')->toArray();
@@ -213,6 +213,125 @@ class UsersController extends Controller{
         }
     }
 
+    public function edit(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Edit User";
+        $this->data['user'] = User::with(['user_info', 'user_info.department', 'user_info.course', 'user_info.yearlevel'])->find($id);
+
+        if(!$this->data['user']){
+			session()->flash('notification-status', "failed");
+			session()->flash('notification-msg', "Record not found.");
+			return redirect()->route('portal.users.index');
+		}
+
+        if(!$request->session()->has('current_progress')){
+            $request->session()->put('current_progress', '1');
+        }
+
+        if(!$request->session()->has('max_progress')){
+            $request->session()->put('max_progress', '2');
+        }
+
+        $current_progress = $request->session()->get('current_progress');
+
+        switch ($current_progress){
+            case '1':
+                return view('portal.users.edit-personal-info', $this->data);
+                break;
+            case '2':
+                return view('portal.users.edit-credential', $this->data);
+                break;
+            case '3':
+                return view('portal.users.account-updated', $this->data);
+                break;
+            default:
+                return redirect()->route('portal.users.index');
+                break;
+        }
+    }
+
+    public function update(UserRequest $request,$id = null){
+        $user = User::find($id);
+
+        if(!$user){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.users.index');
+        }
+
+        $user_info = UserInfo::with(['department', 'course', 'yearlevel'])->where('id', $user->user_info_id)->first();
+
+        $current_progress = $request->session()->get('current_progress', '1');
+        $max_progress = $request->session()->get('max_progress', '2');
+        
+        switch ($current_progress){
+            case '1':
+                session()->put('personal_info.firstname', strtoupper($request->input('firstname')) ?? $user_info->firstname);
+                session()->put('personal_info.middlename', strtoupper($request->input('middlename')) ?? $user_info->middlename);
+                session()->put('personal_info.lastname', strtoupper($request->input('lastname')) ?? $user_info->lastname);
+                session()->put('personal_info.suffix', strtoupper($request->input('suffix')) ?? $user_info->suffix);
+                session()->put('personal_info.birthdate', $request->input('birthdate') ?? $user_info->birthdate);
+                session()->put('personal_info.contact', Helper::format_phone($request->input('contact')) ?? $user_info->contact_number);
+                session()->put('personal_info.email', $request->input('email') ?? $user_info->email);
+                session()->put('personal_info.address', $request->input('address') ?? $user_info->address);
+
+                $request->session()->put('current_progress', '2');
+                $request->session()->put('max_progress', max($max_progress, '2'));
+
+                return redirect()->route('portal.users.edit', [$id]);
+                break;
+            case '2':
+                session()->put('credential.id_number', $request->input('id_number') ?? $user_info->id_number);
+                session()->put('credential.role', $request->input('role') ?? $user_info->role);
+                session()->put('credential.department', $request->input('department') ?? $user_info->department->id);
+                session()->put('credential.course', $request->input('course') ?? $user_info->course->id);
+                session()->put('credential.yearlevel', $request->input('yearlevel') ?? $user_info->yearlevel->id);
+
+                DB::beginTransaction();
+                try{
+                    $user_info->firstname = session()->get('personal_info.firstname') ?? $user_info->firstname;
+                    $user_info->middlename = session()->get('personal_info.middlename') ?? $user_info->middlename;
+                    $user_info->lastname = session()->get('personal_info.lastname') ?? $user_info->lastname;
+                    $user_info->suffix = session()->get('personal_info.suffix' ?? $user_info->suffix);
+                    $user_info->birthdate = session()->get('personal_info.birthdate') ?? $user_info->birthdate;
+                    $user_info->contact_number = session()->get('personal_info.contact') ?? $user_info->contact_number;
+                    $user_info->email = session()->get('personal_info.email') ?? $user_info->email;
+                    $user_info->address = session()->get('personal_info.address') ?? $user_info->address;
+                    $user_info->id_number = session()->get('credential.id_number') ?? $user_info->id_number;
+                    $user_info->role = session()->get('credential.role') ?? $user_info->role;
+                    $user_info->department_id = session()->get('credential.department') ?? $user_info->department->id;
+                    $user_info->course_id = session()->get('credential.course') ?? $user_info->course->id;
+                    $user_info->yearlevel_id = session()->get('credential.yearlevel') ?? $user_info->yearlevel->id;
+                    
+                    if($user_info->save()){
+                        $user->name = "{$user_info->firstname} {$user_info->middlename} {$user_info->lastname} {$user_info->suffix}";
+                        $user->username = $user_info->id_number;
+                        $user->email = $user_info->email;
+                        $user->save();
+
+                        $role = Role::where('name', $user_info->role)->where('guard_name','web')->first();
+                        $user->syncRoles($role);
+                    }
+
+                    DB::commit();
+
+                    $request->session()->put('current_progress', '3');
+                    $request->session()->put('max_progress', max($max_progress, '3'));
+                }catch(\Exception $e){
+                    DB::rollback();
+            
+                    session()->flash('notification-status', "failed");
+                    session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+                    return redirect()->back();
+                }
+
+                return redirect()->route('portal.users.edit', [$id]);
+                break;      
+            default:
+                return redirect()->route('portal.users.index');
+                break;
+        }
+    }
+
     public function cancel(PageRequest $request){
         session()->forget('personal_info');
         session()->forget('credential');
@@ -220,7 +339,7 @@ class UsersController extends Controller{
         session()->forget('max_progress');
 
         session()->flash('notification-status', "info");
-        session()->flash('notification-msg', "Creating user account has been cancelled.");
+        session()->flash('notification-msg', "Create or Update user account has been cancelled.");
         return redirect()->route('portal.users.index');
     }
 
@@ -231,15 +350,19 @@ class UsersController extends Controller{
         session()->forget('max_progress');
 
         session()->flash('notification-status', "success");
-        session()->flash('notification-msg', "New user has been created.");
+        session()->flash('notification-msg', "User account has been created or been updated.");
         return redirect()->route('portal.users.index');
     }
 
-    public function step_back(PageRequest $request,$step = null){
+    public function step_back(PageRequest $request,$step = null,$id = null){
         $max_progress = $request->session()->get('max_progress', '1');
 
         if(in_array($step, ['1', '2', '3']) && $step <= $max_progress){
             session()->put('current_progress', $step);
+        }
+
+        if(!is_null($id)){
+            return redirect()->route('portal.users.edit', [$id]);
         }
 
         return redirect()->route('portal.users.create');

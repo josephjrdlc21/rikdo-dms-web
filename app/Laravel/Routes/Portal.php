@@ -16,9 +16,11 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/', ['as' => "index", 'uses' => "UsersController@index"]);
             Route::get('/create', ['as' => "create", 'uses' => "UsersController@create"]);
             Route::post('/create', ['uses' => "UsersController@store"]);
+            Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "UsersController@edit"]);
+            Route::post('/edit/{id?}', ['uses' => "UsersController@update"]);
             Route::get('/cancel', ['as' => "cancel", 'uses' => "UsersController@cancel"]);
             Route::get('/success', ['as' => "success", 'uses' => "UsersController@success"]);
-            Route::get('/step-back/{step?}', ['as' => "step_back", 'uses' => "UsersController@step_back"]);
+            Route::get('/step-back/{step?}/{id?}', ['as' => "step_back", 'uses' => "UsersController@step_back"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

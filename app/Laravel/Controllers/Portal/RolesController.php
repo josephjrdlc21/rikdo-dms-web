@@ -16,7 +16,7 @@ class RolesController extends Controller{
         parent::__construct();
         array_merge($this->data?:[], parent::get_data());
         $this->data['page_title'] .= " - Roles";
-        $this->data['statuses'] = ['' => "-- Select Status -- ",'active' => "Active",'inactive' => "Inactive"];
+        $this->data['statuses'] = ['' => "Select Status",'active' => "Active",'inactive' => "Inactive"];
         $this->per_page = env("DEFAULT_PER_PAGE", 10);
     }
 
