@@ -13,7 +13,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-sm-12 col-md-8 col-lg-6">
-        @include('portal._components.users.edit-account-tab')
+        @include('portal._components.edit-account-tab')
         @include('portal._components.notification')
         <div class="card">
             <div class="card-header">
@@ -26,7 +26,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_firstname">Firstname</label>
-                                <input type="text" id="input_firstname" class="form-control" placeholder="Firstname" name="firstname"  value="{{$user->user_info->firstname ?? session()->get('personal_info.firstname') ?? ''}}">
+                                <input type="text" id="input_firstname" class="form-control" placeholder="Firstname" name="firstname"  value="{{session()->get('personal_info.firstname') ?? $user->user_info->firstname}}">
                                 @if($errors->first('firstname'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('firstname')}}</small>
                                 @endif
@@ -35,7 +35,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_middlename">Middlename</label>
-                                <input type="text" id="input_middlename" class="form-control" placeholder="Middlename" name="middlename"  value="{{$user->user_info->middlename ?? session()->get('personal_info.middlename') ?? ''}}">
+                                <input type="text" id="input_middlename" class="form-control" placeholder="Middlename" name="middlename"  value="{{session()->get('personal_info.middlename') ?? $user->user_info->middlename}}">
                                 @if($errors->first('middlename'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('middlename')}}</small>
                                 @endif
@@ -46,7 +46,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_lastname">Lastname</label>
-                                <input type="text" id="input_lastname" class="form-control" placeholder="Lastname" name="lastname"  value="{{$user->user_info->lastname ?? session()->get('personal_info.lastname') ?? ''}}">
+                                <input type="text" id="input_lastname" class="form-control" placeholder="Lastname" name="lastname"  value="{{session()->get('personal_info.lastname') ?? $user->user_info->lastname}}">
                                 @if($errors->first('lastname'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('lastname')}}</small>
                                 @endif
@@ -55,7 +55,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_suffix">Suffix</label>
-                                <input type="text" id="input_suffix" class="form-control" placeholder="Suffix" name="suffix"  value="{{$user->user_info->suffix ?? session()->get('personal_info.suffix') ?? ''}}">
+                                <input type="text" id="input_suffix" class="form-control" placeholder="Suffix" name="suffix"  value="{{session()->get('personal_info.suffix') ?? $user->user_info->suffix}}">
                                 @if($errors->first('suffix'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('suffix')}}</small>
                                 @endif
@@ -66,7 +66,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_birthdate">Birthdate</label>
-                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="birthdate" value="{{$user->user_info->birthdate ?? session()->get('personal_info.birthdate') ?? ''}}">                            
+                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="birthdate" value="{{session()->get('personal_info.birthdate') ?? $user->user_info->birthdate}}">                            
                                 @if($errors->first('birthdate'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('birthdate')}}</small>
                                 @endif
@@ -75,7 +75,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_contact">Contact No.</label>
-                                <input type="text" id="input_contact" class="form-control" placeholder="+63" name="contact"  value="{{$user->user_info->contact_number ?? session()->get('personal_info.contact') ?? ''}}">
+                                <input type="text" id="input_contact" class="form-control" placeholder="+63" name="contact"  value="{{session()->get('personal_info.contact') ?? $user->user_info->contact_number}}">
                                 @if($errors->first('contact'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('contact')}}</small>
                                 @endif
@@ -84,14 +84,14 @@
                     </div>
                     <div class="form-group">
                         <label for="input_email">Email</label>
-                        <input type="email" id="input_email" class="form-control" placeholder="Email" name="email"  value="{{$user->user_info->email ?? session()->get('personal_info.email') ?? ''}}">
+                        <input type="email" id="input_email" class="form-control" placeholder="Email" name="email"  value="{{session()->get('personal_info.email') ?? $user->user_info->email}}">
                         @if($errors->first('email'))
                         <small class="d-block mt-1 text-danger">{{$errors->first('email')}}</small>
                         @endif
                     </div>
                     <div class="form-group">
                         <label for="input_address">Address</label>
-                        <input type="text" id="input_address" class="form-control" placeholder="Address" name="address"  value="{{$user->user_info->address ?? session()->get('personal_info.address') ?? ''}}">
+                        <input type="text" id="input_address" class="form-control" placeholder="Address" name="address"  value="{{session()->get('personal_info.address') ?? $user->user_info->address}}">
                         @if($errors->first('address'))
                         <small class="d-block mt-1 text-danger">{{$errors->first('address')}}</small>
                         @endif

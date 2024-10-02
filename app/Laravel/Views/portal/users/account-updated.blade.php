@@ -13,7 +13,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-sm-12 col-md-8 col-lg-6">
-        @include('portal._components.users.edit-account-tab')
+        @include('portal._components.edit-account-tab')
         @include('portal._components.notification')
         <div class="hero align-items-center bg-success text-white">
             <div class="hero-inner text-center">

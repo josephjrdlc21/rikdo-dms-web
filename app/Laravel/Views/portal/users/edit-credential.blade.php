@@ -13,7 +13,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-sm-12 col-md-8 col-lg-6">
-        @include('portal._components.users.edit-account-tab')
+        @include('portal._components.edit-account-tab')
         @include('portal._components.notification')
         <div class="card">
             <div class="card-header">
@@ -26,7 +26,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_id_number">ID Number</label>
-                                <input type="text" id="input_id_number" class="form-control" placeholder="ID Number" name="id_number"  value="{{$user->user_info->id_number ?? session()->get('credential.id_number') ?? ''}}">
+                                <input type="text" id="input_id_number" class="form-control" placeholder="ID Number" name="id_number"  value="{{session()->get('credential.id_number') ?? $user->user_info->id_number}}">
                                 @if($errors->first('id_number'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('id_number')}}</small>
                                 @endif
@@ -35,7 +35,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_role">Role</label>
-                                {!! html()->select('role', $roles, $user->user_info->role ?? session()->get('credential.role') ?? '', ['id' => "input_role"])->class('form-control selectric') !!}
+                                {!! html()->select('role', $roles, session()->get('credential.role') ?? $user->user_info->role, ['id' => "input_role"])->class('form-control selectric') !!}
                                 @if($errors->first('role'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('role')}}</small>
                                 @endif
@@ -56,7 +56,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_course">Course</label>
-                                {!! html()->select('course', $courses, $user->user_info->course->id ?? session()->get('credential.course') ?? '', ['id' => "input_course"])->class('form-control selectric') !!}
+                                {!! html()->select('course', $courses, session()->get('credential.course') ?? $user->user_info->course->id, ['id' => "input_course"])->class('form-control selectric') !!}
                                 @if($errors->first('course'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('course')}}</small>
                                 @endif
@@ -65,7 +65,7 @@
                     </div>
                     <div class="form-group">
                         <label for="input_yearlevel">Yearlevel</label>
-                        {!! html()->select('yearlevel', $yearlevels, $user->user_info->yearlevel->id ?? session()->get('credential.yearlevel') ?? '', ['id' => "input_yearlevel"])->class('form-control selectric') !!}
+                        {!! html()->select('yearlevel', $yearlevels, session()->get('credential.yearlevel') ?? $user->user_info->yearlevel->id, ['id' => "input_yearlevel"])->class('form-control selectric') !!}
                         @if($errors->first('yearlevel'))
                         <small class="d-block mt-1 text-danger">{{$errors->first('yearlevel')}}</small>
                         @endif
