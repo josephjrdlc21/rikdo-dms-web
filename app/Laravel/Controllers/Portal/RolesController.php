@@ -38,13 +38,12 @@ class RolesController extends Controller{
 
         $this->data['record'] = Role::where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                return $query
-                    ->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                $query->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
             }
         })
         ->where(function ($query) {
             if (strlen($this->data['selected_status']) > 0) {
-                return $query->where('status', $this->data['selected_status']);
+                $query->where('status', $this->data['selected_status']);
             }
         })
         ->where(function ($query) {

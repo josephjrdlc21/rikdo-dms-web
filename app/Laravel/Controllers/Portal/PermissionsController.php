@@ -34,8 +34,7 @@ class PermissionsController extends Controller{
 
         $this->data['record'] = Permission::where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                return $query
-                    ->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'")
+                $query->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(description) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(module_name) LIKE '%{$this->data['keyword']}%'");
             }

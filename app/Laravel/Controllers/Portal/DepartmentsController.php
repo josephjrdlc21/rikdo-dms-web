@@ -35,8 +35,7 @@ class DepartmentsController extends Controller{
 
         $this->data['record'] = Department::where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                return $query
-                    ->whereRaw("LOWER(dept_code) LIKE '%{$this->data['keyword']}%'")
+                $query->whereRaw("LOWER(dept_code) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(dept_name) LIKE '%{$this->data['keyword']}%'");
             }
         })

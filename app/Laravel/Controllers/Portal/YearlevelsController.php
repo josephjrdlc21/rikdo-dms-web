@@ -35,8 +35,7 @@ class YearlevelsController extends Controller{
 
         $this->data['record'] = Yearlevel::where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                return $query
-                    ->whereRaw("LOWER(yearlevel_name) LIKE '%{$this->data['keyword']}%'");
+                $query->whereRaw("LOWER(yearlevel_name) LIKE '%{$this->data['keyword']}%'");
             }
         })
         ->where(function ($query) {

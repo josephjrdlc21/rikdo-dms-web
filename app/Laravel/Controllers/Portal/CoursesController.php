@@ -35,8 +35,7 @@ class CoursesController extends Controller{
 
         $this->data['record'] = Course::where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                return $query
-                    ->whereRaw("LOWER(course_code) LIKE '%{$this->data['keyword']}%'")
+                $query->whereRaw("LOWER(course_code) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(course_name) LIKE '%{$this->data['keyword']}%'");
             }
         })

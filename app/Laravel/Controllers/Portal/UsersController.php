@@ -50,8 +50,7 @@ class UsersController extends Controller{
 
         $this->data['record'] = User::with(['user_info', 'user_info.department', 'user_info.course', 'user_info.yearlevel'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                return $query
-                    ->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'")
+                $query->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereHas('user_info', function ($q) {
                         $q->whereRaw("LOWER(id_number) LIKE '%{$this->data['keyword']}%'");
                     });
@@ -59,7 +58,7 @@ class UsersController extends Controller{
         })
         ->where(function ($query) {
             if (strlen($this->data['selected_status']) > 0) {
-                return $query->where('status', $this->data['selected_status']);
+                $query->where('status', $this->data['selected_status']);
             }
         })
         ->whereHas('user_info', function ($query) {
