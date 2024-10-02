@@ -331,6 +331,77 @@ class UsersController extends Controller{
         }
     }
 
+    public function edit_password(PageRequest $request,$id = null){
+        $user = User::find($id);
+
+        if(!$user){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.users.index');
+        }
+
+        DB::beginTransaction();
+        try{
+            $user->password = bcrypt(Str::random(8));
+            $user->save();
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "User password has been reset. New password was sent to email.");
+        }catch(\Exception $e){
+            DB::rollback();
+    
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        return redirect()->route('portal.users.index');
+    }
+
+    public function edit_status(PageRequest $request,$id = null){
+        $user = User::find($id);
+
+        if(!$user){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.users.index');
+        }
+
+        DB::beginTransaction();
+        try{
+            $user->status = $user->status === 'active' ? 'inactive' : 'active';
+            $user->save();
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "User status has been set to {$user->status}.");
+        }catch(\Exception $e){
+            DB::rollback();
+    
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        return redirect()->route('portal.users.index');
+    }
+
+    public function show(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Information";
+        $this->data['user'] = User::with(['user_info', 'user_info.department', 'user_info.course', 'user_info.yearlevel'])->find($id);
+
+        if(!$this->data['user']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.users.index');
+        }
+
+        return view('portal.users.show', $this->data);
+    }
+
     public function cancel(PageRequest $request){
         session()->forget('personal_info');
         session()->forget('credential');

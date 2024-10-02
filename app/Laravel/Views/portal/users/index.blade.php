@@ -98,7 +98,7 @@
                     @forelse($record as $index => $user)
                     <tr>
                         <td>
-                            {{$user->name}}<br><a href="#">{{$user->user_info->id_number}}</a>
+                            {{$user->name}}<br><a href="{{route('portal.users.show', [$user->id])}}">{{$user->user_info->id_number}}</a>
                         </td>
                         <td>{{Helper::capitalize_text($user->user_info->role)}}</td>
                         <td><span class="badge badge-{{Helper::badge_status($user->status)}}">{{Str::upper($user->status)}}</span></td>
@@ -111,9 +111,11 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="">View Details</a>
+                                    <a class="dropdown-item" href="{{route('portal.users.show', [$user->id])}}">View Details</a>
                                     <a class="dropdown-item" href="{{route('portal.users.edit', [$user->id])}}">Edit Details</a>
                                     <a class="dropdown-item delete-record" data-url="" type="button" style="cursor: pointer;">Delete User</a>
+                                    <a class="dropdown-item reset-password" data-url="{{route('portal.users.edit_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
+                                    <a class="dropdown-item status-activation" data-url="{{route('portal.users.edit_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
                                 </div>
                             </div> 
                         </td>
@@ -134,4 +136,57 @@
         @endif
     </div>
 </div>
+@stop
+
+@section('page-scripts')
+<script type="text/javascript">
+    $(".delete-record").on('click', function(){
+        var url = $(this).data('url');
+        
+        swal({
+            title: "Are you sure you want to delete this?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
+
+    $(".reset-password").on('click', function(){
+        var url = $(this).data('url');
+        
+        swal({
+            title: "Are you sure you want to reset this user password?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
+
+    $(".status-activation").on('click', function(){
+        var url = $(this).data('url');
+        var status = $(this).data('status');
+        
+        swal({
+            title: status === 'active' ? 'Are you sure you want to deactivate this account?' : 'Are you sure you want to activate this account?',
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
+</script>
 @stop
