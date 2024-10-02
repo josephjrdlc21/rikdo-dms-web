@@ -402,6 +402,39 @@ class UsersController extends Controller{
         return view('portal.users.show', $this->data);
     }
 
+    public function destroy(PageRequest $request,$id = null){
+        $user = User::find($id);
+
+        if(!$user){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.users.index');
+        }
+        
+        DB::beginTransaction();
+        try{
+            $user_info = UserInfo::find($user->user_info_id);
+            $user_info->delete();
+
+            $user->delete();
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "User has been deleted.");
+        }catch(\Exception $e){
+            DB::rollback();
+    
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        session()->flash('notification-status', "warning");
+        session()->flash('notification-msg', "Unable to delete user.");
+        return redirect()->back();
+    }
+
     public function cancel(PageRequest $request){
         session()->forget('personal_info');
         session()->forget('credential');

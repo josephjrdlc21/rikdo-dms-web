@@ -21,6 +21,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/edit-password/{id?}', ['as' => "edit_password", 'uses' => "UsersController@edit_password"]);
             Route::get('/edit-status/{id?}', ['as' => "edit_status", 'uses' => "UsersController@edit_status"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "UsersController@show"]);
+            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "UsersController@destroy"]);
             Route::get('/cancel', ['as' => "cancel", 'uses' => "UsersController@cancel"]);
             Route::get('/success', ['as' => "success", 'uses' => "UsersController@success"]);
             Route::get('/step-back/{step?}/{id?}', ['as' => "step_back", 'uses' => "UsersController@step_back"]);

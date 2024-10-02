@@ -113,7 +113,7 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="{{route('portal.users.show', [$user->id])}}">View Details</a>
                                     <a class="dropdown-item" href="{{route('portal.users.edit', [$user->id])}}">Edit Details</a>
-                                    <a class="dropdown-item delete-record" data-url="" type="button" style="cursor: pointer;">Delete User</a>
+                                    <a class="dropdown-item delete-record" data-url="{{route('portal.users.delete', [$user->id])}}" type="button" style="cursor: pointer;">Delete User</a>
                                     <a class="dropdown-item reset-password" data-url="{{route('portal.users.edit_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
                                     <a class="dropdown-item status-activation" data-url="{{route('portal.users.edit_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
                                 </div>
