@@ -7,6 +7,8 @@ use App\Laravel\Models\{User,Role,UserInfo,Department,Course,Yearlevel};
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\UserRequest;
 
+use App\Laravel\Notifications\{UserAccountCreatedSuccess,UserAccountResetPasswordSuccess,UserAccountUpdated,UserAccountChangeStatus};
+
 use Carbon,DB,Str,Helper,Mail;
 
 class UsersController extends Controller{
@@ -179,17 +181,30 @@ class UsersController extends Controller{
                     $user->yearlevel_id = session()->get('credential.yearlevel');
                     
                     if($user->save()){
+                        $password = Str::random(8);
+
                         $cred = new User;
                         $cred->user_info_id = $user->id;
                         $cred->name = "{$user->firstname} {$user->middlename} {$user->lastname} {$user->suffix}";
                         $cred->username = $user->id_number;
                         $cred->email = $user->email;
                         $cred->status = "active";
-                        $cred->password = bcrypt(Str::random(8));
+                        $cred->password = bcrypt($password);
                         $cred->save();
 
                         $role = Role::where('name', $user->role)->where('guard_name','web')->first();
                         $cred->assignRole($role);
+
+                        if(env('MAIL_SERVICE', false)){
+                            $data = [
+                                'username' => $cred->username,
+                                'name' => $cred->name,
+                                'email' => $cred->email,
+                                'date_time' => $cred->created_at->format('m/d/Y h:i A'),
+                                'password' => $password
+                            ];
+                            Mail::to($cred->email)->send(new UserAccountCreatedSuccess($data));
+                        }
                     }
 
                     DB::commit();
@@ -309,6 +324,15 @@ class UsersController extends Controller{
 
                         $role = Role::where('name', $user_info->role)->where('guard_name','web')->first();
                         $user->syncRoles($role);
+
+                        if(env('MAIL_SERVICE', false)){
+                            $data = [
+                                'name' => $user->name,
+                                'email' => $user->email,
+                                'date_time' => $user->updated_at > $user_info->updated_at ? $user->updated_at->format('m/d/Y h:i A') : $user_info->updated_at->format('m/d/Y h:i A'),
+                            ];
+                            Mail::to($user->email)->send(new UserAccountUpdated($data));
+                        }
                     }
 
                     DB::commit();
@@ -342,8 +366,20 @@ class UsersController extends Controller{
 
         DB::beginTransaction();
         try{
-            $user->password = bcrypt(Str::random(8));
+            $password = Str::random(8);
+
+            $user->password = bcrypt($password);
             $user->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'date_time' => $user->updated_at->format('m/d/Y h:i A'),
+                    'password' => $password
+                ];
+                Mail::to($user->email)->send(new UserAccountResetPasswordSuccess($data));
+            }
 
             DB::commit();
 
@@ -373,6 +409,16 @@ class UsersController extends Controller{
         try{
             $user->status = $user->status === 'active' ? 'inactive' : 'active';
             $user->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'name' => $user->name,
+                    'status' => strtoupper($user->status),
+                    'email' => $user->email,
+                    'date_time' => $user->updated_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($user->email)->send(new UserAccountChangeStatus($data));
+            }
 
             DB::commit();
 

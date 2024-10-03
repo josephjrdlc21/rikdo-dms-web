@@ -1,11 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
     <head>
         @include('emails._components.metas') 
         @include('emails._components.styles')
     </head>
     <body>
-        
+        @yield('content')
     </body>
-    @include('emails._components.scripts')
 </html>
