@@ -421,7 +421,8 @@ class UsersController extends Controller{
             DB::commit();
 
             session()->flash('notification-status', "success");
-            session()->flash('notification-msg', "User has been deleted.");
+            session()->flash('notification-msg', "User has been deleted.");        
+            return redirect()->route('portal.users.index');
         }catch(\Exception $e){
             DB::rollback();
     
