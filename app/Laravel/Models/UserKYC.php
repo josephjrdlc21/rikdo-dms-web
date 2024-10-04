@@ -50,4 +50,20 @@ class UserKYC extends Model{
      * @var array
      */
     protected $casts = [];
+
+    public function department(){
+		return $this->belongsTo('App\Laravel\Models\Department', 'department_id', 'id');
+	}
+
+    public function course(){
+		return $this->belongsTo('App\Laravel\Models\Course', 'course_id', 'id');
+	}
+
+    public function yearlevel(){
+		return $this->belongsTo('App\Laravel\Models\Yearlevel', 'yearlevel_id', 'id');
+	}
+
+    public function processor(){
+		return $this->belongsTo('App\Laravel\Models\User', 'processor_id', 'id');
+	}
 }

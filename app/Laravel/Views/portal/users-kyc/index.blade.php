@@ -19,28 +19,10 @@
     <div class="card-body">
         <form method="GET" action="">
             <div class="row">
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_keyword">Keyword</label>
                         <input type="text" id="input_keyword" class="form-control" placeholder="eg. ID Number, Name" name="keyword" value="{{$keyword}}">
-                    </div>
-                </div>
-                <div class="col-sm-12 col-lg-3">
-                    <div class="form-group">
-                        <label for="input_user_status">Status</label>
-                        {!! html()->select('status', $statuses, $selected_status, ['id' => "input_user_status"])->class('form-control selectric') !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label for="input_from">From</label>
-                        <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="start_date" value="{{$start_date}}">                            
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label for="input_to">To</label>
-                        <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="end_date" value="{{$end_date}}">                            
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3">
@@ -49,19 +31,35 @@
                         {!! html()->select('role', $roles, $selected_role, ['id' => "input_user_role"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="input_from">From</label>
+                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="start_date" value="{{$start_date}}">                            
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="input_to">To</label>
+                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="end_date" value="{{$end_date}}">                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_user_department">Department</label>
                         {!! html()->select('department', $departments, $selected_department, ['id' => "input_user_department"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_user_course">Course</label>
                         {!! html()->select('course', $courses, $selected_course, ['id' => "input_user_course"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_user_yearlevel">Yearlevel</label>
                         {!! html()->select('yearlevel', $yearlevels, $selected_yearlevel, ['id' => "input_user_yearlevel"])->class('form-control selectric') !!}
@@ -76,9 +74,6 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
-        <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create User</a>
-        </div>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -90,6 +85,7 @@
                         <th>Status</th>
                         <th>Department</th>
                         <th>Course</th>
+                        <th>Process By</th>
                         <th>Date Application</th>
                         <th></th>
                     </tr>
@@ -104,6 +100,7 @@
                         <td><span class="badge badge-{{Helper::application_badge_status($application->status)}}">{{Str::upper($application->status)}}</span></td>
                         <td>{{$application->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$application->course->course_code ?? 'N/A'}}<br><small>{{$user->yearlevel->yearlevel_name ?? ''}}</small></td>
+                        <td>{{$application->processor->name ?? 'N/A'}}</td>
                         <td>{{$application->created_at->format("m/d/Y")}}<br><small>{{$application->created_at->format("h:i A")}}</small></td>
                         <td>
                             <div class="btn-group mb-2">
@@ -117,7 +114,7 @@
                         </td>
                     </tr>
                     @empty
-                    <td colspan="7">
+                    <td colspan="8">
                         <p class="text-center">No record found yet.</p>
                     </td>
                     @endforelse

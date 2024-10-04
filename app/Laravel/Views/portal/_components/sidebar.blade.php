@@ -15,10 +15,10 @@
                 <a class="nav-link" href="{{route('portal.index')}}"><i class="fas fa-signal"></i> <span>Dashboard</span></a>
             </li>
             <li class="menu-header">Menus</li>
-            <li class="dropdown">
+            <li class="dropdown {{request()->segment(1) == "users-kyc" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i> <span>User Applications</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Pending</a></li>
+                    <li class="{{request()->segment(1) == "users-kyc" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users_kyc.index')}}">Pending</a></li>
                     <li><a class="nav-link" href="#">Approved</a></li>
                     <li><a class="nav-link" href="#">Rejected</a></li>
                 </ul>

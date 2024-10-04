@@ -70,23 +70,17 @@ class UsersController extends Controller{
         })
         ->whereHas('user_info', function ($query) {
             if (strlen($this->data['selected_department']) > 0) {
-                $query->whereHas('department', function ($q) {
-                    $q->where('department_id', $this->data['selected_department']);
-                });
+                $query->where('department_id', $this->data['selected_department']);
             }
         })
         ->whereHas('user_info', function ($query) {
             if (strlen($this->data['selected_course']) > 0) {
-                $query->whereHas('course', function ($q) {
-                    $q->where('course_id', $this->data['selected_course']);
-                });
+                $query->where('course_id', $this->data['selected_course']);
             }
         })
         ->whereHas('user_info', function ($query) {
             if (strlen($this->data['selected_yearlevel']) > 0) {
-                $query->whereHas('yearlevel', function ($q) {
-                    $q->where('yearlevel_id', $this->data['selected_yearlevel']);
-                });
+                $query->where('yearlevel_id', $this->data['selected_yearlevel']);
             }
         })
         ->where(function ($query) {
