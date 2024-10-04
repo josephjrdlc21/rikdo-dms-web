@@ -7,7 +7,7 @@ use App\Laravel\Models\{User,Role,UserInfo,Department,Course,Yearlevel};
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\UserRequest;
 
-use App\Laravel\Notifications\{UserAccountCreatedSuccess,UserAccountResetPasswordSuccess,UserAccountUpdated,UserAccountChangeStatus};
+use App\Laravel\Notifications\{UserAccountCreatedSuccess,UserAccountResetPasswordSuccess,UserAccountUpdated,UserAccountChangeStatus,UserAccountRemoved};
 
 use Carbon,DB,Str,Helper,Mail;
 
@@ -463,6 +463,15 @@ class UsersController extends Controller{
             $user_info->delete();
 
             $user->delete();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'date_time' => $user->deleted_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($user->email)->send(new UserAccountRemoved($data));
+            }
 
             DB::commit();
 
