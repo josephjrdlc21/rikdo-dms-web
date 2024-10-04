@@ -92,4 +92,20 @@ class Helper{
     public static function capitalize_text($text){
         return ucwords($text);
     }
+
+    public function application_badge_status($application){
+        $result = "default";
+
+        switch (Str::lower($application)){
+            case 'pending':
+                $result = 'primary';
+                break;
+            case 'approved':
+                $result = 'success';
+                break;
+            case 'rejected':
+                $result = 'danger';
+                break;
+        }
+    }
 }

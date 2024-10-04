@@ -12,6 +12,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
     Route::group(['middleware' => ["portal.auth", "portal.status"]], function(){
         Route::get('/', ['as' => 'index', 'uses' => "MainController@index"]);
 
+        Route::group(['prefix' => "users-kyc", 'as' => "users_kyc."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "UsersKYCController@index"]);
+        });
+
         Route::group(['prefix' => "users", 'as' => "users."], function(){
             Route::get('/', ['as' => "index", 'uses' => "UsersController@index"]);
             Route::get('/create', ['as' => "create", 'uses' => "UsersController@create"]);
