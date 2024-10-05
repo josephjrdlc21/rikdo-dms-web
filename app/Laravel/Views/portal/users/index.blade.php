@@ -101,7 +101,7 @@
                             {{$user->name}}<br><a href="{{route('portal.users.show', [$user->id])}}">{{$user->user_info->id_number}}</a>
                         </td>
                         <td>{{Helper::capitalize_text($user->user_info->role)}}</td>
-                        <td><span class="badge badge-{{Helper::badge_status($user->status)}}">{{Str::upper($user->status)}}</span></td>
+                        <td><span class="badge badge-{{Helper::badge_status($user->status)}}">{{Helper::capitalize_text($user->status)}}</span></td>
                         <td>{{$user->user_info->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$user->user_info->course->course_code ?? 'N/A'}}<br><small>{{$user->user_info->yearlevel->yearlevel_name ?? ''}}</small></td>
                         <td>{{$user->created_at->format("m/d/Y")}}<br><small>{{$user->created_at->format("h:i A")}}</small></td>

@@ -93,19 +93,21 @@ class Helper{
         return ucwords($text);
     }
 
-    public function application_badge_status($application){
+    public static function application_badge_status($status){
         $result = "default";
-
-        switch (Str::lower($application)){
+        
+        switch (Str::lower($status)) {
             case 'pending':
-                $result = 'primary';
+                $result = "primary";
                 break;
             case 'approved':
-                $result = 'success';
+                $result = "success";
                 break;
             case 'rejected':
-                $result = 'danger';
+                $result = "danger";
                 break;
         }
+
+        return $result;
     }
 }

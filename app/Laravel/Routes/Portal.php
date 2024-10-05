@@ -20,6 +20,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/', ['as' => "index", 'uses' => "UsersKYCController@index"]);
             Route::get('/approved', ['as' => "approved", 'uses' => "UsersKYCController@approved"]);
             Route::get('/rejected', ['as' => "rejected", 'uses' => "UsersKYCController@rejected"]);
+            Route::get('/{id?}', ['as' => "show", 'uses' => "UsersKYCController@show"]);
         });
 
         Route::group(['prefix' => "users", 'as' => "users."], function(){

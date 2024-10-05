@@ -46,7 +46,7 @@ class UsersKYCController extends Controller{
         $this->data['courses'] = ['' => "All"] + Course::pluck('course_code', 'id')->toArray();
         $this->data['yearlevels'] = ['' => "All"] + Yearlevel::pluck('yearlevel_name', 'id')->toArray();
 
-        $this->data['record'] = UserKYC::with(['user', 'department', 'course', 'yearlevel'])->where(function ($query) {
+        $this->data['record'] = UserKYC::with(['processor', 'department', 'course', 'yearlevel'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(CONCAT(firstname, ' ', lastname)) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(id_number) LIKE '%{$this->data['keyword']}%'");
@@ -112,7 +112,7 @@ class UsersKYCController extends Controller{
         $this->data['courses'] = ['' => "All"] + Course::pluck('course_code', 'id')->toArray();
         $this->data['yearlevels'] = ['' => "All"] + Yearlevel::pluck('yearlevel_name', 'id')->toArray();
 
-        $this->data['record'] = UserKYC::with(['user', 'department', 'course', 'yearlevel'])->where(function ($query) {
+        $this->data['record'] = UserKYC::with(['processor', 'department', 'course', 'yearlevel'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(CONCAT(firstname, ' ', lastname)) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(id_number) LIKE '%{$this->data['keyword']}%'");
@@ -178,7 +178,7 @@ class UsersKYCController extends Controller{
         $this->data['courses'] = ['' => "All"] + Course::pluck('course_code', 'id')->toArray();
         $this->data['yearlevels'] = ['' => "All"] + Yearlevel::pluck('yearlevel_name', 'id')->toArray();
 
-        $this->data['record'] = UserKYC::with(['user', 'department', 'course', 'yearlevel'])->where(function ($query) {
+        $this->data['record'] = UserKYC::with(['processor', 'department', 'course', 'yearlevel'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(CONCAT(firstname, ' ', lastname)) LIKE '%{$this->data['keyword']}%'")
                     ->orWhereRaw("LOWER(id_number) LIKE '%{$this->data['keyword']}%'");
@@ -220,5 +220,18 @@ class UsersKYCController extends Controller{
         ->paginate($this->per_page);
 
         return view('portal.users-kyc.rejected', $this->data);
+    }
+
+    public function show(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Information";
+        $this->data['user_kyc'] = UserKYC::with(['processor', 'department', 'course', 'yearlevel'])->find($id);
+
+        if(!$this->data['user_kyc']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.users_kyc.index');
+        }
+
+        return view('portal.users-kyc.show', $this->data);
     }
 }

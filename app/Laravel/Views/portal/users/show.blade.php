@@ -56,7 +56,7 @@
                         </div>
                         <div class="mb-2">
                             <h6><b>Status</b></h6>
-                            <p><span class="badge badge-{{Helper::badge_status($user->status)}}">{{$user->status ?: 'N/A'}}</span></p>
+                            <p><span class="badge badge-{{Helper::badge_status($user->status)}}">{{Helper::capitalize_text($user->status) ?: 'N/A'}}</span></p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Birthdate</b></h6>
