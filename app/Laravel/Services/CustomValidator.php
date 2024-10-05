@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Services;
 
-use App\Laravel\Models\User;
+use App\Laravel\Models\{User,UserKYC};
 use Illuminate\Validation\Validator;
 
 use Hash,PhoneNumber;
@@ -31,9 +31,21 @@ class CustomValidator extends Validator{
                     ->count() > 0 ? false : true;
                 break;
             case 'register':
-                return UserKYC::where('id_number', $id_number)
+                $user = User::where('id', '<>', $id)
+                    ->whereHas('user_info', function ($query) use ($id_number) {
+                        $query->where('id_number', $id_number);
+                    })
+                    ->count() > 0;
+
+                $user_kyc = UserKYC::where('id_number', $id_number)
                     ->where('id', '<>', $id)
-                    ->count() ? false : true;
+                    ->count() > 0;
+
+                if($user || $user_kyc){
+                    return false;
+                }
+                
+                return true;
                 break;
             default:
                 return User::where('id_number', $id_number)
@@ -56,9 +68,21 @@ class CustomValidator extends Validator{
                     ->count() > 0 ? false : true;
                 break;
             case 'register':
-                return UserKYC::where('email', $email)
+                $user = User::where('id', '<>', $id)
+                ->whereHas('user_info', function ($query) use ($email) {
+                    $query->where('email', $email);
+                })
+                ->count() > 0;
+
+                $user_kyc = UserKYC::where('email', $email)
                     ->where('id', '<>', $id)
-                    ->count() ? false : true;
+                    ->count() > 0;
+
+                if($user || $user_kyc){
+                    return false;
+                }
+                
+                return true;
                 break;
             default:
                 return User::where('email', $email)
@@ -92,9 +116,21 @@ class CustomValidator extends Validator{
                     ->count() > 0 ? false : true;
                 break;
             case 'register':
-                return UserKYC::where('contact_number', $contact_number)
+                $user = User::where('id', '<>', $id)
+                ->whereHas('user_info', function ($query) use ($contact_number) {
+                    $query->where('contact_number', $contact_number);
+                })
+                ->count() > 0;
+
+                $user_kyc = UserKYC::where('contact_number', $contact_number)
                     ->where('id', '<>', $id)
-                    ->count() ? false : true;
+                    ->count() > 0;
+
+                if($user || $user_kyc){
+                    return false;
+                }
+                
+                return true;                
                 break;
             default:
                 return User::where('contact_number', $contact_number)

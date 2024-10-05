@@ -5,6 +5,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
         Route::group(['middleware' => "portal.guest"], function(){
             Route::get('/login', ['as' => 'login', 'uses' => "AuthController@login"]);
             Route::post('/login', ['uses' => "AuthController@authenticate"]);
+            Route::get('/register', ['as' => 'register', 'uses' => "AuthController@register"]);
+            Route::post('/register', ['uses' => "AuthController@store"]);
+            Route::get('/cancel', ['as' => "cancel", 'uses' => "AuthController@cancel"]);
+            Route::get('/step-back/{step?}', ['as' => "step_back", 'uses' => "AuthController@step_back"]);
         });
         Route::get('/logout', ['as' => "logout", 'uses' => "AuthController@logout"]);
     });
@@ -14,6 +18,8 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
 
         Route::group(['prefix' => "users-kyc", 'as' => "users_kyc."], function(){
             Route::get('/', ['as' => "index", 'uses' => "UsersKYCController@index"]);
+            Route::get('/approved', ['as' => "approved", 'uses' => "UsersKYCController@approved"]);
+            Route::get('/rejected', ['as' => "rejected", 'uses' => "UsersKYCController@rejected"]);
         });
 
         Route::group(['prefix' => "users", 'as' => "users."], function(){

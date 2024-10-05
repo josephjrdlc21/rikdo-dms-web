@@ -43,7 +43,7 @@
         </div>
         <div class="mt-5 text-muted text-center">
             Don't have an account? 
-            <a href="">Create One</a>
+            <a href="{{route('portal.auth.register')}}">Create One</a>
         </div>
         <div class="simple-footer">
             Copyright &copy; RIKDO <script>document.write(new Date().getFullYear());</script>

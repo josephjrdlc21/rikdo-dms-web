@@ -19,8 +19,8 @@
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i> <span>User Applications</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{request()->segment(1) == "users-kyc" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users_kyc.index')}}">Pending</a></li>
-                    <li><a class="nav-link" href="#">Approved</a></li>
-                    <li><a class="nav-link" href="#">Rejected</a></li>
+                    <li class="{{request()->segment(1) == "users-kyc" && request()->segment(2) == "approved" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users_kyc.approved')}}">Approved</a></li>
+                    <li class="{{request()->segment(1) == "users-kyc" && request()->segment(2) == "rejected" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users_kyc.rejected')}}">Rejected</a></li>
                 </ul>
             </li>
             <li class="{{request()->segment(1) == "users" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users.index')}}"><i class="fas fa-users-cog"></i> <span>Account Management</span></a></li>

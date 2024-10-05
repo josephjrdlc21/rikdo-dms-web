@@ -203,6 +203,9 @@ class UsersController extends Controller{
 
                     DB::commit();
 
+                    session()->forget('personal_info');
+                    session()->forget('credential');
+
                     $request->session()->put('current_progress', '3');
                     $request->session()->put('max_progress', max($max_progress, '3'));
                 }catch(\Exception $e){
@@ -330,6 +333,9 @@ class UsersController extends Controller{
                     }
 
                     DB::commit();
+
+                    session()->forget('personal_info');
+                    session()->forget('credential');
 
                     $request->session()->put('current_progress', '3');
                     $request->session()->put('max_progress', max($max_progress, '3'));

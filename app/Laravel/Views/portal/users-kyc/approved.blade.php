@@ -5,7 +5,7 @@
     <h1>User Applications</h1>
     <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="#">Applications</a></div>
-        <div class="breadcrumb-item active"><a href="#">Pending</a></div>
+        <div class="breadcrumb-item active"><a href="#">Approved</a></div>
         <div class="breadcrumb-item">Data</div>
     </div>
 </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-sm btn-primary">Apply Filter</button>
-            <a href="{{route('portal.users_kyc.index')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
+            <a href="{{route('portal.users_kyc.approved')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
         </form>
     </div>
 </div>
@@ -86,8 +86,8 @@
                         <th>Status</th>
                         <th>Department</th>
                         <th>Course</th>
+                        <th>Process By</th>
                         <th>Date Application</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>                         
@@ -100,17 +100,8 @@
                         <td><span class="badge badge-{{Helper::application_badge_status($application->status)}}">{{Str::upper($application->status)}}</span></td>
                         <td>{{$application->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$application->course->course_code ?? 'N/A'}}<br><small>{{$user->yearlevel->yearlevel_name ?? ''}}</small></td>
+                        <td>{{$application->processor->name ?? 'N/A'}}</td>
                         <td>{{$application->created_at->format("m/d/Y")}}<br><small>{{$application->created_at->format("h:i A")}}</small></td>
-                        <td>
-                            <div class="btn-group mb-2">
-                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action
-                                </button>
-                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="">View Details</a>
-                                </div>
-                            </div> 
-                        </td>
                     </tr>
                     @empty
                     <td colspan="7">
