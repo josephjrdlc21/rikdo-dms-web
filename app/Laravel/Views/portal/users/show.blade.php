@@ -78,8 +78,8 @@
                 </div>
                 <a href="{{route('portal.users.index')}}" class="btn btn-sm btn-danger">Cancel</a>
                 <a href="{{route('portal.users.edit', [$user->id])}}" class="btn btn-sm btn-info">Edit User</a>
-                <a class="btn btn-sm btn-warning text-white reset-password" data-url="{{route('portal.users.edit_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
-                <a class="btn btn-sm btn-secondary text-white status-activation" data-url="{{route('portal.users.edit_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
+                <a class="btn btn-sm btn-warning text-white reset-password" data-url="{{route('portal.users.update_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
+                <a class="btn btn-sm btn-secondary text-white status-activation" data-url="{{route('portal.users.update_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
             </div>
         </div>
     </div>

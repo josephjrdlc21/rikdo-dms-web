@@ -5,7 +5,8 @@ namespace App\Laravel\Controllers\Portal;
 use App\Laravel\Models\{UserKYC,User,Role,UserInfo,Department,Course,Yearlevel};
 
 use App\Laravel\Requests\PageRequest;
-//use App\Laravel\Requests\Portal\UserKYCRequest;
+
+use App\Laravel\Notifications\{UserAccountApproved,UserAccountRejected};
 
 use Carbon,DB,Str,Helper,Mail;
 
@@ -220,6 +221,93 @@ class UsersKYCController extends Controller{
         ->paginate($this->per_page);
 
         return view('portal.users-kyc.rejected', $this->data);
+    }
+
+    public function update_status(PageRequest $request,$id = null,$status = "pending"){
+        $user_kyc = UserKYC::find($id);
+
+        if(!$user_kyc){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->back();
+        }
+
+        DB::beginTransaction();
+        try{
+            $user_kyc->status = $status;
+            $user_kyc->processor_id = $this->data['auth']->id;
+            $user_kyc->process_at = Carbon::now();
+            $user_kyc->save();
+
+            if($user_kyc->status == "rejected"){
+                if(env('MAIL_SERVICE', false)){
+                    $data = [
+                        'name' => "{$user_kyc->firstname} {$user_kyc->middlename} {$user_kyc->lastname} {$user_kyc->suffix}",
+                        'status' => strtoupper($user_kyc->status),
+                        'email' => $user_kyc->email,
+                        'date_time' => $user_kyc->updated_at->format('m/d/Y h:i A'),
+                    ];
+                    Mail::to($user_kyc->email)->send(new UserAccountRejected($data));
+                }
+            }
+
+            if($user_kyc->status == "approved"){
+                $user_info = new UserInfo;
+                $user_info->firstname = $user_kyc->firstname;
+                $user_info->middlename = $user_kyc->middlename;
+                $user_info->lastname = $user_kyc->lastname;
+                $user_info->suffix = $user_kyc->suffix;
+                $user_info->birthdate = $user_kyc->birthdate;
+                $user_info->contact_number = $user_kyc->contact_number;
+                $user_info->email = $user_kyc->email;
+                $user_info->address = $user_kyc->address;
+                $user_info->id_number = $user_kyc->id_number;
+                $user_info->role = $user_kyc->role;
+                $user_info->department_id = $user_kyc->department_id;
+                $user_info->course_id = $user_kyc->course_id;
+                $user_info->yearlevel_id = $user_kyc->yearlevel_id;
+                
+                if($user_info->save()){
+                    $password = Str::random(8);
+                    
+                    $user = new User;
+                    $user->user_info_id = $user_info->id;
+                    $user->name = "{$user_info->firstname} {$user_info->middlename} {$user_info->lastname} {$user_info->suffix}";
+                    $user->username = $user_info->id_number;
+                    $user->email = $user_info->email;
+                    $user->status = "active";
+                    $user->password = bcrypt($password);
+                    $user->save();
+
+                    $role = Role::where('name', $user_info->role)->where('guard_name','web')->first();
+                    $user->assignRole($role);
+
+                    if(env('MAIL_SERVICE', false)){
+                        $data = [
+                            'username' => $user->username,
+                            'name' => $user->name,
+                            'email' => $user->email,
+                            'date_time' => $user->created_at->format('m/d/Y h:i A'),
+                            'password' => $password
+                        ];
+                        Mail::to($user->email)->send(new UserAccountApproved($data));
+                    }
+                }
+            }
+               
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "User application has been {$user_kyc->status}.");
+        }catch(\Exception $e){
+            DB::rollBack();
+
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+        
+        return redirect()->route('portal.users_kyc.index');
     }
 
     public function show(PageRequest $request,$id = null){

@@ -87,21 +87,22 @@
                         <th>Department</th>
                         <th>Course</th>
                         <th>Process By</th>
-                        <th>Date Application</th>
+                        <th>Process At</th>
                     </tr>
                 </thead>
                 <tbody>                         
                     @forelse($record as $index => $application)
                     <tr>
                         <td>
-                            {{$application->name}}<br><a href="#">{{$application->id_number}}</a>
+                            {{$application->firstname}} {{$application->middlename}} {{$application->lastname}} {{$application->suffix}}<br>
+                            <a href="{{route('portal.users_kyc.show', [$application->id])}}">{{$application->id_number}}</a>
                         </td>
                         <td>{{Helper::capitalize_text($application->role)}}</td>
-                        <td><span class="badge badge-{{Helper::application_badge_status($application->status)}}">{{Str::upper($application->status)}}</span></td>
+                        <td><span class="badge badge-{{Helper::application_badge_status($application->status)}}">{{Helper::capitalize_text($application->status)}}</span></td>
                         <td>{{$application->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$application->course->course_code ?? 'N/A'}}<br><small>{{$user->yearlevel->yearlevel_name ?? ''}}</small></td>
                         <td>{{$application->processor->name ?? 'N/A'}}</td>
-                        <td>{{$application->created_at->format("m/d/Y")}}<br><small>{{$application->created_at->format("h:i A")}}</small></td>
+                        <td>{{Carbon::parse($application->process_at)->format("m/d/Y")}}<br><small>{{Carbon::parse($application->process_at)->format("h:i A")}}</small></td>
                     </tr>
                     @empty
                     <td colspan="7">

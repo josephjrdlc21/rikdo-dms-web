@@ -20,6 +20,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/', ['as' => "index", 'uses' => "UsersKYCController@index"]);
             Route::get('/approved', ['as' => "approved", 'uses' => "UsersKYCController@approved"]);
             Route::get('/rejected', ['as' => "rejected", 'uses' => "UsersKYCController@rejected"]);
+            Route::get('/update-status/{id?}/{status?}', ['as' => "update_status", 'uses' => "UsersKYCController@update_status"]);
             Route::get('/{id?}', ['as' => "show", 'uses' => "UsersKYCController@show"]);
         });
 
@@ -29,8 +30,8 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::post('/create', ['uses' => "UsersController@store"]);
             Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "UsersController@edit"]);
             Route::post('/edit/{id?}', ['uses' => "UsersController@update"]);
-            Route::get('/edit-password/{id?}', ['as' => "edit_password", 'uses' => "UsersController@edit_password"]);
-            Route::get('/edit-status/{id?}', ['as' => "edit_status", 'uses' => "UsersController@edit_status"]);
+            Route::get('/update-password/{id?}', ['as' => "update_password", 'uses' => "UsersController@update_password"]);
+            Route::get('/update-status/{id?}', ['as' => "update_status", 'uses' => "UsersController@update_status"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "UsersController@show"]);
             Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "UsersController@destroy"]);
             Route::get('/cancel', ['as' => "cancel", 'uses' => "UsersController@cancel"]);

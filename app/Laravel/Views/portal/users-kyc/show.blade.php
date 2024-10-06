@@ -78,8 +78,10 @@
                     </div>
                 </div>
                 <a href="{{route('portal.users_kyc.index')}}" class="btn btn-sm btn-secondary">Close</a>
-                <a href="#" class="btn btn-sm btn-success">Approve Appplication</a>
-                <a href="#" class="btn btn-sm btn-danger">Reject Appplication</a>
+                @if($user_kyc->status === 'pending')
+                <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'approved'])}}" class="btn btn-sm btn-success text-white btn-approve" type="button" style="cursor: pointer;">Approve Appplication</a>
+                <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'rejected'])}}" class="btn btn-sm btn-danger text-white btn-rejected" type="button" style="cursor: pointer;">Reject Appplication</a>
+                @endif
             </div>
         </div>
     </div>
@@ -88,6 +90,36 @@
 
 @section('page-scripts')
 <script type="text/javascript">
-  
+    $(".btn-approve").on('click', function(){
+        var url = $(this).data('url');
+        
+        swal({
+            title: "Are you sure you want approve this user application?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
+
+    $(".btn-rejected").on('click', function(){
+        var url = $(this).data('url');
+        
+        swal({
+            title: "Are you sure you want reject this user application?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
 </script>
 @stop

@@ -355,7 +355,7 @@ class UsersController extends Controller{
         }
     }
 
-    public function edit_password(PageRequest $request,$id = null){
+    public function update_password(PageRequest $request,$id = null){
         $user = User::find($id);
 
         if(!$user){
@@ -396,7 +396,7 @@ class UsersController extends Controller{
         return redirect()->route('portal.users.index');
     }
 
-    public function edit_status(PageRequest $request,$id = null){
+    public function update_status(PageRequest $request,$id = null){
         $user = User::find($id);
 
         if(!$user){
