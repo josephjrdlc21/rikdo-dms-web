@@ -64,6 +64,7 @@
                     <li class="{{request()->segment(2) == "departments" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.departments.index')}}">Departments</a></li>
                     <li class="{{request()->segment(2) == "courses" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.courses.index')}}">Courses</a></li>
                     <li class="{{request()->segment(2) == "yearlevels" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.yearlevels.index')}}">Yearlevels</a></li>
+                    <li class="{{request()->segment(2) == "research-types" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.research_types.index')}}">Research Types</a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="#"><i class="fas fa-compass"></i> <span>Audit Trail</span></a></li>

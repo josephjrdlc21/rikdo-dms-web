@@ -78,6 +78,15 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
                 Route::post('/edit/{id?}', ['uses' => "YearlevelsController@update"]);
                 Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "YearlevelsController@destroy"]);
             });
+
+            Route::group(['prefix' => "research-types", 'as' => "research_types."], function(){
+                Route::get('/', ['as' => "index", 'uses' => "ResearchTypesController@index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "ResearchTypesController@create"]);
+                Route::post('/create', ['uses' => "ResearchTypesController@store"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "ResearchTypesController@edit"]);
+                Route::post('/edit/{id?}', ['uses' => "ResearchTypesController@update"]);
+                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "ResearchTypesController@destroy"]);
+            });
         });
     });
 });
