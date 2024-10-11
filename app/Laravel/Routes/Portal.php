@@ -7,6 +7,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::post('/login', ['uses' => "AuthController@authenticate"]);
             Route::get('/register', ['as' => 'register', 'uses' => "AuthController@register"]);
             Route::post('/register', ['uses' => "AuthController@store"]);
+            Route::get('/forgot-password', ['as' => "forgot_password", 'uses' => "AuthController@forgot_password"]);
+            Route::post('/forgot-password', ['uses' => "AuthController@forgot_password_email"]);
+            Route::get('/reset-password/{refid?}', ['as' => "reset_password", 'uses' => "AuthController@reset_password"]);
+            Route::post('/reset-password/{refid?}', ['uses' => "AuthController@store_password"]);
             Route::get('/cancel', ['as' => "cancel", 'uses' => "AuthController@cancel"]);
             Route::get('/step-back/{step?}', ['as' => "step_back", 'uses' => "AuthController@step_back"]);
         });

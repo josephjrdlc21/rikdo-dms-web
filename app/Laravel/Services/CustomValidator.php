@@ -138,4 +138,8 @@ class CustomValidator extends Validator{
                     ->count() ? false : true;
         }
     }
+
+    public function validatePasswordFormat($attribute, $value, $parameters){
+        return preg_match(("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.]).{8,}$/"), $value);
+    }
 }

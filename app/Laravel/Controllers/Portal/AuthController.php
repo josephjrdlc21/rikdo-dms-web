@@ -2,10 +2,12 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{User,UserKYC,Role,Department,Course,Yearlevel};
+use App\Laravel\Models\{User,UserKYC,Role,Department,Course,Yearlevel,PasswordReset};
 
 use App\Laravel\Requests\PageRequest;
-use App\Laravel\Requests\Portal\RegisterRequest;
+use App\Laravel\Requests\Portal\{RegisterRequest,ForgotPasswordRequest,ResetPasswordRequest};
+
+use App\Laravel\Notifications\{ResetPassword,ResetPasswordSuccess};
 
 use Str,DB,Helper,Mail,Carbon;
 
@@ -159,6 +161,129 @@ class AuthController extends Controller{
                 return redirect()->route('portal.auth.register');
                 break;
         }
+    }
+
+    public function forgot_password(PageRequest $request){
+        $this->data['page_title'] .= " - Forgot Password";
+
+        return view('portal.auth.forgot-password', $this->data);
+    }
+
+    public function forgot_password_email(ForgotPasswordRequest $request){
+        $email = strtolower($request->input('email'));
+        $token = Str::random(60);
+
+        $user = User::where('email', $email)->first();
+
+        if(!$user){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->back();
+        }
+
+        if($user->status == "inactive"){
+            session()->flash('notification-status', "warning");
+            session()->flash('notification-msg', "Unable to process this request because account is locked.");
+            return redirect()->back();
+        }
+
+        DB::beginTransaction();
+        try{
+            PasswordReset::where('email', $email)->delete();
+
+            $password_reset = new PasswordReset;
+            $password_reset->email = $email;
+            $password_reset->token = $token;
+            $password_reset->created_at = Carbon::now();
+            $password_reset->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'email' => $password_reset->email, 
+                    'token' => $password_reset->token,
+                    'date_time' => $password_reset->created_at->format('m/d/Y h:i A')
+                ];
+                Mail::to($password_reset->email)->send(new ResetPassword($data));
+            }
+
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        session()->flash('notification-status', "success");
+        session()->flash('notification-msg', "Password reset was sent successfully to your email.");
+        return redirect()->back();
+    }
+
+    public function reset_password(PageRequest $request,$refid = null){
+        $this->data['page_title'] .= " - Reset Password";
+
+        $password_reset = PasswordReset::where('token', $refid)->first();
+
+        if(!$password_reset){
+            session()->flash('notification-status', "warning");
+            session()->flash('notification-msg', "Token is not valid. Please try again!");
+            return redirect()->route('portal.auth.forgot_password');
+        }
+
+        return view('portal.auth.reset-password', $this->data);
+    }
+
+    public function store_password(ResetPasswordRequest $request, $refid = null){
+        $password_reset = PasswordReset::where('token', $refid)->first();
+        $current_date_time = Carbon::now();
+
+        if (!$password_reset) {
+            session()->flash('notification-status', "warning");
+            session()->flash('notification-msg', "Token is not valid. Please try again!");
+            return redirect()->route('portal.auth.forgot_password');
+        }
+
+        $user = User::where('email', strtolower($password_reset->email))->first();
+
+        if(!$user){
+            session()->flash('notification-status', "warning");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.auth.forgot_password');
+        }
+
+        DB::beginTransaction();
+        try{
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+
+            if (env('MAIL_SERVICE', false)) {
+                $data = [
+                    'name' => $user->name,
+                    'email' => $user->email, 
+                    'date_time' => $user->updated_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($user->email)->send(new ResetPasswordSuccess($data));
+            }
+
+            PasswordReset::where('email', $user->email)->delete();
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "New password successfully stored. Login to the platform using your updated credentials.");
+
+            auth($this->guard)->login($user);
+
+            return redirect()->route('portal.index');
+        }catch(\Exception $e){
+            DB::rollback();
+
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+        }
+
+        return redirect()->back();
     }
 
     public function cancel(PageRequest $request){
