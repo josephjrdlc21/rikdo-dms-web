@@ -5,7 +5,7 @@ namespace App\Laravel\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class UserKYC extends Model{
+class SharedResearch extends Model{
     
     use SoftDeletes;
 
@@ -24,7 +24,7 @@ class UserKYC extends Model{
      *
      * @var string
      */
-    protected $table = "users_kyc";
+    protected $table = "shared_research";
     /**
      * The attributes that are mass assignable.
      *
@@ -50,20 +50,4 @@ class UserKYC extends Model{
      * @var array
      */
     protected $casts = [];
-
-    public function department(){
-        return $this->belongsTo('App\Laravel\Models\Department', 'department_id', 'id');
-    }
-
-    public function course(){
-        return $this->belongsTo('App\Laravel\Models\Course', 'course_id', 'id');
-    }
-
-    public function yearlevel(){
-        return $this->belongsTo('App\Laravel\Models\Yearlevel', 'yearlevel_id', 'id');
-    }
-
-    public function processor(){
-        return $this->belongsTo('App\Laravel\Models\User', 'processor_id', 'id');
-    }
 }

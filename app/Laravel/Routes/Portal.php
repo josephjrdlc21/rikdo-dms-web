@@ -43,6 +43,13 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/step-back/{step?}/{id?}', ['as' => "step_back", 'uses' => "UsersController@step_back"]);
         });
 
+        Route::group(['prefix' => "research", 'as' => "research."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "ResearchController@index"]);
+            Route::get('/approved', ['as' => "approved", 'uses' => "ResearchController@approved"]);
+            Route::get('/for-revision', ['as' => "for_revision", 'uses' => "ResearchController@for_revision"]);
+            Route::get('/rejected', ['as' => "rejected", 'uses' => "ResearchController@rejected"]);
+        });
+
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){
             Route::group(['prefix' => "roles", 'as' => "roles."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "RolesController@index"]);

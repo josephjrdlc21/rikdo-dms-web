@@ -24,13 +24,13 @@
                 </ul>
             </li>
             <li class="{{request()->segment(1) == "users" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users.index')}}"><i class="fas fa-users-cog"></i> <span>Account Management</span></a></li>
-            <li class="dropdown">
+            <li class="dropdown {{request()->segment(1) == "research" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-file"></i> <span>My Research</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Pending</a></li>
-                    <li><a class="nav-link" href="#">Approved</a></li>
-                    <li><a class="nav-link" href="#">Revision</a></li>
-                    <li><a class="nav-link" href="#">Rejected</a></li>
+                    <li class="{{request()->segment(1) == "research" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research.index')}}">Pending</a></li>
+                    <li class="{{request()->segment(1) == "research" && request()->segment(2) == "approved" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research.approved')}}">Approved</a></li>
+                    <li class="{{request()->segment(1) == "research" && request()->segment(2) == "for-revision" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research.for_revision')}}">Revision</a></li>
+                    <li class="{{request()->segment(1) == "research" && request()->segment(2) == "rejected" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research.rejected')}}">Rejected</a></li>
                 </ul>
             </li>
             <li class="dropdown">

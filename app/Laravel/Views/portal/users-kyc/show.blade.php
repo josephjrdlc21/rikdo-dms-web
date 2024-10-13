@@ -94,8 +94,8 @@
         var url = $(this).data('url');
         
         swal({
-            title: "Are you sure you want approve this user application?",
-            icon: "warning",
+            title: "Are you sure you want to approve this user application?",
+            icon: "info",
             buttons: true,
             dangerMode: true,
         })
@@ -110,7 +110,7 @@
         var url = $(this).data('url');
         
         swal({
-            title: "Are you sure you want reject this user application?",
+            title: "Are you sure you want to reject this user application?",
             icon: "warning",
             buttons: true,
             dangerMode: true,

@@ -110,4 +110,25 @@ class Helper{
 
         return $result;
     }
+
+    public static function research_badge_status($status){
+        $result = "default";
+        
+        switch (Str::lower($status)) {
+            case 'pending':
+                $result = "primary";
+                break;
+            case 'approved':
+                $result = "success";
+                break;
+            case 'for_revision':
+                $result = "warning";
+                break;
+            case 'rejected':
+                $result = "danger";
+                break;
+        }
+
+        return $result;
+    }
 }
