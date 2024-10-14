@@ -34,4 +34,8 @@
         -webkit-appearance: none; 
         margin: 0; 
     }
+
+    .select2-container {
+        max-width: 100% !important;
+    }
 </style>

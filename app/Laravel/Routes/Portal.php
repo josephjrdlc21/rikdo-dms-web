@@ -48,6 +48,8 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/approved', ['as' => "approved", 'uses' => "ResearchController@approved"]);
             Route::get('/for-revision', ['as' => "for_revision", 'uses' => "ResearchController@for_revision"]);
             Route::get('/rejected', ['as' => "rejected", 'uses' => "ResearchController@rejected"]);
+            Route::get('/create', ['as' => "create", 'uses' => "ResearchController@create"]);
+            Route::post('/create', ['uses' => "ResearchController@store"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

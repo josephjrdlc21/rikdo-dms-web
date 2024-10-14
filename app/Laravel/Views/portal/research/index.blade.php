@@ -66,7 +66,7 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Research</a>
+            <a href="{{route('portal.research.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Research</a>
         </div>
     </div>
     <div class="card-body p-0">
