@@ -27,10 +27,10 @@ class ResearchRequest extends RequestManager
             'research_file' => "required|file|mimes:doc,docx|between:1,10240",
             'research_type' => "required",
             'title' => "required",
-            'chapter' => "required",
-            'version' => "required",
+            'chapter' => "required|integer|min:1",
+            'version' => "required|numeric|min:1",
             'submit_to' => "required",
-            'share_file' => "nullable"
+            'share_file' => "nullable|array"
         ];
 
         return $rules;

@@ -71,7 +71,7 @@
                     </div>
                     <div class="form-group">
                         <label for="input_submit_to">Submit to</label>
-                        {!! html()->select('submit_to', ['' => "Select Professor"] + $researchers, old('submit_to'), ['id' => "input_submit_to"])->class('form-control selectric') !!}
+                        {!! html()->select('submit_to', ['' => "Select Professor"] + $researchers, old('submit_to'), ['id' => "input_submit_to"])->class('form-control select2') !!}
                         @if($errors->first('submit_to'))
                         <small class="d-block mt-1 text-danger">{{$errors->first('submit_to')}}</small>
                         @endif             

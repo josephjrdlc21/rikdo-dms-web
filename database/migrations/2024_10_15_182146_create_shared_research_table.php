@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('research_id')->nullable()->index();
             $table->string('user_id')->nullable()->index();
-            $table->text('comments');
             $table->timestamps();
             $table->softDeletes();
         });

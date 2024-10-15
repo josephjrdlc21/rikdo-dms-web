@@ -7,9 +7,13 @@ use App\Laravel\Models\{Research,ResearchType,User,SharedResearch};
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\ResearchRequest;
 
-use Carbon,DB,Helper;
+use App\Laravel\Traits\VerifyResearch;
+
+use Carbon,DB,Helper,FileUploader;
 
 class ResearchController extends Controller{
+    use VerifyResearch;
+
     protected $data;
 
     public function __construct(){
@@ -176,18 +180,56 @@ class ResearchController extends Controller{
     }
 
     public function store(ResearchRequest $request){
-        //DB::beginTransaction();
-        try {
-            //$research = new Research;
-            //$research->save();
+        if($this->check_research_title($request)){
+            return redirect()->back();
+        }
 
-            //DB::commit();
+        if($this->check_chapter_limit($request)){
+            return redirect()->back();
+        }
+
+        if($this->check_chapter_version($request)){
+            return redirect()->back();
+        }
+
+        DB::beginTransaction();
+        try {
+            $research = new Research;
+            $research->title = $request->input('title');
+            $research->research_type_id = $request->input('research_file');
+            $research->department_id = $this->data['auth']->user_info->department_id;
+            $research->course_id = $this->data['auth']->user_info->course_id;
+            $research->yearlevel_id = $this->data['auth']->user_info->yearlevel_id;
+            $research->submitted_to_id = $request->input('submit_to');
+            $research->submitted_by_id = $this->data['auth']->id;
+            $research->chapter = $request->input('chapter', 0);
+            $research->version = $request->input('version');
+            $research->save();
+
+            if($request->hasFile('research_file')){
+                $research_file = FileUploader::upload($request->file('research_file'), "uploads/research/{$research->id}");
+
+                $research->path = $research_file['path'];
+                $research->directory = $research_file['directory'];
+                $research->filename = $research_file['filename'];
+                $research->source = $research_file['source'];
+                $research->save();
+            }
+
+            foreach($request->input('share_file') as $author){
+                $share_file = new SharedResearch;
+                $share_file->research_id = $research->id;
+                $share_file->user_id = $author;
+                $share_file->save();
+            }
+
+            DB::commit();
 
             session()->flash('notification-status', "success");
             session()->flash('notification-msg', "New research has been created.");
             return redirect()->route('portal.research.index');
         }catch(\Exception $e){
-            //DB::rollback();
+            DB::rollback();
             
             session()->flash('notification-status', "failed");
             session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");

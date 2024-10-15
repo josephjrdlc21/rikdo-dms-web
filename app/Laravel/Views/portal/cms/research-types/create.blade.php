@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         <label for="input_max_chapter">Max Chapter</label>
-                        <input type="number" id="input_max_chapter" class="form-control" placeholder="Max Chapter" name="max_chapter"  value="{{old('max_chapter')}}" min="0" step="1">
+                        <input type="number" id="input_max_chapter" class="form-control" placeholder="0" name="max_chapter"  value="{{old('max_chapter')}}" min="0" step="1">
                         @if($errors->first('max_chapter'))
                         <small class="d-block mt-1 text-danger">{{$errors->first('max_chapter')}}</small>
                         @endif
