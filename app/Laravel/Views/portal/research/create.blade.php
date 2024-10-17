@@ -20,7 +20,7 @@
                 <h4>Create Research</h4>
             </div>
             <div class="card-body">
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="" enctype="multipart/form-data" id="research_form">
                     {!!csrf_field()!!}
                     <div class="row">
                         <div class="col-md-6">
@@ -53,7 +53,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_chapter">Chapter</label>
-                                <input type="number" id="input_chapter" class="form-control" placeholder="0" name="chapter" value="{{old('chapter')}}">
+                                <input type="number" id="input_chapter" class="form-control" placeholder="0" name="chapter" value="{{old('chapter')}}" min="0">
                                 @if($errors->first('chapter'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('chapter')}}</small>
                                 @endif
@@ -62,7 +62,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="input_version">Version</label>
-                                <input type="number" id="input_version" class="form-control" placeholder="0.0" name="version" value="{{old('version')}}">
+                                <input type="number" id="input_version" class="form-control" placeholder="0.0" name="version" value="{{old('version')}}" step="0.1" min="0">
                                 @if($errors->first('version'))
                                 <small class="d-block mt-1 text-danger">{{$errors->first('version')}}</small>
                                 @endif
@@ -84,10 +84,30 @@
                         @endif                 
                     </div>
                     <a href="{{route('portal.research.index')}}" class="btn btn-sm btn-danger">Cancel</a>
-                    <button type="submit" class="btn btn-sm btn-info">Submit</button>
+                    <button type="submit" class="btn btn-sm btn-info create-research">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+@stop
+
+@section('page-scripts')
+<script type="text/javascript">
+    $(".create-research").on('click', function(e){
+        e.preventDefault();
+
+        swal({
+            title: "Are you sure you want to submit this?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                $('#research_form').submit();
+            }
+        });
+    });
+</script>
 @stop

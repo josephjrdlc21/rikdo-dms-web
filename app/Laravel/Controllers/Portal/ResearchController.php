@@ -29,6 +29,9 @@ class ResearchController extends Controller{
         $this->data['page_title'] .= " - List of Research";
 
         $this->data['keyword'] = strtolower($request->get('keyword'));
+        $this->data['selected_type'] = strtolower($request->input('research_type'));
+        $this->data['chapter'] = strtolower($request->input('chapter'));
+        $this->data['version'] = strtolower($request->input('version'));
 
         $first_record = Research::orderBy('created_at', 'ASC')->first();
         $start_date = $request->get('start_date', now()->startOfMonth());
@@ -38,10 +41,32 @@ class ResearchController extends Controller{
 
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
+        $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
-        $this->data['record'] = Research::where(function ($query) {
+        $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'");
+                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
+                    ->orWhereHas('submitted_to', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    })
+                    ->orWhereHas('submitted_by', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    });
+            }
+        })
+        ->whereHas('research_type', function ($query) {
+            if (strlen($this->data['selected_type']) > 0) {
+                $query->where('id', $this->data['selected_type']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['chapter']) > 0){
+                $query->where('chapter', $this->data['chapter']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['version']) > 0){
+                $query->where('version', $this->data['version']);
             }
         })
         ->where(function ($query) {
@@ -55,6 +80,7 @@ class ResearchController extends Controller{
                 }
             });
         })
+        ->where('submitted_by_id', $this->data['auth']->id)
         ->where('status', 'pending')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -66,6 +92,9 @@ class ResearchController extends Controller{
         $this->data['page_title'] .= " - List of Research";
 
         $this->data['keyword'] = strtolower($request->get('keyword'));
+        $this->data['selected_type'] = strtolower($request->input('research_type'));
+        $this->data['chapter'] = strtolower($request->input('chapter'));
+        $this->data['version'] = strtolower($request->input('version'));
 
         $first_record = Research::orderBy('created_at', 'ASC')->first();
         $start_date = $request->get('start_date', now()->startOfMonth());
@@ -75,10 +104,32 @@ class ResearchController extends Controller{
 
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
+        $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
-        $this->data['record'] = Research::where(function ($query) {
+        $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'");
+                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
+                    ->orWhereHas('submitted_to', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    })
+                    ->orWhereHas('submitted_by', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    });
+            }
+        })
+        ->whereHas('research_type', function ($query) {
+            if (strlen($this->data['selected_type']) > 0) {
+                $query->where('id', $this->data['selected_type']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['chapter']) > 0){
+                $query->where('chapter', $this->data['chapter']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['version']) > 0){
+                $query->where('version', $this->data['version']);
             }
         })
         ->where(function ($query) {
@@ -92,6 +143,7 @@ class ResearchController extends Controller{
                 }
             });
         })
+        ->where('submitted_by_id', $this->data['auth']->id)
         ->where('status', 'approved')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -103,6 +155,9 @@ class ResearchController extends Controller{
         $this->data['page_title'] .= " - List of Research";
 
         $this->data['keyword'] = strtolower($request->get('keyword'));
+        $this->data['selected_type'] = strtolower($request->input('research_type'));
+        $this->data['chapter'] = strtolower($request->input('chapter'));
+        $this->data['version'] = strtolower($request->input('version'));
 
         $first_record = Research::orderBy('created_at', 'ASC')->first();
         $start_date = $request->get('start_date', now()->startOfMonth());
@@ -112,10 +167,32 @@ class ResearchController extends Controller{
 
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
+        $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
-        $this->data['record'] = Research::where(function ($query) {
+        $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'");
+                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
+                    ->orWhereHas('submitted_to', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    })
+                    ->orWhereHas('submitted_by', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    });
+            }
+        })
+        ->whereHas('research_type', function ($query) {
+            if (strlen($this->data['selected_type']) > 0) {
+                $query->where('id', $this->data['selected_type']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['chapter']) > 0){
+                $query->where('chapter', $this->data['chapter']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['version']) > 0){
+                $query->where('version', $this->data['version']);
             }
         })
         ->where(function ($query) {
@@ -129,6 +206,7 @@ class ResearchController extends Controller{
                 }
             });
         })
+        ->where('submitted_by_id', $this->data['auth']->id)
         ->where('status', 'for_revision')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -140,6 +218,9 @@ class ResearchController extends Controller{
         $this->data['page_title'] .= " - List of Research";
 
         $this->data['keyword'] = strtolower($request->get('keyword'));
+        $this->data['selected_type'] = strtolower($request->input('research_type'));
+        $this->data['chapter'] = strtolower($request->input('chapter'));
+        $this->data['version'] = strtolower($request->input('version'));
 
         $first_record = Research::orderBy('created_at', 'ASC')->first();
         $start_date = $request->get('start_date', now()->startOfMonth());
@@ -149,10 +230,32 @@ class ResearchController extends Controller{
 
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
+        $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
-        $this->data['record'] = Research::where(function ($query) {
+        $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
-                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'");
+                $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
+                    ->orWhereHas('submitted_to', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    })
+                    ->orWhereHas('submitted_by', function ($q) {
+                        $q->whereRaw("LOWER(name) LIKE '%{$this->data['keyword']}%'");
+                    });
+            }
+        })
+        ->whereHas('research_type', function ($query) {
+            if (strlen($this->data['selected_type']) > 0) {
+                $query->where('id', $this->data['selected_type']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['chapter']) > 0){
+                $query->where('chapter', $this->data['chapter']);
+            }
+        })
+        ->where(function ($query) {
+            if(strlen($this->data['version']) > 0){
+                $query->where('version', $this->data['version']);
             }
         })
         ->where(function ($query) {
@@ -166,6 +269,7 @@ class ResearchController extends Controller{
                 }
             });
         })
+        ->where('submitted_by_id', $this->data['auth']->id)
         ->where('status', 'rejected')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -195,8 +299,8 @@ class ResearchController extends Controller{
         DB::beginTransaction();
         try {
             $research = new Research;
-            $research->title = $request->input('title');
-            $research->research_type_id = $request->input('research_file');
+            $research->title = strtoupper($request->input('title'));
+            $research->research_type_id = $request->input('research_type');
             $research->department_id = $this->data['auth']->user_info->department_id;
             $research->course_id = $this->data['auth']->user_info->course_id;
             $research->yearlevel_id = $this->data['auth']->user_info->yearlevel_id;
@@ -216,11 +320,13 @@ class ResearchController extends Controller{
                 $research->save();
             }
 
-            foreach($request->input('share_file') as $author){
-                $share_file = new SharedResearch;
-                $share_file->research_id = $research->id;
-                $share_file->user_id = $author;
-                $share_file->save();
+            if($request->input('share_file')){
+                foreach($request->input('share_file') as $author){
+                    $share_file = new SharedResearch;
+                    $share_file->research_id = $research->id;
+                    $share_file->user_id = $author;
+                    $share_file->save();
+                }
             }
 
             DB::commit();

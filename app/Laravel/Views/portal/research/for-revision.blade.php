@@ -41,19 +41,19 @@
                 <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_research_type">Research Type</label>
-                        <input type="text" id="" class="form-control" placeholder="All" name="" value="">
+                        {!! html()->select('research_type', $research_types, value($selected_type), ['id' => "input_research_type"])->class('form-control selectric') !!}               
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_chapter">Chapter</label>
-                        <input type="text" id="" class="form-control" placeholder="0" name="" value="">
+                        <input type="number" id="input_chapter" class="form-control" placeholder="0" name="chapter" value="{{$chapter}}" min="0">
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_version">Version</label>
-                        <input type="text" id="" class="form-control" placeholder="0.0" name="" value="">
+                        <input type="number" id="input_version" class="form-control" placeholder="0.0" name="version" value="{{$version}}" step="0.1" min="0">
                     </div>
                 </div>
             </div>
@@ -75,13 +75,12 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Title</th>
+                        <th class="text-center">Title</th>
+                        <th>Type</th>
                         <th>Status</th>
-                        <th class="text-center">Chapter</th>
-                        <th class="text-center">Version</th>
+                        <th>Professor</th>
                         <th>Submitted By</th>
-                        <th>Submitted To</th>
-                        <th>Date Submitted</th>
+                        <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -89,12 +88,14 @@
                     @forelse($record as $index => $research)
                     <tr>
                         <td>{{$loop->index + $record->firstItem()}}</td>
-                        <td>{{$research->title}}</td>
+                        <td class="text-center">
+                            {{$research->title}}<br>
+                            <small>ch {{$research->chapter}}, ver {{$research->version}}</small>
+                        </td>
+                        <td>{{$research->research_type->type}}</td>
                         <td><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text($research->status)}}</span></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{$research->submitted_to->name}}</td>
+                        <td>{{$research->submitted_by->name}}</td>
                         <td>{{$research->created_at->format("m/d/Y")}}<br><small>{{$research->created_at->format("h:i A")}}</small></td>
                         <td>
                             <div class="btn-group mb-2">
@@ -108,7 +109,7 @@
                         </td>
                     </tr>
                     @empty
-                    <td colspan="9">
+                    <td colspan="8">
                         <p class="text-center">No record found yet.</p>
                     </td>
                     @endforelse

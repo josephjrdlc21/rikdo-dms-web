@@ -50,4 +50,16 @@ class Research extends Model{
      * @var array
      */
     protected $casts = [];
+
+    public function submitted_by(){
+        return $this->belongsTo('App\Laravel\Models\User', 'submitted_by_id', 'id');
+    }
+
+    public function submitted_to(){
+        return $this->belongsTo('App\Laravel\Models\User', 'submitted_to_id', 'id');
+    }
+
+    public function research_type(){
+        return $this->belongsTo('App\Laravel\Models\ResearchType', 'research_type_id', 'id');
+    }
 }
