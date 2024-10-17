@@ -321,8 +321,15 @@ class ResearchController extends Controller{
             }
 
             if($request->input('share_file')){
-                foreach($request->input('share_file') as $author){
-                    SharedResearch::firstOrCreate(['research_id' => $research->id, 'user_id' => $author]);
+                foreach ($request->input('share_file') as $author) {
+                    $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
+            
+                    if (!$check_research) {
+                        $share_file = new SharedResearch;
+                        $share_file->research_id = $research->id;
+                        $share_file->user_id = $author;
+                        $share_file->save();
+                    }
                 }
             }
 
