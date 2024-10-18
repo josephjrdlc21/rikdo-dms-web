@@ -50,6 +50,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/rejected', ['as' => "rejected", 'uses' => "ResearchController@rejected"]);
             Route::get('/create', ['as' => "create", 'uses' => "ResearchController@create"]);
             Route::post('/create', ['uses' => "ResearchController@store"]);
+            Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "ResearchController@edit"]);
+            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "ResearchController@destroy"]);
+            Route::get('/show/{id?}', ['as' => "show", 'uses' => "ResearchController@show"]);
+            Route::get('/download/{id?}', ['as' => "download", 'uses' => "ResearchController@download"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

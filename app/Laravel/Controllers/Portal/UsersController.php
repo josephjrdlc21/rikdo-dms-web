@@ -142,8 +142,8 @@ class UsersController extends Controller{
                 session()->put('personal_info.suffix', strtoupper($request->input('suffix')));
                 session()->put('personal_info.birthdate', $request->input('birthdate'));
                 session()->put('personal_info.contact', Helper::format_phone($request->input('contact')));
-                session()->put('personal_info.email', $request->input('email'));
-                session()->put('personal_info.address', $request->input('address'));
+                session()->put('personal_info.email', strtolower($request->input('email')));
+                session()->put('personal_info.address', strtoupper($request->input('address')));
 
                 $request->session()->put('current_progress', '2');
                 $request->session()->put('max_progress', max($max_progress, '2'));
@@ -282,8 +282,8 @@ class UsersController extends Controller{
                 session()->put('personal_info.suffix', strtoupper($request->input('suffix')) ?? $user_info->suffix);
                 session()->put('personal_info.birthdate', $request->input('birthdate') ?? $user_info->birthdate);
                 session()->put('personal_info.contact', Helper::format_phone($request->input('contact')) ?? $user_info->contact_number);
-                session()->put('personal_info.email', $request->input('email') ?? $user_info->email);
-                session()->put('personal_info.address', $request->input('address') ?? $user_info->address);
+                session()->put('personal_info.email', strtolower($request->input('email')) ?? $user_info->email);
+                session()->put('personal_info.address', strtoupper($request->input('address')) ?? $user_info->address);
 
                 $request->session()->put('current_progress', '2');
                 $request->session()->put('max_progress', max($max_progress, '2'));

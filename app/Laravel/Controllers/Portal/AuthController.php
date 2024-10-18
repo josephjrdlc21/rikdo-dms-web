@@ -101,8 +101,8 @@ class AuthController extends Controller{
                 session()->put('personal_info.suffix', strtoupper($request->input('suffix')));
                 session()->put('personal_info.birthdate', $request->input('birthdate'));
                 session()->put('personal_info.contact', Helper::format_phone($request->input('contact')));
-                session()->put('personal_info.email', $request->input('email'));
-                session()->put('personal_info.address', $request->input('address'));
+                session()->put('personal_info.email', strtolower($request->input('email')));
+                session()->put('personal_info.address', strtoupper($request->input('address')));
 
                 $request->session()->put('current_progress', '2');
                 $request->session()->put('max_progress', max($max_progress, '2'));

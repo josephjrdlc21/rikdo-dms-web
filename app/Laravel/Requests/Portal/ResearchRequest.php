@@ -23,6 +23,8 @@ class ResearchRequest extends RequestManager
      */
     public function rules()
     {
+        $id = $this->id ?? 0;
+
         $rules = [
             'research_file' => "required|file|mimes:doc,docx|between:1,10240",
             'research_type' => "required",
@@ -32,6 +34,10 @@ class ResearchRequest extends RequestManager
             'submit_to' => "required",
             'share_file' => "nullable|array"
         ];
+
+        if($id > 0){
+            $rules['research_file'] = 'nullable|file|mimes:doc,docx|between:1,10240';
+        }
 
         return $rules;
     }

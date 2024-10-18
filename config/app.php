@@ -193,6 +193,7 @@ return [
         'ImageRemover' => App\Laravel\Services\ImageRemover::class,
         'FileUploader' => App\Laravel\Services\FileUploader::class,
         'FileRemover' => App\Laravel\Services\FileRemover::class,
+        'FileDownloader' => App\Laravel\Services\FileDownloader::class,
         'Carbon' => Carbon\Carbon::class,
         'SnappyPDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,

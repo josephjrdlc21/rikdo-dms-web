@@ -18,6 +18,11 @@ class Research extends Model{
         static::creating(function ($model) {
             $model->connection = config('database.default');
         });
+
+        static::deleting(function ($research) {
+            $research->logs()->delete();
+            $research->shared()->delete();
+        });
     }
     /**
      * The database table used by the model.
@@ -61,5 +66,25 @@ class Research extends Model{
 
     public function research_type(){
         return $this->belongsTo('App\Laravel\Models\ResearchType', 'research_type_id', 'id');
+    }
+
+    public function department(){
+		return $this->belongsTo('App\Laravel\Models\Department', 'department_id', 'id');
+	}
+
+    public function course(){
+		return $this->belongsTo('App\Laravel\Models\Course', 'course_id', 'id');
+	}
+
+    public function yearlevel(){
+		return $this->belongsTo('App\Laravel\Models\Yearlevel', 'yearlevel_id', 'id');
+	}
+
+    public function logs(){
+        return $this->hasMany('App\Laravel\Models\ResearchLog', 'research_id', 'id');
+    }
+
+    public function shared(){
+        return $this->hasMany('App\Laravel\Models\SharedResearch', 'research_id', 'id');
     }
 }

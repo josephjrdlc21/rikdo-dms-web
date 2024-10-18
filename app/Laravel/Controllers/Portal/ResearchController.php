@@ -2,14 +2,14 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,ResearchType,User,SharedResearch};
+use App\Laravel\Models\{Research,ResearchType,User,SharedResearch,ResearchLog};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\ResearchRequest;
 
 use App\Laravel\Traits\VerifyResearch;
 
-use Carbon,DB,Helper,FileUploader;
+use Carbon,DB,Helper,FileUploader,FileDownloader;
 
 class ResearchController extends Controller{
     use VerifyResearch;
@@ -321,14 +321,16 @@ class ResearchController extends Controller{
             }
 
             if($request->input('share_file')){
-                foreach ($request->input('share_file') as $author) {
-                    $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
-            
-                    if (!$check_research) {
-                        $share_file = new SharedResearch;
-                        $share_file->research_id = $research->id;
-                        $share_file->user_id = $author;
-                        $share_file->save();
+                foreach($request->input('share_file') as $author){
+                    if($author != $research->submitted_to_id){
+                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
+                
+                        if(!$check_research){
+                            $share_file = new SharedResearch;
+                            $share_file->research_id = $research->id;
+                            $share_file->user_id = $author;
+                            $share_file->save();
+                        }
                     }
                 }
             }
@@ -349,5 +351,81 @@ class ResearchController extends Controller{
         session()->flash('notification-status', "warning");
         session()->flash('notification-msg', "Unable to create new research.");
         return redirect()->back();
+    }
+
+    public function edit(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Edit Research";
+        $this->data['research'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->find($id);
+
+        if(!$this->data['research']){
+			session()->flash('notification-status', "failed");
+			session()->flash('notification-msg', "Record not found.");
+			return redirect()->route('portal.research.index');
+		}
+
+        if($this->data['research']->status !== "pending"){
+			session()->flash('notification-status', "warning");
+			session()->flash('notification-msg', "Research has already been processed. It cannot be edited.");
+			return redirect()->route('portal.research.index');
+		}
+
+        $this->data['shared'] = SharedResearch::where('research_id', $this->data['research']->id)->pluck('user_id')->toArray();
+
+        return view('portal.research.edit', $this->data);
+    }
+
+    public function destroy(PageRequest $request,$id = null){
+        $research = Research::find($id);
+
+        if(!$research){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.research.index');
+        }
+
+        if($research->status !== "pending") {
+            session()->flash('notification-status', "warning");
+            session()->flash('notification-msg', "Research has already been processed. It cannot be deleted.");
+            return redirect()->route('portal.research.index');
+        }
+
+        if($research->delete()){
+            session()->flash('notification-status', 'success');
+            session()->flash('notification-msg', "Research has been deleted.");
+            return redirect()->back();
+        }
+    }
+
+    public function show(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Information";
+        $this->data['research'] = Research::with(['submitted_by', 'submitted_to', 'research_type', 'department', 'course', 'yearlevel'])->find($id);
+
+        if(!$this->data['research']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.research.index');
+        }
+
+        $this->data['research_history'] = ResearchLog::with('user')->where('research_id', $this->data['research']->id)->get();
+
+        return view('portal.research.show', $this->data);
+    }
+
+    public function download(PageRequest $request,$id = null){
+        $research = Research::find($id);
+
+        if(!$research){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.research.index');
+        }
+
+        $path = $research->path ? "{$research->path}/{$research->filename}" : "{$research->directory}/{$research->filename}";
+        
+        if(!FileDownloader::download($path)){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Unable to download the file.");
+            return redirect()->route('portal.research.show', [$research->id]);
+        }
     }
 }

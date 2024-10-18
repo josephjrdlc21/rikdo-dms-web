@@ -20,7 +20,7 @@
     <div class="card-body">
         <form method="GET" action="">
             <div class="row">
-                <div class="col-sm-12 col-lg-4">
+                <div class="col-sm-12 col-lg-3">
                     <div class="form-group">
                         <label for="input_keyword">Keyword</label>
                         <input type="text" id="input_keyword" class="form-control" placeholder="eg. ID Number, Name" name="keyword" value="{{$keyword}}">
@@ -32,20 +32,16 @@
                         {!! html()->select('role', $roles, $selected_role, ['id' => "input_user_role"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-5">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="input_from">From</label>
-                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="start_date" value="{{$start_date}}">                            
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="input_to">To</label>
-                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="end_date" value="{{$end_date}}">                            
-                            </div>
-                        </div>
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label for="input_from">From</label>
+                        <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="start_date" value="{{$start_date}}">                            
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label for="input_to">To</label>
+                        <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="end_date" value="{{$end_date}}">                            
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-4">
