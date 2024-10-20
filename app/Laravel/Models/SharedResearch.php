@@ -50,4 +50,8 @@ class SharedResearch extends Model{
      * @var array
      */
     protected $casts = [];
+
+    public function user(){
+        return $this->belongsTo('App\Laravel\Models\User', 'user_id', 'id');
+    }
 }

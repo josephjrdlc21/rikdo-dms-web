@@ -72,6 +72,16 @@
                             <h6><b>Processed/Modified At</b></h6>
                             <p>{{$research->updated_at->format("m/d/Y h:i A") ?: 'N/A'}}</p>
                         </div>
+                    </div><hr>
+                    <div class="col-sm-12">
+                        <div class="mb-2">
+                            <h6><b>Share File With</b></h6>
+                            @forelse($shared as $author)
+                            <span>{{$author->user->name}}</span><br>
+                            @empty
+                            <span>{{'N/A'}}</span>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
                 <a href="{{route('portal.research.index')}}" class="btn btn-sm btn-secondary">Close</a>

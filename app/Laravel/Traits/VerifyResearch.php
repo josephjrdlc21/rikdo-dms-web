@@ -7,16 +7,18 @@ use App\Laravel\Models\{Research,ResearchType};
 use DB;
 
 trait VerifyResearch{
-    public function check_research_title($request){
-        $exists = Research::where(DB::raw('LOWER(title)'), strtolower($request->input('title')))
-            ->where('chapter', $request->input('chapter'))
-            ->where('version', $request->input('version'))
-            ->exists();
+    public function check_research_title($request,$id = null){
+        if(is_null($id)){
+            $exists = Research::where(DB::raw('LOWER(title)'), strtolower($request->input('title')))
+                ->where('chapter', $request->input('chapter'))
+                ->where('version', $request->input('version'))
+                ->exists();
 
-        if($exists){
-            session()->flash('notification-status', "warning");
-            session()->flash('notification-msg', "Same title with the same chapter and version already exists.");
-            return true;
+            if($exists){
+                session()->flash('notification-status', "warning");
+                session()->flash('notification-msg', "Same title with the same chapter and version already exists.");
+                return true;
+            }
         }
 
         return false;
