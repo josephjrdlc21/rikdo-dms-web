@@ -43,6 +43,8 @@ class ResearchController extends Controller{
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
         $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
+        $shared = SharedResearch::where('user_id', $this->data['auth']->id)->pluck('research_id')->toArray();
+
         $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
@@ -80,7 +82,10 @@ class ResearchController extends Controller{
                 }
             });
         })
-        ->where('submitted_by_id', $this->data['auth']->id)
+        ->where(function ($query) use ($shared) {
+            $query->where('submitted_by_id', $this->data['auth']->id)
+                  ->orWhereIn('id', $shared);
+        })
         ->where('status', 'pending')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -106,6 +111,8 @@ class ResearchController extends Controller{
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
         $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
+        $shared = SharedResearch::where('user_id', $this->data['auth']->id)->pluck('research_id')->toArray();
+
         $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
@@ -143,7 +150,10 @@ class ResearchController extends Controller{
                 }
             });
         })
-        ->where('submitted_by_id', $this->data['auth']->id)
+        ->where(function ($query) use ($shared) {
+            $query->where('submitted_by_id', $this->data['auth']->id)
+                  ->orWhereIn('id', $shared);
+        })
         ->where('status', 'approved')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
