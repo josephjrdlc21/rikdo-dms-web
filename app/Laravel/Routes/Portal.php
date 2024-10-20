@@ -57,6 +57,13 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/download/{id?}', ['as' => "download", 'uses' => "ResearchController@download"]);
         });
 
+        Route::group(['prefix' => "student-research", 'as' => "student_research."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "StudentResearchController@index"]);
+            Route::get('/approved', ['as' => "approved", 'uses' => "StudentResearchController@approved"]);
+            Route::get('/for-revision', ['as' => "for_revision", 'uses' => "StudentResearchController@for_revision"]);
+            Route::get('/rejected', ['as' => "rejected", 'uses' => "StudentResearchController@rejected"]);
+        });
+
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){
             Route::group(['prefix' => "roles", 'as' => "roles."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "RolesController@index"]);

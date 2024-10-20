@@ -80,7 +80,7 @@
                         <th>Status</th>
                         <th>Professor</th>
                         <th>Submitted By</th>
-                        <th>Date</th>
+                        <th>Date Submitted</th>
                         <th></th>
                     </tr>
                 </thead>

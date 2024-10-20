@@ -2,10 +2,10 @@
 
 @section('breadcrumb')
 <div class="section-header">
-    <h1>My Research</h1>
+    <h1>Student Research</h1>
     <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="#">My Research</a></div>
-        <div class="breadcrumb-item active"><a href="#">Revision</a></div>
+        <div class="breadcrumb-item active"><a href="#">Student Research</a></div>
+        <div class="breadcrumb-item active"><a href="#">For Revision</a></div>
         <div class="breadcrumb-item">Data</div>
     </div>
 </div>
@@ -58,16 +58,13 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-sm btn-primary">Apply Filter</button>
-            <a href="{{route('portal.research.for_revision')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
+            <a href="{{route('portal.student_research.for_revision')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
         </form>
     </div>
 </div>
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
-        <div class="card-header-action">
-            <a href="{{route('portal.research.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Research</a>
-        </div>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -103,7 +100,9 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="{{route('portal.research.show', [$research->id])}}">View Details</a>
+                                    <a class="dropdown-item" href="#">View Details</a>
+                                    <a class="dropdown-item" href="#">Edit Details</a>
+                                    <a class="dropdown-item delete-record" data-url="#" type="button" style="cursor: pointer;">Delete Research</a>
                                 </div>
                             </div> 
                         </td>

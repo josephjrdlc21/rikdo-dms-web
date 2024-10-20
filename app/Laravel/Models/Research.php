@@ -87,4 +87,12 @@ class Research extends Model{
     public function shared(){
         return $this->hasMany('App\Laravel\Models\SharedResearch', 'research_id', 'id');
     }
+
+    public function modified_by(){
+        return $this->belongsTo('App\Laravel\Models\User', 'modified_by_id', 'id');
+    }
+
+    public function processed_by(){
+        return $this->belongsTo('App\Laravel\Models\User', 'process_by_id', 'id');
+    }
 }

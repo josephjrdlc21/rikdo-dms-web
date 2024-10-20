@@ -179,6 +179,8 @@ class ResearchController extends Controller{
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
         $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
+        $shared = SharedResearch::where('user_id', $this->data['auth']->id)->pluck('research_id')->toArray();
+
         $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
@@ -216,7 +218,10 @@ class ResearchController extends Controller{
                 }
             });
         })
-        ->where('submitted_by_id', $this->data['auth']->id)
+        ->where(function ($query) use ($shared) {
+            $query->where('submitted_by_id', $this->data['auth']->id)
+                  ->orWhereIn('id', $shared);
+        })
         ->where('status', 'for_revision')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -242,6 +247,8 @@ class ResearchController extends Controller{
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
         $this->data['research_types'] = ['' => "All"] + ResearchType::pluck('type', 'id')->toArray();
 
+        $shared = SharedResearch::where('user_id', $this->data['auth']->id)->pluck('research_id')->toArray();
+
         $this->data['record'] = Research::with(['submitted_by', 'submitted_to', 'research_type'])->where(function ($query) {
             if (strlen($this->data['keyword']) > 0) {
                 $query->whereRaw("LOWER(title) LIKE '%{$this->data['keyword']}%'")
@@ -279,7 +286,10 @@ class ResearchController extends Controller{
                 }
             });
         })
-        ->where('submitted_by_id', $this->data['auth']->id)
+        ->where(function ($query) use ($shared) {
+            $query->where('submitted_by_id', $this->data['auth']->id)
+                  ->orWhereIn('id', $shared);
+        })        
         ->where('status', 'rejected')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
@@ -378,7 +388,8 @@ class ResearchController extends Controller{
 			session()->flash('notification-msg', "Research has already been processed. It cannot be edited.");
 			return redirect()->route('portal.research.index');
 		}
-
+        
+        $this->data['authors'] = User::where('id', '!=', $this->data['research']->submitted_by_id)->pluck('name', 'id')->toArray();
         $this->data['shared'] = SharedResearch::where('research_id', $this->data['research']->id)->pluck('user_id')->toArray();
 
         return view('portal.research.edit', $this->data);
@@ -415,11 +426,8 @@ class ResearchController extends Controller{
         try{
             $research->title = strtoupper($request->input('title'));
             $research->research_type_id = $request->input('research_type');
-            $research->department_id = $this->data['auth']->user_info->department_id;
-            $research->course_id = $this->data['auth']->user_info->course_id;
-            $research->yearlevel_id = $this->data['auth']->user_info->yearlevel_id;
             $research->submitted_to_id = $request->input('submit_to');
-            $research->submitted_by_id = $this->data['auth']->id;
+            $research->modified_by_id = $this->data['auth']->id;
             $research->chapter = $request->input('chapter', 0);
             $research->version = $request->input('version');
             $research->save();
@@ -515,7 +523,7 @@ class ResearchController extends Controller{
 
     public function show(PageRequest $request,$id = null){
         $this->data['page_title'] .= " - Information";
-        $this->data['research'] = Research::with(['submitted_by', 'submitted_to', 'research_type', 'department', 'course', 'yearlevel'])->find($id);
+        $this->data['research'] = Research::with(['submitted_by', 'submitted_to', 'research_type', 'department', 'course', 'yearlevel', 'modified_by', 'processed_by'])->find($id);
 
         if(!$this->data['research']){
             session()->flash('notification-status', "failed");

@@ -46,6 +46,10 @@
                             <h6><b>Date Submitted</b></h6>
                             <p>{{$research->created_at->format("m/d/Y h:i A") ?: 'N/A'}}</p>
                         </div>
+                        <div class="mb-2">
+                            <h6><b>Last Modified By</b></h6>
+                            <p>{{$research->modified_by->name ?? 'N/A'}}</p>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-2">
@@ -71,6 +75,10 @@
                         <div class="mb-2">
                             <h6><b>Processed/Modified At</b></h6>
                             <p>{{$research->updated_at->format("m/d/Y h:i A") ?: 'N/A'}}</p>
+                        </div>
+                        <div class="mb-2">
+                            <h6><b>Processed By</b></h6>
+                            <p>{{$research->processed_by->name ?? 'N/A'}}</p>
                         </div>
                     </div><hr>
                     <div class="col-sm-12">

@@ -78,7 +78,7 @@
                     </div>
                     <div class="form-group">
                         <label for="input_share_file">Share File</label>
-                        {!! html()->multiselect('share_file[]', $researchers, $shared, ['id' => "input_share_file"])->class('form-control select2') !!}
+                        {!! html()->multiselect('share_file[]', $authors, $shared, ['id' => "input_share_file"])->class('form-control select2') !!}
                         @if($errors->first('share_file'))
                         <small class="d-block mt-1 text-danger">{{$errors->first('share_file')}}</small>
                         @endif                 
