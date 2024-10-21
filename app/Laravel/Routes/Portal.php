@@ -52,6 +52,8 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::post('/create', ['uses' => "ResearchController@store"]);
             Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "ResearchController@edit"]);
             Route::post('/edit/{id?}', ['uses' => "ResearchController@update"]);
+            Route::get('/edit-share/{id?}', ['as' => "edit_share", 'uses' => "ResearchController@edit_share"]);
+            Route::post('/edit-share/{id?}', ['uses' => "ResearchController@update_share"]);
             Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "ResearchController@destroy"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "ResearchController@show"]);
             Route::get('/download/{id?}', ['as' => "download", 'uses' => "ResearchController@download"]);
@@ -62,6 +64,12 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/approved', ['as' => "approved", 'uses' => "StudentResearchController@approved"]);
             Route::get('/for-revision', ['as' => "for_revision", 'uses' => "StudentResearchController@for_revision"]);
             Route::get('/rejected', ['as' => "rejected", 'uses' => "StudentResearchController@rejected"]);
+            Route::get('/edit-share/{id?}', ['as' => "edit_share", 'uses' => "StudentResearchController@edit_share"]);
+            Route::post('/edit-share/{id?}', ['uses' => "StudentResearchController@update_share"]);
+            Route::get('/edit-status/{id?}/{status?}', ['as' => "edit_status", 'uses' => "StudentResearchController@edit_status"]);
+            Route::post('/edit-status/{id?}/{status?}', ['uses' => "StudentResearchController@update_status"]);
+            Route::get('/show/{id?}', ['as' => "show", 'uses' => "StudentResearchController@show"]);
+            Route::get('/download/{id?}', ['as' => "download", 'uses' => "StudentResearchController@download"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

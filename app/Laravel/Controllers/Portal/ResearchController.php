@@ -499,6 +499,85 @@ class ResearchController extends Controller{
         return redirect()->back();
     }
 
+    public function edit_share(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Share Research";
+        $this->data['research'] = Research::with('research_type')->find($id);
+
+        if(!$this->data['research']){
+			session()->flash('notification-status', "failed");
+			session()->flash('notification-msg', "Record not found.");
+			return redirect()->route('portal.research.index');
+		}
+
+        $this->data['authors'] = User::where('id', '!=', $this->data['research']->submitted_by_id)->pluck('name', 'id')->toArray();
+        $this->data['shared'] = SharedResearch::where('research_id', $this->data['research']->id)->pluck('user_id')->toArray();
+
+        return view('portal.research.edit-share', $this->data);
+    }
+
+    public function update_share(PageRequest $request,$id = null){
+        $research = Research::find($id);
+
+        if(!$research){
+            session()->flash('notification-status', "failed");
+			session()->flash('notification-msg', "Record not found.");
+			return redirect()->route('portal.research.index');
+        }
+
+        DB::beginTransaction();
+        try{
+            if($request->input('share_file')){
+                $remove_authors = array_diff($research->shared()->pluck('user_id')->toArray(), $request->input('share_file'));
+                $new_authors = array_diff($request->input('share_file'), $research->shared()->pluck('user_id')->toArray());
+
+                if(!empty($remove_authors)){
+                    SharedResearch::where('research_id', $research->id)->whereIn('user_id', $remove_authors)->forceDelete();
+                    
+                    $research->updated_at = Carbon::now();
+                    $research->save();
+                }
+
+                $check_submitted = SharedResearch::where('research_id', $research->id)->where('user_id', $research->submitted_to_id)->first();
+
+                if($check_submitted){
+                    $check_submitted->forceDelete();
+
+                    $research->updated_at = Carbon::now();
+                    $research->save();
+                }
+                
+                foreach($new_authors as $author){
+                    if($author != $research->submitted_to_id){
+                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
+
+                        if(!$check_research){
+                            $share = new SharedResearch();
+                            $share->research_id = $research->id;
+                            $share->user_id = $author;
+                            $share->save();
+
+                            $research->updated_at = Carbon::now();
+                            $research->save();
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "Research has been shared with other authors or advisers.");
+            return redirect()->route('portal.research.show', [$research->id]);
+        }catch(\Exception $e){
+            DB::rollback();
+
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+        }
+
+        return redirect()->back();
+    }
+
     public function destroy(PageRequest $request,$id = null){
         $research = Research::find($id);
 
@@ -553,14 +632,9 @@ class ResearchController extends Controller{
         if($download){
             return $download;
         }
-        else{
-            session()->flash('notification-status', "error");
-            session()->flash('notification-msg', "Failed to download research file.");
-            return redirect()->route('portal.research.show', [$research->id]);
-        }
-
-        session()->flash('notification-status', "success");
-        session()->flash('notification-msg', "Research file has been downloaded.");
+        
+        session()->flash('notification-status', "error");
+        session()->flash('notification-msg', "Failed to download research file.");
         return redirect()->route('portal.research.show', [$research->id]);
     }
 }
