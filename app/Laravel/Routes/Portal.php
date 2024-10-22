@@ -68,6 +68,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::post('/edit-share/{id?}', ['uses' => "StudentResearchController@update_share"]);
             Route::get('/edit-status/{id?}/{status?}', ['as' => "edit_status", 'uses' => "StudentResearchController@edit_status"]);
             Route::post('/edit-status/{id?}/{status?}', ['uses' => "StudentResearchController@update_status"]);
+            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "StudentResearchController@destroy"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "StudentResearchController@show"]);
             Route::get('/download/{id?}', ['as' => "download", 'uses' => "StudentResearchController@download"]);
         });

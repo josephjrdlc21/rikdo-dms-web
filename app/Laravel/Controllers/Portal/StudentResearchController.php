@@ -340,6 +340,12 @@ class StudentResearchController extends Controller{
                 }
             }
 
+            $research_log = new ResearchLog;
+            $research_log->research_id = $research->id;
+            $research_log->user_id = $this->data['auth']->id;
+            $research_log->remarks = "Research has been shared to other users";
+            $research_log->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -376,6 +382,12 @@ class StudentResearchController extends Controller{
                     $research->status = $status;
                     $research->process_by_id = $this->data['auth']->id;
                     $research->save();
+
+                    $research_log = new ResearchLog;
+                    $research_log->research_id = $research->id;
+                    $research_log->user_id = $this->data['auth']->id;
+                    $research_log->remarks = "Research has been {$research->status}";
+                    $research_log->save();
                 
                     DB::commit();
 
@@ -404,6 +416,12 @@ class StudentResearchController extends Controller{
                     $research->status = $status;
                     $research->process_by_id = $this->data['auth']->id;
                     $research->save();
+
+                    $research_log = new ResearchLog;
+                    $research_log->research_id = $research->id;
+                    $research_log->user_id = $this->data['auth']->id;
+                    $research_log->remarks = "Research has been {$research->status}";
+                    $research_log->save();
                 
                     DB::commit();
 
@@ -514,6 +532,12 @@ class StudentResearchController extends Controller{
             $research->status = $status;
             $research->save();
 
+            $research_log = new ResearchLog;
+            $research_log->research_id = $research->id;
+            $research_log->user_id = $this->data['auth']->id;
+            $research_log->remarks = "Research has been {$research->status}";
+            $research_log->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -530,6 +554,22 @@ class StudentResearchController extends Controller{
         session()->flash('notification-status', "warning");
         session()->flash('notification-msg', "Unable to revise research.");
         return redirect()->back();
+    }
+
+    public function destroy(PageRequest $request,$id = null){
+        $research = Research::find($id);
+
+        if(!$research){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.research.index');
+        }
+
+        if($research->delete()){
+            session()->flash('notification-status', 'success');
+            session()->flash('notification-msg', "Research has been deleted.");
+            return redirect()->back();
+        }
     }
 
     public function show(PageRequest $request,$id = null){

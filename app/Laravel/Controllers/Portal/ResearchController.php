@@ -355,6 +355,12 @@ class ResearchController extends Controller{
                 }
             }
 
+            $research_log = new ResearchLog;
+            $research_log->research_id = $research->id;
+            $research_log->user_id = $this->data['auth']->id;
+            $research_log->remarks = "New research has been created";
+            $research_log->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -481,6 +487,12 @@ class ResearchController extends Controller{
                 }
             }
 
+            $research_log = new ResearchLog;
+            $research_log->research_id = $research->id;
+            $research_log->user_id = $this->data['auth']->id;
+            $research_log->remarks = "Research has been updated";
+            $research_log->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -562,6 +574,12 @@ class ResearchController extends Controller{
                     }
                 }
             }
+
+            $research_log = new ResearchLog;
+            $research_log->research_id = $research->id;
+            $research_log->user_id = $this->data['auth']->id;
+            $research_log->remarks = "Research has been shared to other users";
+            $research_log->save();
 
             DB::commit();
 

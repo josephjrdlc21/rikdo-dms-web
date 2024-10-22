@@ -29,27 +29,27 @@
                     <div class="col-md-6">
                         <div class="mb-2">
                             <h6><b>Title</b></h6>
-                            <p>{{$research->title ?: 'N/A'}}</p>
+                            <p>{{$research->title ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Chapter</b></h6>
-                            <p>{{$research->research_type->type ?: 'N/A'}}</p>
+                            <p>{{$research->research_type->type ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Chapter</b></h6>
-                            <p>{{$research->chapter ?: 'N/A'}}</p>
+                            <p>{{$research->chapter ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Version</b></h6>
-                            <p>{{$research->version ?: 'N/A'}}</p>
+                            <p>{{$research->version ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Department</b></h6>
-                            <p>{{$research->department->dept_name ?: 'N/A'}}</p>
+                            <p>{{$research->department->dept_name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Date Submitted</b></h6>
-                            <p>{{$research->created_at->format("m/d/Y h:i A") ?: 'N/A'}}</p>
+                            <p>{{$research->created_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Last Modified By</b></h6>
@@ -59,27 +59,27 @@
                     <div class="col-md-6">
                         <div class="mb-2">
                             <h6><b>Status</b></h6>
-                            <p><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text($research->status) ?: 'N/A'}}</span></p>
+                            <p><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text($research->status) ?? 'N/A'}}</span></p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Submitted By</b></h6>
-                            <p>{{$research->submitted_by->name ?: 'N/A'}}</p>
+                            <p>{{$research->submitted_by->name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Professor</b></h6>
-                            <p>{{$research->submitted_to->name ?: 'N/A'}}</p>
+                            <p>{{$research->submitted_to->name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Course</b></h6>
-                            <p>{{$research->course->course_name ?: 'N/A'}}</p>
+                            <p>{{$research->course->course_name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Department</b></h6>
-                            <p>{{$research->yearlevel->yearlevel_name ?: 'N/A'}}</p>
+                            <p>{{$research->yearlevel->yearlevel_name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Processed/Modified At</b></h6>
-                            <p>{{$research->updated_at->format("m/d/Y h:i A") ?: 'N/A'}}</p>
+                            <p>{{$research->updated_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Processed By</b></h6>

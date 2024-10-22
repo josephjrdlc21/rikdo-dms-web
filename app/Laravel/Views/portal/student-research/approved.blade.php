@@ -102,7 +102,7 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="{{route('portal.student_research.show', [$research->id])}}">View Details</a>
                                     <a class="dropdown-item" href="{{route('portal.student_research.edit_share', [$research->id])}}">Share Research</a>
-                                    <a class="dropdown-item delete-record" data-url="#" type="button" style="cursor: pointer;">Delete Research</a>
+                                    <a class="dropdown-item delete-record" data-url="{{route('portal.student_research.delete', [$research->id])}}" type="button" style="cursor: pointer;">Delete Research</a>
                                 </div>
                             </div> 
                         </td>
@@ -123,4 +123,24 @@
         @endif
     </div>
 </div>
+@stop
+
+@section('page-scripts')
+<script type="text/javascript">
+    $(".delete-record").on('click', function(){
+        var url = $(this).data('url');
+        
+        swal({
+            title: "Are you sure you want to delete this?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
+</script>
 @stop
