@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-sm-12 col-md-8 col-lg-6">
+    <div class="col-sm-12 col-md-9 col-lg-7">
         @include('portal._components.edit-account-tab')
         @include('portal._components.notification')
         <div class="card">

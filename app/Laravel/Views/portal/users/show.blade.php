@@ -12,10 +12,20 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-sm-12 col-md-8 col-lg-6">
+    <div class="col-sm-12 col-md-9 col-lg-7">
         <div class="card">
             <div class="card-header">
                 <h4>User Information</h4>
+                <div class="card-header-action">
+                    <div class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a href="{{route('portal.users.edit', [$user->id])}}" class="dropdown-item">Edit User</a>
+                            <a class="dropdown-item reset-password" data-url="{{route('portal.users.update_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
+                            <a class="dropdown-item status-activation" data-url="{{route('portal.users.update_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row mb-2">
@@ -76,10 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{route('portal.users.index')}}" class="btn btn-sm btn-danger">Cancel</a>
-                <a href="{{route('portal.users.edit', [$user->id])}}" class="btn btn-sm btn-info">Edit User</a>
-                <a class="btn btn-sm btn-warning text-white reset-password" data-url="{{route('portal.users.update_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
-                <a class="btn btn-sm btn-secondary text-white status-activation" data-url="{{route('portal.users.update_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
+                <a href="{{route('portal.users.index')}}" class="btn btn-sm btn-dark">Close Details</a>
             </div>
         </div>
     </div>

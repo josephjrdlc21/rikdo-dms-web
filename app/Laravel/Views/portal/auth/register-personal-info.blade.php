@@ -99,7 +99,7 @@
             <a href="{{route('portal.auth.cancel')}}">Login</a>
         </div>
         <div class="simple-footer">
-            Copyright &copy; RIKDO <script>document.write(new Date().getFullYear());</script>
+            Copyright &copy; {{env('APP_NAME')}} <script>document.write(new Date().getFullYear());</script>
         </div>
     </div>
 </div>

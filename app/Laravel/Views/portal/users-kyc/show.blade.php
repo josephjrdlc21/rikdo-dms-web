@@ -13,10 +13,21 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-sm-12 col-md-8 col-lg-6">
+    <div class="col-sm-12 col-md-9 col-lg-7">
         <div class="card">
             <div class="card-header">
                 <h4>Application Details</h4>
+                @if($user_kyc->status === 'pending')
+                <div class="card-header-action">
+                    <div class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'approved'])}}" class="dropdown-item btn-approve" type="button" style="cursor: pointer;">Approve Appplication</a>
+                            <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'rejected'])}}" class="dropdown-item btn-rejected" type="button" style="cursor: pointer;">Reject Appplication</a>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row mb-2">
@@ -77,11 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{route('portal.users_kyc.index')}}" class="btn btn-sm btn-secondary">Close</a>
-                @if($user_kyc->status === 'pending')
-                <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'approved'])}}" class="btn btn-sm btn-success text-white btn-approve" type="button" style="cursor: pointer;">Approve Appplication</a>
-                <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'rejected'])}}" class="btn btn-sm btn-danger text-white btn-rejected" type="button" style="cursor: pointer;">Reject Appplication</a>
-                @endif
+                <a href="{{route('portal.users_kyc.index')}}" class="btn btn-sm btn-dark">Close Details</a>
             </div>
         </div>
     </div>
