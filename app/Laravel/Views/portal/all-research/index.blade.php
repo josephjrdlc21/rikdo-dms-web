@@ -2,10 +2,10 @@
 
 @section('breadcrumb')
 <div class="section-header">
-    <h1>Student Research</h1>
+    <h1>All Research</h1>
     <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="#">Student Research</a></div>
-        <div class="breadcrumb-item active"><a href="#">For Revision</a></div>
+        <div class="breadcrumb-item active"><a href="#">All Research</a></div>
+        <div class="breadcrumb-item active"><a href="#">Pending</a></div>
         <div class="breadcrumb-item">Data</div>
     </div>
 </div>
@@ -58,7 +58,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-sm btn-primary">Apply Filter</button>
-            <a href="{{route('portal.student_research.for_revision')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
+            <a href="{{route('portal.all_research.index')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
         </form>
     </div>
 </div>
@@ -98,9 +98,8 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="{{route('portal.student_research.show', [$research->id])}}">View Details</a>
-                                    <a class="dropdown-item" href="{{route('portal.student_research.edit_share', [$research->id])}}">Share Research</a>
-                                    <a class="dropdown-item delete-record" data-url="{{route('portal.student_research.delete', [$research->id])}}" type="button" style="cursor: pointer;">Delete Research</a>
+                                    <a class="dropdown-item" href="{{route('portal.all_research.show', [$research->id])}}">View Details</a>
+                                    <a class="dropdown-item delete-record" data-url="{{route('portal.all_research.delete', [$research->id])}}" type="button" style="cursor: pointer;">Delete Research</a>
                                 </div>
                             </div> 
                         </td>

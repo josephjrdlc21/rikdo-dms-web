@@ -79,7 +79,6 @@
                     <tr>
                         <th>User</th>
                         <th>Role</th>
-                        <th>Status</th>
                         <th>Department</th>
                         <th>Course</th>
                         <th>Date Application</th>
@@ -94,10 +93,9 @@
                             <a href="{{route('portal.users_kyc.show', [$application->id])}}">{{$application->id_number}}</a>
                         </td>
                         <td>{{Helper::capitalize_text($application->role)}}</td>
-                        <td><span class="badge badge-{{Helper::application_badge_status($application->status)}}">{{Helper::capitalize_text($application->status)}}</span></td>
                         <td>{{$application->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$application->course->course_code ?? 'N/A'}}<br><small>{{$user->yearlevel->yearlevel_name ?? ''}}</small></td>
-                        <td>{{$application->created_at->format("m/d/Y")}}<br><small>{{$application->created_at->format("h:i A")}}</small></td>
+                        <td>{{$application->created_at->format("m/d/Y h:i A")}}</td>
                         <td>
                             <div class="btn-group mb-2">
                                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -110,7 +108,7 @@
                         </td>
                     </tr>
                     @empty
-                    <td colspan="7">
+                    <td colspan="6">
                         <p class="text-center">No record found yet.</p>
                     </td>
                     @endforelse

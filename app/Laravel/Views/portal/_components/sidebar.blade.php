@@ -42,16 +42,16 @@
                     <li class="{{request()->segment(1) == "student-research" && request()->segment(2) == "rejected" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.student_research.rejected')}}">Rejected</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{request()->segment(1) == "all-research" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-folder"></i> <span>All Research</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Pending</a></li>
-                    <li><a class="nav-link" href="#">Approved</a></li>
-                    <li><a class="nav-link" href="#">Revision</a></li>
-                    <li><a class="nav-link" href="#">Rejected</a></li>
+                    <li class="{{request()->segment(1) == "all-research" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.all_research.index')}}">Pending</a></li>
+                    <li class="{{request()->segment(1) == "all-research" && request()->segment(2) == "approved" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.all_research.approved')}}">Approved</a></li>
+                    <li class="{{request()->segment(1) == "all-research" && request()->segment(2) == "for-revision" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.all_research.for_revision')}}">Revision</a></li>
+                    <li class="{{request()->segment(1) == "all-research" && request()->segment(2) == "rejected" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.all_research.rejected')}}">Rejected</a></li>
                 </ul>
             </li>            
-            <li><a class="nav-link" href="#"><i class="fas fa-copy"></i> <span>Completed Research</span></a></li>
+            <li class="{{request()->segment(1) == "completed-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.completed_research.index')}}"><i class="fas fa-copy"></i> <span>Completed Research</span></a></li>
             <li><a class="nav-link" href="#"><i class="fas fa-globe"></i> <span>Posted Research</span></a></li>
             <li><a class="nav-link" href="#"><i class="fas fa-archive"></i> <span>Archives</span></a></li>
             <li><a class="nav-link" href="#"><i class="fas fa-file-invoice"></i> <span>Research Reports</span></a></li>

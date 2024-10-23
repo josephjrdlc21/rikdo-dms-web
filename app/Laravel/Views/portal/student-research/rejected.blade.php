@@ -74,7 +74,6 @@
                         <th>No.</th>
                         <th class="text-center">Title</th>
                         <th>Type</th>
-                        <th>Status</th>
                         <th>Professor</th>
                         <th>Submitted By</th>
                         <th>Date Submitted</th>
@@ -90,10 +89,9 @@
                             <small>ch {{$research->chapter}}, ver {{$research->version}}</small>
                         </td>
                         <td>{{$research->research_type->type}}</td>
-                        <td><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text($research->status)}}</span></td>
                         <td>{{$research->submitted_to->name}}</td>
                         <td>{{$research->submitted_by->name}}</td>
-                        <td>{{$research->created_at->format("m/d/Y")}}<br><small>{{$research->created_at->format("h:i A")}}</small></td>
+                        <td>{{$research->created_at->format("m/d/Y h:i A")}}</td>
                         <td>
                             <div class="btn-group mb-2">
                                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -108,7 +106,7 @@
                         </td>
                     </tr>
                     @empty
-                    <td colspan="8">
+                    <td colspan="7">
                         <p class="text-center">No record found yet.</p>
                     </td>
                     @endforelse

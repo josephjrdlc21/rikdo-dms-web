@@ -79,11 +79,11 @@
                     <tr>
                         <th>User</th>
                         <th>Role</th>
-                        <th>Status</th>
                         <th>Department</th>
                         <th>Course</th>
                         <th>Process By</th>
                         <th>Process At</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>                         
@@ -94,11 +94,20 @@
                             <a href="{{route('portal.users_kyc.show', [$application->id])}}">{{$application->id_number}}</a>
                         </td>
                         <td>{{Helper::capitalize_text($application->role)}}</td>
-                        <td><span class="badge badge-{{Helper::application_badge_status($application->status)}}">{{Helper::capitalize_text($application->status)}}</span></td>
                         <td>{{$application->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$application->course->course_code ?? 'N/A'}}<br><small>{{$user->yearlevel->yearlevel_name ?? ''}}</small></td>
                         <td>{{$application->processor->name ?? 'N/A'}}</td>
-                        <td>{{Carbon::parse($application->process_at)->format("m/d/Y")}}<br><small>{{Carbon::parse($application->process_at)->format("h:i A")}}</small></td>
+                        <td>{{Carbon::parse($application->process_at)->format("m/d/Y h:i A")}}</td>
+                        <td>
+                            <div class="btn-group mb-2">
+                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    <a class="dropdown-item" href="{{route('portal.users_kyc.show', [$application->id])}}">View Details</a>
+                                </div>
+                            </div> 
+                        </td>
                     </tr>
                     @empty
                     <td colspan="7">
