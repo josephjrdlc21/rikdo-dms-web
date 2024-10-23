@@ -304,23 +304,19 @@ class StudentResearchController extends Controller{
         DB::beginTransaction();
         try{
             if($request->input('share_file')){
-                $remove_authors = array_diff($research->shared()->pluck('user_id')->toArray(), $request->input('share_file'));
-                $new_authors = array_diff($request->input('share_file'), $research->shared()->pluck('user_id')->toArray());
+                $existing_authors = $research->shared()->pluck('user_id')->toArray();
+
+                $remove_authors = array_diff($existing_authors, $request->input('share_file'));
+                $new_authors = array_diff($request->input('share_file'), $existing_authors);
 
                 if(!empty($remove_authors)){
                     SharedResearch::where('research_id', $research->id)->whereIn('user_id', $remove_authors)->forceDelete();
-                    
-                    $research->updated_at = Carbon::now();
-                    $research->save();
                 }
 
                 $check_submitted = SharedResearch::where('research_id', $research->id)->where('user_id', $research->submitted_to_id)->first();
 
                 if($check_submitted){
                     $check_submitted->forceDelete();
-
-                    $research->updated_at = Carbon::now();
-                    $research->save();
                 }
                 
                 foreach($new_authors as $author){
@@ -328,17 +324,17 @@ class StudentResearchController extends Controller{
                         $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
 
                         if(!$check_research){
-                            $share = new SharedResearch();
+                            $share = new SharedResearch;
                             $share->research_id = $research->id;
                             $share->user_id = $author;
                             $share->save();
-
-                            $research->updated_at = Carbon::now();
-                            $research->save();
                         }
                     }
                 }
             }
+
+            $research->updated_at = Carbon::now();
+            $research->save();
 
             $research_log = new ResearchLog;
             $research_log->research_id = $research->id;
@@ -493,23 +489,19 @@ class StudentResearchController extends Controller{
             }
 
             if($request->input('share_file')){
-                $remove_authors = array_diff($research->shared()->pluck('user_id')->toArray(), $request->input('share_file'));
-                $new_authors = array_diff($request->input('share_file'), $research->shared()->pluck('user_id')->toArray());
+                $existing_authors = $research->shared()->pluck('user_id')->toArray();
+
+                $remove_authors = array_diff($existing_authors, $request->input('share_file'));
+                $new_authors = array_diff($request->input('share_file'), $existing_authors);
 
                 if(!empty($remove_authors)){
                     SharedResearch::where('research_id', $research->id)->whereIn('user_id', $remove_authors)->forceDelete();
-                    
-                    $research->updated_at = Carbon::now();
-                    $research->save();
                 }
 
                 $check_submitted = SharedResearch::where('research_id', $research->id)->where('user_id', $research->submitted_to_id)->first();
 
                 if($check_submitted){
                     $check_submitted->forceDelete();
-
-                    $research->updated_at = Carbon::now();
-                    $research->save();
                 }
                 
                 foreach($new_authors as $author){
@@ -517,19 +509,17 @@ class StudentResearchController extends Controller{
                         $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
 
                         if(!$check_research){
-                            $share = new SharedResearch();
+                            $share = new SharedResearch;
                             $share->research_id = $research->id;
                             $share->user_id = $author;
                             $share->save();
-
-                            $research->updated_at = Carbon::now();
-                            $research->save();
                         }
                     }
                 }
             }
 
             $research->status = $status;
+            $research->updated_at = Carbon::now();
             $research->save();
 
             $research_log = new ResearchLog;
