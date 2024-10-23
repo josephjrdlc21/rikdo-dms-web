@@ -93,7 +93,7 @@
                             <small>ch {{$research->chapter}}, ver {{$research->version}}</small>
                         </td>
                         <td>{{$research->research_type->type}}</td>
-                        <td><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text($research->status)}}</span></td>
+                        <td><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text(str_replace('_', ' ', $research->status))}}</span></td>
                         <td>{{$research->submitted_to->name}}</td>
                         <td>{{$research->submitted_by->name}}</td>
                         <td>{{$research->created_at->format("m/d/Y")}}<br><small>{{$research->created_at->format("h:i A")}}</small></td>

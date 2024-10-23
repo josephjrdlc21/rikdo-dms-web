@@ -564,6 +564,7 @@ class ResearchController extends Controller{
                 }
             }
 
+            $research->modified_by_id = $this->data['auth']->id;
             $research->updated_at = Carbon::now();
             $research->save();
 
@@ -612,16 +613,13 @@ class ResearchController extends Controller{
 
     public function show(PageRequest $request,$id = null){
         $this->data['page_title'] .= " - Information";
-        $this->data['research'] = Research::with(['submitted_by', 'submitted_to', 'research_type', 'department', 'course', 'yearlevel', 'modified_by', 'processed_by'])->find($id);
+        $this->data['research'] = Research::with(['submitted_by', 'submitted_to', 'research_type', 'department', 'course', 'yearlevel', 'modified_by', 'logs', 'shared'])->find($id);
 
         if(!$this->data['research']){
             session()->flash('notification-status', "failed");
             session()->flash('notification-msg', "Record not found.");
             return redirect()->route('portal.research.index');
         }
-
-        $this->data['research_history'] = ResearchLog::with('user')->where('research_id', $this->data['research']->id)->get();
-        $this->data['shared'] = SharedResearch::with('user')->where('research_id', $this->data['research']->id)->get();
 
         return view('portal.research.show', $this->data);
     }

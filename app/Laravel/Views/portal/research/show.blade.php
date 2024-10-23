@@ -54,7 +54,7 @@
                     <div class="col-md-6">
                         <div class="mb-2">
                             <h6><b>Status</b></h6>
-                            <p><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text($research->status) ?? 'N/A'}}</span></p>
+                            <p><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text(str_replace('_', ' ', $research->status)) ?? 'N/A'}}</span></p>
                         </div>
                         <div class="mb-2">
                             <h6><b>Submitted By</b></h6>
@@ -84,7 +84,7 @@
                     <div class="col-sm-12">
                         <div class="mb-2">
                             <h6><b>Share File With</b></h6>
-                            @forelse($shared as $author)
+                            @forelse($research->shared as $author)
                             <span>{{$author->user->name}}</span><br>
                             @empty
                             <span>{{'N/A'}}</span>
@@ -115,7 +115,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($research_history as $history)
+                            @forelse($research->logs as $history)
                             <tr>
                                 <td>{{$history->user->name}}</td>
                                 <td>{{$history->remarks}}</td>
