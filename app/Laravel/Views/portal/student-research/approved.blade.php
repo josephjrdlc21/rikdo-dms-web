@@ -14,11 +14,15 @@
 @section('content')
 @include('portal._components.notification')
 <div class="card">
-    <div class="card-header">
-        <h4>Search Filter</h4>
-    </div>
-    <div class="card-body">
-        <form method="GET" action="">
+    <form method="GET" action="">
+        <div class="card-header">
+            <h4>Search Filter</h4>
+            <div class="card-header-action">
+                <button type="submit" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Apply Filter</button>
+                <a href="{{route('portal.student_research.approved')}}" class="btn btn-sm btn-secondary" style="border-radius: 0.25rem !important;">Reset Filter</a>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
@@ -56,11 +60,9 @@
                         <input type="number" id="input_version" class="form-control" placeholder="0.0" name="version" value="{{$version}}" step="0.1" min="0">
                     </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-sm btn-primary">Apply Filter</button>
-            <a href="{{route('portal.student_research.approved')}}" class="btn btn-sm btn-secondary">Reset Filter</a>
-        </form>
-    </div>
+            </div> 
+        </div>
+    </form>
 </div>
 <div class="card">
     <div class="card-header">
