@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Services;
 
-use App\Laravel\Models\{User,UserKYC};
+use App\Laravel\Models\{User,UserKYC,Research,ResearchType,CompletedResearch};
 use Illuminate\Validation\Validator;
 
 use Hash,PhoneNumber;
@@ -141,5 +141,31 @@ class CustomValidator extends Validator{
 
     public function validatePasswordFormat($attribute, $value, $parameters){
         return preg_match(("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.]).{8,}$/"), $value);
+    }
+
+    public function validateIsTitleApproved($attribute, $value, $parameters){
+        $research = Research::where('title', $value)->first();
+        $chapter = ResearchType::where('id', $research->research_type_id)->first();
+
+        $count = Research::where('title', $research->title)
+            ->where('chapter', $chapter->max)
+            ->where('status', 'approved')
+            ->count();
+
+        return $count === 1;
+    }
+
+    public function validateUniqueTitle($attribute, $value, $parameters){
+        $research = CompletedResearch::where('title', $value)->first();
+
+        if ($research) {
+            if ($research->status === 're_submission') {
+                return true;
+            }
+            
+            return false;
+        }
+    
+        return true;
     }
 }

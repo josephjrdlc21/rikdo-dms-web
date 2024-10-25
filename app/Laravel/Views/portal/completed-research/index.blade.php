@@ -26,7 +26,7 @@
                 <div class="col-sm-12 col-lg-3">
                     <div class="form-group">
                         <label for="input_keyword">Keyword</label>
-                        <input type="text" id="input_keyword" class="form-control" placeholder="eg. Research Title, Authors" name="keyword" value="{{$keyword}}">
+                        <input type="text" id="input_keyword" class="form-control" placeholder="eg. Research Title" name="keyword" value="{{$keyword}}">
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3">
@@ -47,19 +47,25 @@
                         <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="end_date" value="{{$end_date}}">                            
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-4">
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label for="input_type">Type</label>
+                        {!! html()->select('type', $types, $selected_type, ['id' => "input_type"])->class('form-control selectric') !!}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-3">
                     <div class="form-group">
                         <label for="input_user_department">Department</label>
                         {!! html()->select('department', $departments, $selected_department, ['id' => "input_user_department"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-4">
+                <div class="col-sm-12 col-lg-3">
                     <div class="form-group">
                         <label for="input_user_course">Course</label>
                         {!! html()->select('course', $courses, $selected_course, ['id' => "input_user_course"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-4">
+                <div class="col-sm-12 col-lg-3">
                     <div class="form-group">
                         <label for="input_user_yearlevel">Yearlevel</label>
                         {!! html()->select('yearlevel', $yearlevels, $selected_yearlevel, ['id' => "input_user_yearlevel"])->class('form-control selectric') !!}
@@ -73,7 +79,7 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Submit Research</a>
+            <a href="{{route('portal.completed_research.create')}}" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Submit Research</a>
         </div>
     </div>
     <div class="card-body p-0">
@@ -99,7 +105,7 @@
                         <td><span class="badge badge-{{Helper::completed_badge_status($completed->status)}}">{{Helper::capitalize_text($completed->status)}}</span></td>
                         <td>{{$completed->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$completed->course->course_code ?? 'N/A'}}<br><small>{{$completed->yearlevel->yearlevel_name ?? ''}}</small></td>
-                        <td>{{$completed->processor->name}}</td>
+                        <td>{{$completed->processor->name ?? 'Not Yet Processed'}}</td>
                         <td>{{$completed->created_at->format("m/d/Y")}}<br><small>{{$completed->created_at->format("h:i A")}}</small></td>
                         <td>
                             <div class="btn-group mb-2">
@@ -107,8 +113,13 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="#">View Details</a>
+                                    <a class="dropdown-item" href="{{route('portal.completed_research.show', [$completed->id])}}">View Details</a>
+                                    @if($completed->status == "re_submission")
+                                    <a class="dropdown-item" href="#">Resubmit Research</a>
+                                    @endif
+                                    @if($completed->status == "for_posting")
                                     <a class="dropdown-item" href="#">Post Research</a>
+                                    @endif
                                     <a class="dropdown-item" href="#">Delete Research</a>
                                 </div>
                             </div> 

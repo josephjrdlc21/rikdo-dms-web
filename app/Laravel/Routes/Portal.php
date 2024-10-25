@@ -85,6 +85,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
 
         Route::group(['prefix' => "completed-research", 'as' => "completed_research."], function(){
             Route::get('/', ['as' => "index", 'uses' => "CompletedResearchController@index"]);
+            Route::get('/create', ['as' => "create", 'uses' => "CompletedResearchController@create"]);
+            Route::post('/create', ['uses' => "CompletedResearchController@store"]);
+            Route::get('/show/{id?}', ['as' => "show", 'uses' => "CompletedResearchController@show"]);
+            Route::get('/download/{id?}', ['as' => "download", 'uses' => "CompletedResearchController@download"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

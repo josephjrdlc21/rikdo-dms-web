@@ -4,10 +4,6 @@
 
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{asset('assets/libs/bootstrap-social/bootstrap-social.css')}}">
-
-<link rel="stylesheet" href="{{asset('assets/libs/jqvmap/dist/jqvmap.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/libs/weather-icon/css/weather-icons.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/libs/weather-icon/css/weather-icons-wind.min.css')}}">
 <link rel="stylesheet" href="{{asset('assets/libs/summernote/summernote-bs4.css')}}">
 <link rel="stylesheet" href="{{asset('assets/libs/bootstrap-daterangepicker/daterangepicker.css')}}">
 <link rel="stylesheet" href="{{asset('assets/libs/select2/dist/css/select2.min.css')}}">
