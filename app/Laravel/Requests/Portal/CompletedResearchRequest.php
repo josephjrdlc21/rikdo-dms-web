@@ -23,9 +23,12 @@ class CompletedResearchRequest extends RequestManager
      */
     public function rules()
     {
+        $id = $this->id ?? 0;
+
         $rules = [
-            'title' => "required|unique_title|is_title_approved",
+            'title' => "required|unique_title:{$id}|is_title_approved",
             'research_file' => "required|file|mimes:pdf|between:1,10240",
+            'authors' => "required|array",
             'abstract' => "required"
         ];
 
@@ -37,7 +40,9 @@ class CompletedResearchRequest extends RequestManager
         return [
             'required' => "Field is required.",
             'title.is_title_approved' => "This title has not yet been approved and reached the final chapter",
-            'title.unique_title' => "This title has been already submitted."
+            'title.unique_title' => "This title has been already submitted.",
+            'authors.array' => "Please assign at least 1 author.",
+            'authors.required' => "Please assign at least 1 author.",
         ];
     }
 }

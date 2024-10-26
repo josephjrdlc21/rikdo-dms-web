@@ -7,12 +7,12 @@ use App\Laravel\Models\{Research,ResearchType,User,SharedResearch,ResearchLog};
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\ResearchRequest;
 
-use App\Laravel\Traits\VerifyResearch;
+use App\Laravel\Traits\{VerifyResearch,SharesResearch};
 
 use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover;
 
 class ResearchController extends Controller{
-    use VerifyResearch;
+    use VerifyResearch, SharesResearch;
 
     protected $data;
 
@@ -341,18 +341,7 @@ class ResearchController extends Controller{
             }
 
             if($request->input('share_file')){
-                foreach($request->input('share_file') as $author){
-                    if($author != $research->submitted_to_id){
-                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
-                
-                        if(!$check_research){
-                            $share_file = new SharedResearch;
-                            $share_file->research_id = $research->id;
-                            $share_file->user_id = $author;
-                            $share_file->save();
-                        }
-                    }
-                }
+                $this->share($research, $request->input('share_file'));
             }
 
             $research_log = new ResearchLog;
@@ -466,18 +455,7 @@ class ResearchController extends Controller{
                     $check_submitted->forceDelete();
                 }
                 
-                foreach($new_authors as $author){
-                    if($author != $research->submitted_to_id){
-                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
-
-                        if(!$check_research){
-                            $share = new SharedResearch;
-                            $share->research_id = $research->id;
-                            $share->user_id = $author;
-                            $share->save();
-                        }
-                    }
-                }
+                $this->share($research, $new_authors);
             }
 
             $research->updated_at = Carbon::now();
@@ -549,19 +527,8 @@ class ResearchController extends Controller{
                 if($check_submitted){
                     $check_submitted->forceDelete();
                 }
-                
-                foreach($new_authors as $author){
-                    if($author != $research->submitted_to_id){
-                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
 
-                        if(!$check_research){
-                            $share = new SharedResearch;
-                            $share->research_id = $research->id;
-                            $share->user_id = $author;
-                            $share->save();
-                        }
-                    }
-                }
+                $this->share($research, $new_authors);
             }
 
             $research->modified_by_id = $this->data['auth']->id;

@@ -148,6 +148,9 @@ class Helper{
             case 'rejected':
                 $result = "danger";
                 break;
+            case 'posted':
+                $result = "success";
+                break;
         }
 
         return $result;

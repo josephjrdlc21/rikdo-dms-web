@@ -87,6 +87,9 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/', ['as' => "index", 'uses' => "CompletedResearchController@index"]);
             Route::get('/create', ['as' => "create", 'uses' => "CompletedResearchController@create"]);
             Route::post('/create', ['uses' => "CompletedResearchController@store"]);
+            Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "CompletedResearchController@edit"]);
+            Route::post('/edit/{id?}', ['uses' => "CompletedResearchController@update"]);
+            Route::get('/edit-status/{id?}/{status?}', ['as' => "edit_status", 'uses' => "CompletedResearchController@edit_status"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "CompletedResearchController@show"]);
             Route::get('/download/{id?}', ['as' => "download", 'uses' => "CompletedResearchController@download"]);
         });

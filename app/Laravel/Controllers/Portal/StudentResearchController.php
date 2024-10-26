@@ -7,12 +7,12 @@ use App\Laravel\Models\{Research,ResearchType,User,SharedResearch,ResearchLog};
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\StudentResearchRequest;
 
-use App\Laravel\Traits\VerifyResearch;
+use App\Laravel\Traits\{VerifyResearch,SharesResearch};
 
 use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover;
 
 class StudentResearchController extends Controller{
-    use VerifyResearch;
+    use VerifyResearch, SharesResearch;
 
     protected $data;
 
@@ -319,18 +319,7 @@ class StudentResearchController extends Controller{
                     $check_submitted->forceDelete();
                 }
                 
-                foreach($new_authors as $author){
-                    if($author != $research->submitted_to_id){
-                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
-
-                        if(!$check_research){
-                            $share = new SharedResearch;
-                            $share->research_id = $research->id;
-                            $share->user_id = $author;
-                            $share->save();
-                        }
-                    }
-                }
+                $this->share($research, $new_authors);
             }
 
             $research->modified_by_id = $this->data['auth']->id;
@@ -505,18 +494,7 @@ class StudentResearchController extends Controller{
                     $check_submitted->forceDelete();
                 }
                 
-                foreach($new_authors as $author){
-                    if($author != $research->submitted_to_id){
-                        $check_research = SharedResearch::where('research_id', $research->id)->where('user_id', $author)->first();
-
-                        if(!$check_research){
-                            $share = new SharedResearch;
-                            $share->research_id = $research->id;
-                            $share->user_id = $author;
-                            $share->save();
-                        }
-                    }
-                }
+                $this->share($research, $new_authors);
             }
 
             $research->status = $status;

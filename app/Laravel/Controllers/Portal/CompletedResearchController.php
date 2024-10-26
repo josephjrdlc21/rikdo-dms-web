@@ -7,7 +7,7 @@ use App\Laravel\Models\{CompletedResearch,Department,Course,Yearlevel,Research,S
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CompletedResearchRequest;
 
-use Carbon,DB,FileUploader,FileDownloader;
+use Carbon,DB,FileUploader,FileDownloader,FileRemover;
 
 class CompletedResearchController extends Controller{
     protected $data;
@@ -15,6 +15,15 @@ class CompletedResearchController extends Controller{
     public function __construct(){
         parent::__construct();
         array_merge($this->data?:[], parent::get_data());
+        $shared = SharedResearch::where('user_id', $this->data['auth']->id)->pluck('research_id')->toArray();
+        $this->data['research'] = Research::where(function ($query) use ($shared) {
+            $query->where('submitted_by_id', $this->data['auth']->id)
+                ->orWhereIn('id', $shared);
+        })
+        ->where('status', 'approved')
+        ->distinct()
+        ->pluck('title', 'title')->toArray();
+        $this->data['researchers'] = User::pluck('name', 'id')->toArray();
         $this->data['page_title'] .= " - Completed Research";
         $this->per_page = env("DEFAULT_PER_PAGE", 10);
     }
@@ -93,16 +102,6 @@ class CompletedResearchController extends Controller{
     public function create(PageRequest $request){
         $this->data['page_title'] .= " - Create For Posted Research";
 
-        $shared = SharedResearch::where('user_id', $this->data['auth']->id)->pluck('research_id')->toArray();
-
-        $this->data['research'] = Research::where(function ($query) use ($shared) {
-            $query->where('submitted_by_id', $this->data['auth']->id)
-                ->orWhereIn('id', $shared);
-        })
-        ->where('status', 'approved')
-        ->distinct()
-        ->pluck('title', 'title')->toArray();
-
         return view('portal.completed-research.create', $this->data);
     }
 
@@ -110,7 +109,6 @@ class CompletedResearchController extends Controller{
         DB::beginTransaction();
         try{
             $research = Research::where('title', $request->input('title'))->first();
-            $authors = array_merge([$research->submitted_by_id], SharedResearch::where('research_id', $research->id)->pluck('user_id')->toArray());
 
             $completed_research = new CompletedResearch;
             $completed_research->title = $request->input('title');
@@ -119,7 +117,7 @@ class CompletedResearchController extends Controller{
             $completed_research->course_id = $research->course_id;
             $completed_research->yearlevel_id = $research->yearlevel_id;
             $completed_research->abstract = $request->input('abstract');
-            $completed_research->authors = implode(',', $authors);
+            $completed_research->authors = implode(',', $request->input('authors', []));
             $completed_research->save();
 
             if($request->hasFile('research_file')){
@@ -148,6 +146,155 @@ class CompletedResearchController extends Controller{
         session()->flash('notification-status', "warning");
         session()->flash('notification-msg', "Unable to post research.");
         return redirect()->back();
+    }
+
+    public function edit(PageRequest $request,$id = null){
+        $this->data['completed_research'] = CompletedResearch::find($id);
+
+        if(!$this->data['completed_research']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
+        if(!$this->data['research']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Only authors of this research can re submit this file.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
+        $this->data['authors'] = User::whereIn('id', explode(',', $this->data['completed_research']->authors))->pluck('id')->toArray();
+        
+        return view('portal.completed-research.edit', $this->data);
+    }
+
+    public function update(CompletedResearchRequest $request,$id = null){
+        $completed_research = CompletedResearch::find($id);
+
+        if(!$completed_research){
+            session()->flash('notification-status', "failed");
+			session()->flash('notification-msg', "Record not found.");
+			return redirect()->route('portal.completed_research.index');
+        }
+
+        DB::beginTransaction();
+        try{
+            $completed_research->abstract = $request->input('abstract');
+            $completed_research->status = "pending";
+            $completed_research->remarks = null;
+            $completed_research->authors = implode(',', $request->input('authors', []));
+            $completed_research->save();
+
+            if($request->hasFile('research_file')){
+                FileRemover::remove($completed_research->path);
+
+                $research_file = FileUploader::upload($request->file('research_file'), "uploads/completed/{$completed_research->id}");
+
+                $completed_research->path = $research_file['path'];
+                $completed_research->directory = $research_file['directory'];
+                $completed_research->filename = $research_file['filename'];
+                $completed_research->source = $research_file['source'];
+                $completed_research->save();
+            }
+
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "Research has been resubmitted.");
+        }catch(\Exception $e){
+            DB::rollback();
+
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        return redirect()->route('portal.completed_research.index');
+    }
+
+    public function edit_status(PageRequest $request,$id = null,$status = "pending"){
+        $completed_research = CompletedResearch::find($id);
+
+        if(!$completed_research){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
+        if($completed_research->status !== "pending"){
+            session()->flash('notification-status', "warning");
+            session()->flash('notification-msg', "Research has already been processed. It cannot be process again.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
+        switch($status){
+            case "for_posting":
+                try{
+                    $completed_research->status = $status;
+                    $completed_research->processor_id = $this->data['auth']->id;
+                    $completed_research->save();
+                
+                    DB::commit();
+
+                    session()->flash('notification-status', "success");
+                    session()->flash('notification-msg', "Research has been ready for posting.");
+                }catch(\Exception $e){
+                    DB::rollback();
+
+                    session()->flash('notification-status', "failed");
+                    session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+                    return redirect()->back();
+                }
+
+                return redirect()->route('portal.completed_research.index');
+                break;
+            case "re_submission":
+                try{
+                    $completed_research->status = $status;
+                    $completed_research->processor_id = $this->data['auth']->id;
+                    $completed_research->remarks = $request->get('remarks');
+                    $completed_research->save();
+                   
+                    DB::commit();
+
+                    session()->flash('notification-status', "success");
+                    session()->flash('notification-msg', "Research has been remarked for re submission.");
+                }catch(\Exception $e){
+                    DB::rollback();
+
+                    session()->flash('notification-status', "failed");
+                    session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+                    return redirect()->back();
+                }
+
+                return redirect()->route('portal.completed_research.index');
+                break;
+            case "rejected":
+                try{
+                    $completed_research->status = $status;
+                    $completed_research->processor_id = $this->data['auth']->id;
+                    $completed_research->remarks = $request->get('remarks');
+                    $completed_research->save();
+                   
+                    DB::commit();
+
+                    session()->flash('notification-status', "success");
+                    session()->flash('notification-msg', "Research has been rejected.");
+                }catch(\Exception $e){
+                    DB::rollback();
+
+                    session()->flash('notification-status', "failed");
+                    session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+                    return redirect()->back();
+                }
+
+                return redirect()->route('portal.completed_research.index');
+                break;
+            default:
+                return redirect()->route('portal.completed_research.index');
+
+                break;
+        }
     }
 
     public function show(PageRequest $request,$id = null){

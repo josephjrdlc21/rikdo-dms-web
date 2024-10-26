@@ -156,10 +156,12 @@ class CustomValidator extends Validator{
     }
 
     public function validateUniqueTitle($attribute, $value, $parameters){
-        $research = CompletedResearch::where('title', $value)->first();
+        $id = (is_array($parameters) and isset($parameters[0])) ? $parameters[0] : "0";
+
+        $research = CompletedResearch::where('title', $value)->where('id', '<>', $id)->first();
 
         if ($research) {
-            if ($research->status === 're_submission') {
+            if ($research->status === 're_submission' AND $research->id == "0") {
                 return true;
             }
             

@@ -102,7 +102,7 @@
                     <tr>
                         <td>{{$loop->index + $record->firstItem()}}</td>
                         <td class="text-center">{{$completed->title}}<br><small>{{$completed->research_type->type}}</small></td>
-                        <td><span class="badge badge-{{Helper::completed_badge_status($completed->status)}}">{{Helper::capitalize_text($completed->status)}}</span></td>
+                        <td><span class="badge badge-{{Helper::completed_badge_status($completed->status)}}">{{Helper::capitalize_text(str_replace('_', ' ', $completed->status))}}</span></td>
                         <td>{{$completed->department->dept_code ?? 'N/A'}}</td>
                         <td>{{$completed->course->course_code ?? 'N/A'}}<br><small>{{$completed->yearlevel->yearlevel_name ?? ''}}</small></td>
                         <td>{{$completed->processor->name ?? 'Not Yet Processed'}}</td>
@@ -115,12 +115,14 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="{{route('portal.completed_research.show', [$completed->id])}}">View Details</a>
                                     @if($completed->status == "re_submission")
-                                    <a class="dropdown-item" href="#">Resubmit Research</a>
+                                    <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed->id])}}">Resubmit Research</a>
                                     @endif
                                     @if($completed->status == "for_posting")
                                     <a class="dropdown-item" href="#">Post Research</a>
                                     @endif
+                                    @if($completed->status != "posted")
                                     <a class="dropdown-item" href="#">Delete Research</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>
