@@ -91,7 +91,13 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::post('/edit/{id?}', ['uses' => "CompletedResearchController@update"]);
             Route::get('/edit-status/{id?}/{status?}', ['as' => "edit_status", 'uses' => "CompletedResearchController@edit_status"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "CompletedResearchController@show"]);
+            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "CompletedResearchController@destroy"]);
             Route::get('/download/{id?}', ['as' => "download", 'uses' => "CompletedResearchController@download"]);
+        });
+
+        Route::group(['prefix' => "posted-research", 'as' => "posted_research."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "PostedResearchController@index"]);
+            Route::get('/create/{id?}', ['as' => "create", 'uses' => "PostedResearchController@create"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

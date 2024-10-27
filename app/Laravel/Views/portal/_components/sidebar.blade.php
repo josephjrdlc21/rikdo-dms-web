@@ -52,7 +52,7 @@
                 </ul>
             </li>            
             <li class="{{request()->segment(1) == "completed-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.completed_research.index')}}"><i class="fas fa-copy"></i> <span>Completed Research</span></a></li>
-            <li><a class="nav-link" href="#"><i class="fas fa-globe"></i> <span>Posted Research</span></a></li>
+            <li class="{{request()->segment(1) == "posted-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.posted_research.index')}}"><i class="fas fa-globe"></i> <span>Posted Research</span></a></li>
             <li><a class="nav-link" href="#"><i class="fas fa-archive"></i> <span>Archives</span></a></li>
             <li><a class="nav-link" href="#"><i class="fas fa-file-invoice"></i> <span>Research Reports</span></a></li>
             <li class="menu-header">System Settings</li>

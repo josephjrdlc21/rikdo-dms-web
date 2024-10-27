@@ -312,6 +312,28 @@ class CompletedResearchController extends Controller{
         return view('portal.completed-research.show', $this->data);
     }
 
+    public function destroy(PageRequest $request,$id = null){
+        $completed_research = CompletedResearch::find($id);
+
+        if(!$completed_research){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
+        if($completed_research->status === "posted") {
+            session()->flash('notification-status', "danger");
+            session()->flash('notification-msg', "Research has already been posted. It cannot be deleted.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
+        if($completed_research->delete()){
+            session()->flash('notification-status', 'success');
+            session()->flash('notification-msg', "Research has been deleted.");
+            return redirect()->back();
+        }
+    }
+
     public function download(PageRequest $request,$id = null){
         $completed_research = CompletedResearch::find($id);
 
