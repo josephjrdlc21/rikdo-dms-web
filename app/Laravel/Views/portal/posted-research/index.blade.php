@@ -105,7 +105,7 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="#">View Details</a>
+                                    <a class="dropdown-item" href="{{route('portal.posted_research.show', [$posted->id])}}">View Details</a>
                                 </div>
                             </div> 
                         </td>

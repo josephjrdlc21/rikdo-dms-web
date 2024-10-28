@@ -2,12 +2,12 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{PostedResearch,CompletedResearch,Department,Course,Yearlevel,ResearchType};
+use App\Laravel\Models\{PostedResearch,CompletedResearch,Department,Course,Yearlevel,ResearchType,User};
 
 use App\Laravel\Requests\PageRequest;
-//use App\Laravel\Requests\Portal\PostedResearchRequest;
+use App\Laravel\Requests\Portal\PostedResearchRequest;
 
-use Carbon,DB;
+use Carbon,DB,FileDownloader;
 
 class PostedResearchController extends Controller{
     protected $data;
@@ -15,7 +15,6 @@ class PostedResearchController extends Controller{
     public function __construct(){
         parent::__construct();
         array_merge($this->data?:[], parent::get_data());
-        $this->data['for_posting'] = ['' => "Select Research"];
         $this->data['page_title'] .= " - Posted Research";
         $this->per_page = env("DEFAULT_PER_PAGE", 10);
     }
@@ -86,7 +85,89 @@ class PostedResearchController extends Controller{
 
     public function create(PageRequest $request,$id = null){
         $this->data['page_title'] .= " - Post Research";
+        $this->data['for_posting'] = ['' => "Select Research"] + CompletedResearch::where('status', 'for_posting')->pluck('title', 'id')->toArray();
+
+        if(!is_null($id)){
+            $this->data['default_research'] = CompletedResearch::where('status', 'for_posting')->where('id', $id)->pluck('id')->toArray();
+        }
 
         return view('portal.posted-research.create', $this->data);
+    }
+
+    public function store(PostedResearchRequest $request,$id = null){
+        DB::beginTransaction();
+        try{
+            $completed_research = CompletedResearch::where('id', $request->input('research'))->where('status', 'for_posting')->first();
+            $completed_research->status = "posted";
+            $completed_research->save();
+            
+            $posted_research = new PostedResearch;
+            $posted_research->title = $completed_research->title;
+            $posted_research->research_type_id = $completed_research->research_type_id;
+            $posted_research->department_id = $completed_research->department_id;
+            $posted_research->course_id = $completed_research->course_id;
+            $posted_research->yearlevel_id = $completed_research->yearlevel_id;
+            $posted_research->abstract = $completed_research->abstract;
+            $posted_research->authors = $completed_research->authors;
+            $posted_research->processor_id = $this->data['auth']->id;
+            $posted_research->path = $completed_research->path;
+            $posted_research->directory = $completed_research->directory;
+            $posted_research->filename = $completed_research->filename;
+            $posted_research->source = $completed_research->source;
+            $posted_research->save();
+            
+            DB::commit();
+
+            session()->flash('notification-status', "success");
+            session()->flash('notification-msg', "Research has been posted.");
+            return redirect()->route('portal.posted_research.index');
+        }catch(\Exception $e){
+            DB::rollback();
+
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            return redirect()->back();
+        }
+
+        session()->flash('notification-status', "warning");
+        session()->flash('notification-msg', "Unable to post research.");
+        return redirect()->back();  
+    }
+
+    public function show(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Information";
+        $this->data['posted_research'] = PostedResearch::with(['department', 'course', 'yearlevel', 'processor', 'research_type'])->find($id);
+
+        if(!$this->data['posted_research']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.posted_research.index');
+        }
+
+        $this->data['authors'] = User::whereIn('id', explode(',', $this->data['posted_research']->authors))->get();
+
+        return view('portal.posted-research.show', $this->data);
+    }
+
+    public function download(PageRequest $request,$id = null){
+        $posted_research = PostedResearch::find($id);
+
+        if(!$posted_research){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.posted_research.index');
+        }
+
+        $path = $posted_research->path ? "{$posted_research->path}/{$posted_research->filename}" : "{$posted_research->directory}/{$posted_research->filename}";
+
+        $download = FileDownloader::download($path);
+
+        if($download){
+            return $download;
+        }
+        
+        session()->flash('notification-status', "error");
+        session()->flash('notification-msg', "Failed to download research file.");
+        return redirect()->route('portal.posted_research.show', [$posted_research->id]);
     }
 }

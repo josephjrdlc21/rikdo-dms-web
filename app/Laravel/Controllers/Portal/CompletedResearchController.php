@@ -133,7 +133,7 @@ class CompletedResearchController extends Controller{
             DB::commit();
 
             session()->flash('notification-status', "success");
-            session()->flash('notification-msg', "Research has been posted.");
+            session()->flash('notification-msg', "Research has been completed.");
             return redirect()->route('portal.completed_research.index');
         }catch(\Exception $e){
             DB::rollback();
@@ -144,7 +144,7 @@ class CompletedResearchController extends Controller{
         }
 
         session()->flash('notification-status', "warning");
-        session()->flash('notification-msg', "Unable to post research.");
+        session()->flash('notification-msg', "Unable to completed research.");
         return redirect()->back();
     }
 

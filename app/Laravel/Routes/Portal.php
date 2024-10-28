@@ -98,6 +98,9 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
         Route::group(['prefix' => "posted-research", 'as' => "posted_research."], function(){
             Route::get('/', ['as' => "index", 'uses' => "PostedResearchController@index"]);
             Route::get('/create/{id?}', ['as' => "create", 'uses' => "PostedResearchController@create"]);
+            Route::post('/create/{id?}', ['uses' => "PostedResearchController@store"]);
+            Route::get('/show/{id?}', ['as' => "show", 'uses' => "PostedResearchController@show"]);
+            Route::get('/download/{id?}', ['as' => "download", 'uses' => "PostedResearchController@download"]);
         });
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){

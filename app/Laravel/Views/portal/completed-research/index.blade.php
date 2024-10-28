@@ -118,7 +118,7 @@
                                     <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed->id])}}">Resubmit Research</a>
                                     @endif
                                     @if($completed->status == "for_posting")
-                                    <a class="dropdown-item" href="#">Post Research</a>
+                                    <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed->id])}}">Post Research</a>
                                     @endif
                                     @if($completed->status != "posted")
                                     <a class="dropdown-item delete-record" data-url="{{route('portal.completed_research.delete', [$completed->id])}}" type="button" style="cursor: pointer;">Delete Research</a>
