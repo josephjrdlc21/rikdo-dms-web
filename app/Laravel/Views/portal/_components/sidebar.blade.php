@@ -53,8 +53,21 @@
             </li>            
             <li class="{{request()->segment(1) == "completed-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.completed_research.index')}}"><i class="fas fa-copy"></i> <span>Completed Research</span></a></li>
             <li class="{{request()->segment(1) == "posted-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.posted_research.index')}}"><i class="fas fa-globe"></i> <span>Posted Research</span></a></li>
-            <li><a class="nav-link" href="#"><i class="fas fa-archive"></i> <span>Archives</span></a></li>
-            <li><a class="nav-link" href="#"><i class="fas fa-file-invoice"></i> <span>Research Reports</span></a></li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-archive"></i> <span>Archives</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="#">Researches</a></li>
+                    <li><a class="nav-link" href="#">Completed</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i> <span>Research Reports</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="#">Researches</a></li>
+                    <li><a class="nav-link" href="#">Completed</a></li>
+                    <li><a class="nav-link" href="#">Posted</a></li>
+                </ul>
+            </li>
             <li class="menu-header">System Settings</li>
             <li class="dropdown {{request()->segment(1) == "cms" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i> <span>Content Management</span></a>
