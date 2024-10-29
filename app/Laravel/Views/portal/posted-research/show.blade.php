@@ -43,7 +43,7 @@
                         @empty
                         <span>{{'N/A'}}</span>
                         @endforelse
-                        <br>Processor: {{$posted_research->processor->name ?? 'Not Yet Processed'}}</p>
+                        <br>Posted by: {{$posted_research->processor->name ?? 'Not Yet Processed'}}</p>
                     </div>
                 </div>
                 <div class="row">

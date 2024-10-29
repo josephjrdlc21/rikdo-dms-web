@@ -24,7 +24,7 @@
                             @if($completed_research->status == "re_submission" && $check_authenticated)
                             <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed_research->id])}}">Resubmit Research</a>
                             @endif
-                            @if($completed_research->status == "for_posting"  && !$check_authenticated)
+                            @if($completed_research->status == "for_posting")
                             <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed_research->id])}}">Post Research</a>
                             @endif
                             <a href="{{route('portal.completed_research.download', [$completed_research->id])}}" class="dropdown-item">Download File</a>

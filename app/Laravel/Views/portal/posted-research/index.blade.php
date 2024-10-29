@@ -85,7 +85,7 @@
                         <th class="text-center">Title</th>
                         <th>Department</th>
                         <th>Course</th>
-                        <th>Process By</th>
+                        <th>Post By</th>
                         <th>Date Submitted</th>
                         <th></th>
                     </tr>
