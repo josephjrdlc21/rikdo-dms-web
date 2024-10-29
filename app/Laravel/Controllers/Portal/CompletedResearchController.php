@@ -46,7 +46,7 @@ class CompletedResearchController extends Controller{
 
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
-        $this->data['statuses'] = ['' => "All", 'pending' => "Pending", 're_submission' => "Re Submission", 'for_posting' => "For Posting", 'rejected' => "Rejected"];
+        $this->data['statuses'] = ['' => "All", 'pending' => "Pending", 're_submission' => "Re Submission", 'for_posting' => "For Posting", 'rejected' => "Rejected", 'posted' => "Posted"];
         $this->data['departments'] = ['' => "All"] + Department::pluck('dept_code', 'id')->toArray();
         $this->data['courses'] = ['' => "All"] + Course::pluck('course_code', 'id')->toArray();
         $this->data['yearlevels'] = ['' => "All"] + Yearlevel::pluck('yearlevel_name', 'id')->toArray();
