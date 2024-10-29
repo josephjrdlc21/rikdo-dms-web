@@ -21,15 +21,16 @@
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @if($completed_research->status == "re_submission")
+                            @if($completed_research->status == "re_submission" && $check_authenticated)
                             <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed_research->id])}}">Resubmit Research</a>
                             @endif
-                            @if($completed_research->status == "for_posting")
+                            @if($completed_research->status == "for_posting"  && !$check_authenticated)
                             <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed_research->id])}}">Post Research</a>
                             @endif
                             <a href="{{route('portal.completed_research.download', [$completed_research->id])}}" class="dropdown-item">Download File</a>
                         </div>
                     </div>
+                    @if($completed_research->status == "pending" && !$check_authenticated)
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
@@ -38,6 +39,7 @@
                             <a data-url="{{route('portal.completed_research.edit_status', ['id' => $completed_research->id, 'status' => "rejected"])}}" class="dropdown-item status-reject" type="button" style="cursor: pointer;">Reject Research</a>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

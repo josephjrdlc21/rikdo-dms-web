@@ -26,6 +26,7 @@
                             <a href="{{route('portal.student_research.edit_share', [$research->id])}}" class="dropdown-item">Share Research</a>
                         </div>
                     </div>
+                    @if($research->status == "pending")
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
@@ -34,6 +35,7 @@
                             <a data-url="{{route('portal.student_research.edit_status', ['id' => $research->id, 'status' => "rejected"])}}" class="dropdown-item status-reject" type="button" style="cursor: pointer;">Reject</a>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="card-body">
@@ -109,6 +111,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-right">
                 <a href="{{route('portal.student_research.index')}}" class="btn btn-sm btn-dark">Close Details</a>
             </div>
         </div>

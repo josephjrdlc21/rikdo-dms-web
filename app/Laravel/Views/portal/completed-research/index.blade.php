@@ -113,11 +113,14 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @php
+                                    $check_authenticated = in_array($auth->id, explode(',', $completed->authors));
+                                    @endphp
                                     <a class="dropdown-item" href="{{route('portal.completed_research.show', [$completed->id])}}">View Details</a>
-                                    @if($completed->status == "re_submission")
+                                    @if($completed->status == "re_submission" && $check_authenticated)
                                     <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed->id])}}">Resubmit Research</a>
                                     @endif
-                                    @if($completed->status == "for_posting")
+                                    @if($completed->status == "for_posting" && !$check_authenticated)
                                     <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed->id])}}">Post Research</a>
                                     @endif
                                     @if($completed->status != "posted")

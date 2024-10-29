@@ -22,7 +22,9 @@
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @if($research->status == "pending")
                             <a href="{{route('portal.research.edit', [$research->id])}}" class="dropdown-item">Edit Research</a>
+                            @endif
                             <a href="{{route('portal.research.download', [$research->id])}}" class="dropdown-item">Download File</a>
                             <a href="{{route('portal.research.edit_share', [$research->id])}}" class="dropdown-item">Share Research</a>
                         </div>
@@ -102,6 +104,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-right">
                 <a href="{{route('portal.research.index')}}" class="btn btn-sm btn-dark">Close Details</a>
             </div>
         </div>

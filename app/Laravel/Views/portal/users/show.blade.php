@@ -86,6 +86,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-right">
                 <a href="{{route('portal.users.index')}}" class="btn btn-sm btn-dark">Close Details</a>
             </div>
         </div>

@@ -227,6 +227,12 @@ class CompletedResearchController extends Controller{
             return redirect()->route('portal.completed_research.index');
         }
 
+        if(in_array($this->data['auth']->id, explode(',', $completed_research->authors))){
+            session()->flash('notification-status', "danger");
+            session()->flash('notification-msg', "Authors cannot remark a research.");
+            return redirect()->route('portal.completed_research.index');
+        }
+
         switch($status){
             case "for_posting":
                 try{
@@ -307,7 +313,10 @@ class CompletedResearchController extends Controller{
             return redirect()->route('portal.completed_research.index');
         }
 
-        $this->data['authors'] = User::whereIn('id', explode(',', $this->data['completed_research']->authors))->get();
+        $check_authors = explode(',', $this->data['completed_research']->authors);
+
+        $this->data['authors'] = User::whereIn('id', $check_authors)->get();
+        $this->data['check_authenticated'] = in_array($this->data['auth']->id, $check_authors) ? true : false;
 
         return view('portal.completed-research.show', $this->data);
     }
