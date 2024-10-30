@@ -107,6 +107,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/', ['as' => "index", 'uses' => "ArchivesController@index"]);
             Route::get('/completed', ['as' => "completed", 'uses' => "ArchivesController@completed"]);
             Route::get('/show/{id?}', ['as' => "show", 'uses' => "ArchivesController@show"]);
+            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "ArchivesController@destroy"]);
             Route::get('/restore/{id?}', ['as' => "restore", 'uses' => "ArchivesController@restore"]);
         });
 

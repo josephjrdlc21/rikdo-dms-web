@@ -6,7 +6,7 @@ use App\Laravel\Models\{Research,Department,Course,Yearlevel,ResearchType,Comple
 
 use App\Laravel\Requests\PageRequest;
 
-use Carbon,DB;
+use Carbon,DB,FileRemover;
 
 class ArchivesController extends Controller{
     protected $data;
@@ -113,7 +113,7 @@ class ArchivesController extends Controller{
 
         $this->data['start_date'] = Carbon::parse($start_date)->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
-        $this->data['statuses'] = ['' => "All", 'pending' => "Pending", 're_submission' => "Re Submission", 'for_posting' => "For Posting", 'rejected' => "Rejected", 'posted' => "Posted"];
+        $this->data['statuses'] = ['' => "All", 'pending' => "Pending", 're_submission' => "Re Submission", 'for_posting' => "For Posting", 'rejected' => "Rejected"];
         $this->data['departments'] = ['' => "All"] + Department::pluck('dept_code', 'id')->toArray();
         $this->data['courses'] = ['' => "All"] + Course::pluck('course_code', 'id')->toArray();
         $this->data['yearlevels'] = ['' => "All"] + Yearlevel::pluck('yearlevel_name', 'id')->toArray();
@@ -160,6 +160,7 @@ class ArchivesController extends Controller{
                 }
             });
         })
+        ->where('status', '!=', 'posted')
         ->orderBy('created_at','DESC')
         ->paginate($this->per_page);
 
@@ -203,6 +204,56 @@ class ArchivesController extends Controller{
         return redirect()->back();
     }
 
+    public function destroy(PageRequest $request,$id = null){
+        switch ($request->get('type')) {
+            case 'completed':
+                $research = CompletedResearch::withTrashed()->find($id);
+
+                if(!$research){
+                    session()->flash('notification-status', "failed");
+                    session()->flash('notification-msg', "Record not found.");
+                    return redirect()->route('portal.archives.index');
+                }
+
+                FileRemover::remove($research->path);
+
+                if($research->forceDelete()){
+                    session()->flash('notification-status', 'success');
+                    session()->flash('notification-msg', "Completed research has been deleted.");
+                    return redirect()->back();
+                }
+
+                break;
+            case 'researches':
+                $research = Research::withTrashed()->find($id);
+
+                if(!$research){
+                    session()->flash('notification-status', "failed");
+                    session()->flash('notification-msg', "Record not found.");
+                    return redirect()->route('portal.archives.index');
+                }
+
+                FileRemover::remove($research->path);
+
+                if($research->forceDelete()){
+                    $research->shared_with_trashed()->forceDelete();
+                    $research->logs_with_trashed()->forceDelete();
+
+                    session()->flash('notification-status', 'success');
+                    session()->flash('notification-msg', "Research has been deleted.");
+                    return redirect()->back();
+                }
+
+                break;
+            default:
+                return redirect()->back();
+
+                break;
+        }
+
+        return redirect()->back();
+    }
+
     public function restore(PageRequest $request,$id = null){
         switch ($request->get('type')) {
             case 'completed':
@@ -231,6 +282,9 @@ class ArchivesController extends Controller{
                 }
 
                 if($research->restore()){
+                    $research->logs_with_trashed()->restore();
+                    $research->shared_with_trashed()->restore();
+
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been restored.");
                     return redirect()->back();

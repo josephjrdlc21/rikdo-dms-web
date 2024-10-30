@@ -116,7 +116,7 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="{{route('portal.archives.show', [$researches->id])}}?type=researches">View Details</a>
                                     <a class="dropdown-item restore-record" data-url="{{route('portal.archives.restore', [$researches->id])}}" data-type="researches" type="button" style="cursor: pointer;">Restore Research</a>
-                                    <a class="dropdown-item delete-record" data-url="#" type="button" style="cursor: pointer;">Delete Permanently</a>
+                                    <a class="dropdown-item delete-record" data-url="{{route('portal.archives.delete', [$researches->id])}}" data-type="researches" type="button" style="cursor: pointer;">Delete Permanently</a>
                                 </div>
                             </div> 
                         </td>
@@ -143,6 +143,7 @@
 <script type="text/javascript">
     $(".delete-record").on('click', function(){
         var url = $(this).data('url');
+        var type = $(this).data('type');
         
         swal({
             title: "Are you sure you want to delete this permanently?",
@@ -152,7 +153,7 @@
         })
         .then((result) => {
             if(result){
-                window.location.href = url;
+                window.location.href = url + '?type=' + type;
             }
         });
     });
