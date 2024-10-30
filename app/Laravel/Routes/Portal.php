@@ -103,6 +103,13 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/download/{id?}', ['as' => "download", 'uses' => "PostedResearchController@download"]);
         });
 
+        Route::group(['prefix' => "archives", 'as' => "archives."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "ArchivesController@index"]);
+            Route::get('/completed', ['as' => "completed", 'uses' => "ArchivesController@completed"]);
+            Route::get('/show/{id?}', ['as' => "show", 'uses' => "ArchivesController@show"]);
+            Route::get('/restore/{id?}', ['as' => "restore", 'uses' => "ArchivesController@restore"]);
+        });
+
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){
             Route::group(['prefix' => "roles", 'as' => "roles."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "RolesController@index"]);

@@ -95,4 +95,12 @@ class Research extends Model{
     public function processed_by(){
         return $this->belongsTo('App\Laravel\Models\User', 'process_by_id', 'id');
     }
+
+    public function shared_with_trashed(){
+        return $this->hasMany('App\Laravel\Models\SharedResearch', 'research_id', 'id')->withTrashed();
+    }
+
+    public function logs_with_trashed(){
+        return $this->hasMany('App\Laravel\Models\ResearchLog', 'research_id', 'id')->withTrashed();
+    }
 }

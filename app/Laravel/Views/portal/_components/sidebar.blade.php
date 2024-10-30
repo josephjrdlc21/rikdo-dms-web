@@ -53,11 +53,11 @@
             </li>            
             <li class="{{request()->segment(1) == "completed-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.completed_research.index')}}"><i class="fas fa-copy"></i> <span>Completed Research</span></a></li>
             <li class="{{request()->segment(1) == "posted-research" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.posted_research.index')}}"><i class="fas fa-globe"></i> <span>Posted Research</span></a></li>
-            <li class="dropdown">
+            <li class="dropdown {{request()->segment(1) == "archives" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-archive"></i> <span>Archives</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Researches</a></li>
-                    <li><a class="nav-link" href="#">Completed</a></li>
+                    <li class="{{request()->segment(1) == "archives" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.archives.index')}}">Researches</a></li>
+                    <li class="{{request()->segment(1) == "archives" && request()->segment(2) == "completed" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.archives.completed')}}">Completed</a></li>
                 </ul>
             </li>
             <li class="dropdown">
