@@ -60,12 +60,12 @@
                     <li class="{{request()->segment(1) == "archives" && request()->segment(2) == "completed" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.archives.completed')}}">Completed</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{request()->segment(1) == "research-reports" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i> <span>Research Reports</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Researches</a></li>
-                    <li><a class="nav-link" href="#">Completed</a></li>
-                    <li><a class="nav-link" href="#">Posted</a></li>
+                    <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.index')}}">Researches</a></li>
+                    <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "completed" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.completed')}}">Completed</a></li>
+                    <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "posted" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.posted')}}">Posted</a></li>
                 </ul>
             </li>
             <li class="menu-header">System Settings</li>
