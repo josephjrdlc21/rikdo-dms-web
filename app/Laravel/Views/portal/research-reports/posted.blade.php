@@ -32,8 +32,8 @@
                 </div>
                 <div class="col-sm-12 col-lg-3">
                     <div class="form-group">
-                        <label for="input_status">Status</label>
-                        {!! html()->select('status', $statuses, $selected_status, ['id' => "input_status"])->class('form-control selectric') !!}
+                        <label for="input_type">Type</label>
+                        {!! html()->select('type', $types, $selected_type, ['id' => "input_type"])->class('form-control selectric') !!}
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3">
@@ -48,25 +48,19 @@
                         <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" name="end_date" value="{{$end_date}}">                            
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-3">
-                    <div class="form-group">
-                        <label for="input_type">Type</label>
-                        {!! html()->select('type', $types, $selected_type, ['id' => "input_type"])->class('form-control selectric') !!}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_user_department">Department</label>
                         {!! html()->select('department', $departments, $selected_department, ['id' => "input_user_department"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_user_course">Course</label>
                         {!! html()->select('course', $courses, $selected_course, ['id' => "input_user_course"])->class('form-control selectric') !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-lg-3">
+                <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
                         <label for="input_user_yearlevel">Yearlevel</label>
                         {!! html()->select('yearlevel', $yearlevels, $selected_yearlevel, ['id' => "input_user_yearlevel"])->class('form-control selectric') !!}
@@ -80,8 +74,12 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Export Excel</a>
-            <a href="#" class="btn btn-sm btn-danger" style="border-radius: 0.25rem !important;">Export PDF</a>
+            <a href="{{route('portal.research_reports.export')}}?report_type=posted&file_type=excel&keyword={{$keyword}}&start_date={{$start_date}}
+            &end_date={{$end_date}}&department={{$selected_department}}&course={{$selected_course}}&yearlevel={{$selected_yearlevel}}
+            &type={{$selected_type}}" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Export Excel</a>
+            <a href="{{route('portal.research_reports.export')}}?report_type=posted&file_type=pdf&keyword={{$keyword}}&start_date={{$start_date}}
+            &end_date={{$end_date}}&department={{$selected_department}}&course={{$selected_course}}&yearlevel={{$selected_yearlevel}}
+            &type={{$selected_type}}" class="btn btn-sm btn-danger" style="border-radius: 0.25rem !important;">Export PDF</a>
         </div>
     </div>
     <div class="card-body p-0">

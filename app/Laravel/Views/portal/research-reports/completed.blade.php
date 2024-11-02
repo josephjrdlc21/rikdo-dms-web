@@ -80,8 +80,12 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Export Excel</a>
-            <a href="#" class="btn btn-sm btn-danger" style="border-radius: 0.25rem !important;">Export PDF</a>
+            <a href="{{route('portal.research_reports.export')}}?report_type=completed&file_type=excel&keyword={{$keyword}}&status={{$selected_status}}
+            &start_date={{$start_date}}&end_date={{$end_date}}&department={{$selected_department}}&course={{$selected_course}}&yearlevel={{$selected_yearlevel}}
+            &type={{$selected_type}}" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Export Excel</a>
+            <a href="{{route('portal.research_reports.export')}}?report_type=completed&file_type=pdf&keyword={{$keyword}}&status={{$selected_status}}
+            &start_date={{$start_date}}&end_date={{$end_date}}&department={{$selected_department}}&course={{$selected_course}}&yearlevel={{$selected_yearlevel}}
+            &type={{$selected_type}}" class="btn btn-sm btn-danger" style="border-radius: 0.25rem !important;">Export PDF</a>
         </div>
     </div>
     <div class="card-body p-0">
