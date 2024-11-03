@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="card-footer text-right">
-                <a href="{{route('portal.all_research.index')}}" class="btn btn-sm btn-dark">Close Details</a>
+                <a href="{{route('portal.all_research.index')}}" class="btn btn-sm btn-light">Close</a>
             </div>
         </div>
     </div>

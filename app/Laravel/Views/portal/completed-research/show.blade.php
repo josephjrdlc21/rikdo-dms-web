@@ -113,7 +113,7 @@
                 {!!$completed_research->abstract!!}
             </div>
             <div class="card-footer text-right">
-                <a href="{{route('portal.completed_research.index')}}" class="btn btn-sm btn-dark">Close Details</a>
+                <a href="{{route('portal.completed_research.index')}}" class="btn btn-sm btn-light">Close</a>
             </div>
         </div>
     </div>
