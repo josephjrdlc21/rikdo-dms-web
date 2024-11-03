@@ -79,7 +79,7 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="{{route('portal.completed_research.create')}}" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Submit Research</a>
+            <a href="{{route('portal.completed_research.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Submit Research</a>
         </div>
     </div>
     <div class="card-body p-0">
@@ -109,7 +109,7 @@
                         <td>{{$completed->created_at->format("m/d/Y")}}<br><small>{{$completed->created_at->format("h:i A")}}</small></td>
                         <td>
                             <div class="btn-group mb-2">
-                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
