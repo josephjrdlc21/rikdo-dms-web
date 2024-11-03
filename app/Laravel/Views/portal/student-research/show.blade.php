@@ -88,7 +88,7 @@
                             <p>{{$research->course->course_name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
-                            <h6><b>Department</b></h6>
+                            <h6><b>Yearlevel</b></h6>
                             <p>{{$research->yearlevel->yearlevel_name ?? 'N/A'}}</p>
                         </div>
                         <div class="mb-2">
