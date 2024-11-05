@@ -231,6 +231,12 @@ class ResearchReportsController extends Controller{
         return view('portal.research-reports.posted', $this->data);
     }
 
+    public function summary(PageRequest $request){
+        $this->data['page_title'] .= " - Summary Report";
+
+        return view('portal.research-reports.summary', $this->data);
+    }
+
     public function export(PageRequest $request){
         $this->data['keyword'] = strtolower($request->get('keyword'));
         $this->data['selected_department'] = strtolower($request->get('department'));

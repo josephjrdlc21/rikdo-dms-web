@@ -66,6 +66,7 @@
                     <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.index')}}">Researches</a></li>
                     <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "completed" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.completed')}}">Completed</a></li>
                     <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "posted" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.posted')}}">Posted</a></li>
+                    <li class="{{request()->segment(1) == "research-reports" && request()->segment(2) == "summary" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.research_reports.summary')}}">Summary</a></li>
                 </ul>
             </li>
             <li class="menu-header">System Settings</li>

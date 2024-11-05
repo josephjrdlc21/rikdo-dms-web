@@ -115,6 +115,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/', ['as' => "index", 'uses' => "ResearchReportsController@index"]);
             Route::get('/completed', ['as' => "completed", 'uses' => "ResearchReportsController@completed"]);
             Route::get('/posted', ['as' => "posted", 'uses' => "ResearchReportsController@posted"]);
+            Route::get('/summary', ['as' => "summary", 'uses' => "ResearchReportsController@summary"]);
             Route::get('/export', ['as' => "export", 'uses' => "ResearchReportsController@export"]);
         });
 
