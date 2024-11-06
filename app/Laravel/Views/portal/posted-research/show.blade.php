@@ -28,32 +28,67 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12">
-                        <p class="text-center">{{$posted_research->title ?? 'N/A'}}</p>
+                    <div class="col-md-6">
+                        <h6><b>Title</b></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{$posted_research->title ?? 'N/A'}}</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        <p>Dept: {{$posted_research->department->dept_name ?? 'N/A'}}<br>
-                        Course: {{$posted_research->course->course_name ?? 'N/A'}}<br>
-                        Year Level: {{$posted_research->yearlevel->yearlevel_name ?? 'N/A'}}<br>
-                        Authors: 
+                    <div class="col-md-6">
+                        <h6><b>Department</b></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{$posted_research->department->dept_name ?? 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><b>Course</b></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{$posted_research->course->course_name ?? 'N/A'}} - {{$completed_research->yearlevel->yearlevel_name ?? 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><b>Posted By</b></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{$posted_research->processor->name ?? 'Not Yet Processed'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><b>Date Posted</b></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{$posted_research->created_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><b>Authors</b></h6>
+                    </div>
+                    <div class="col-md-6">
                         @forelse($authors as $author)
                         <span>{{$author->name}}</span> 
                         @empty
                         <span>{{'N/A'}}</span>
                         @endforelse
-                        <br>Posted by: {{$posted_research->processor->name ?? 'Not Yet Processed'}}</p>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h4>Abstract</h4>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         {!!$posted_research->abstract!!}                    
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <p>Date: {{$posted_research->created_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
                     </div>
                 </div>
             </div>

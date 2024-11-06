@@ -14,7 +14,7 @@
 @section('content')
 @include('portal._components.notification')
 <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-7">
+    <div class="col-sm-12 col-md-7 col-lg-8">
         <div class="card">
             <div class="card-header">
                 <h4>Research Details</h4>
@@ -28,115 +28,120 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <h6><b>Title</b></h6>
-                            <p>{{$research->title ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Chapter</b></h6>
-                            <p>{{$research->research_type->type ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Chapter</b></h6>
-                            <p>{{$research->chapter ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Version</b></h6>
-                            <p>{{$research->version ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Department</b></h6>
-                            <p>{{$research->department->dept_name ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Date Submitted</b></h6>
-                            <p>{{$research->created_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Last Modified By</b></h6>
-                            <p>{{$research->modified_by->name ?? 'N/A'}}</p>
-                        </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6><b>Title</b></h6>
+                        <p>{{$research->title ?? 'N/A'}}</p>
                     </div>
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <h6><b>Status</b></h6>
-                            <p><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text(str_replace('_', ' ', $research->status)) ?? 'N/A'}}</span></p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Submitted By</b></h6>
-                            <p>{{$research->submitted_by->name ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Professor</b></h6>
-                            <p>{{$research->submitted_to->name ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Course</b></h6>
-                            <p>{{$research->course->course_name ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Yearlevel</b></h6>
-                            <p>{{$research->yearlevel->yearlevel_name ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Processed/Modified At</b></h6>
-                            <p>{{$research->updated_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <h6><b>Processed By</b></h6>
-                            <p>{{$research->processed_by->name ?? 'N/A'}}</p>
-                        </div>
-                    </div><hr>
-                    <div class="col-sm-12">
-                        <div class="mb-2">
-                            <h6><b>Share File With</b></h6>
-                            @forelse($research->shared as $author)
-                            <span>{{$author->user->name}}</span><br>
-                            @empty
-                            <span>{{'N/A'}}</span>
-                            @endforelse
-                        </div>
+                    <div class="col-lg-4">
+                        <h6><b>Status</b></h6>
+                        <p><span class="badge badge-{{Helper::research_badge_status($research->status)}}">{{Helper::capitalize_text(str_replace('_', ' ', $research->status)) ?? 'N/A'}}</span></p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Type</b></h6>
+                        <p>{{$research->research_type->type ?? 'N/A'}}</p>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer text-right">
-                <a href="{{route('portal.all_research.index')}}" class="btn btn-sm btn-light">Close</a>
-            </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6><b>Chapter</b></h6>
+                        <p>{{$research->chapter ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Version</b></h6>
+                        <p>{{$research->version ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Date Submitted</b></h6>
+                        <p>{{$research->created_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6><b>Department</b></h6>
+                        <p>{{$research->department->dept_name ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Course</b></h6>
+                        <p>{{$research->course->course_name ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Yearlevel</b></h6>
+                        <p>{{$research->yearlevel->yearlevel_name ?? 'N/A'}}</p>
+                    </div>
+                </div>
+            </div> 
         </div>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-5">
         <div class="card">
             <div class="card-header">
-                <h4>History</h4>
+                <h4>Submission Overview</h4>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table mb-0">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Remarks</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($research->logs as $history)
-                            <tr>
-                                <td>{{$history->user->name}}</td>
-                                <td>{{$history->remarks}}</td>
-                                <td>{{$history->created_at->format("m/d/Y")}}<br><small>{{$history->created_at->format("h:i A")}}</small></td>
-                            </tr>
-                            @empty
-                            <td colspan="3">
-                                <p class="text-center">No history yet.</p>
-                            </td>
-                            @endforelse
-                        </tbody>
-                    </table>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6><b>Submitted By</b></h6>
+                        <p>{{$research->submitted_by->name ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Professor</b></h6>
+                        <p>{{$research->submitted_to->name ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Last Modified By</b></h6>
+                        <p>{{$research->modified_by->name ?? 'N/A'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6><b>Processed By</b></h6>
+                        <p>{{$research->processed_by->name ?? 'N/A'}}</p> 
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Processed/Modified At</b></h6>
+                        <p>{{$research->updated_at->format("m/d/Y h:i A") ?? 'N/A'}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><b>Share File With</b></h6>
+                        @forelse($research->shared as $author)
+                        <span>{{$author->user->name}}</span><br>
+                        @empty
+                        <span>{{'N/A'}}</span>
+                        @endforelse
+                    </div>
                 </div>
             </div>
+        </div><hr>
+        <div class="text-right">
+            <a href="{{route('portal.all_research.index')}}" class="btn btn-sm btn-light">Close</a>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-5 col-lg-4">
+        <h2 class="section-title">Activities</h2>
+        <div class="activities">
+            @forelse($research->logs as $history)
+            <div class="activity">
+                <div class="activity-icon bg-primary text-white shadow-primary">
+                    <i class="fas fa-arrows-alt"></i>
+                </div>
+                <div class="activity-detail">
+                    <div class="mb-2">
+                        <span class="text-job text-primary">{{$history->created_at->format("m/d/Y h:i A")}}</span>
+                        <span class="bullet"></span>
+                        <a class="text-job" href="#">Remark</a>
+                    </div>
+                    <p>{{$history->user->name}} - {{$history->remarks}}.</p>
+                </div>
+            </div>
+            @empty
+            <div class="activity">
+                <div class="activity-icon bg-primary text-white shadow-primary">
+                    <i class="fas fa-arrows-alt"></i>
+                </div>
+                <div class="activity-detail">
+                    <p>No activities yet.</p>
+                </div>
+            </div>
+            @endforelse
         </div>
     </div>
 </div>
