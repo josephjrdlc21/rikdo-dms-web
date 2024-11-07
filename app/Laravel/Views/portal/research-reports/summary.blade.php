@@ -15,6 +15,33 @@
 @include('portal._components.notification')
 <div class="row justify-content-center">
     <div class="col-sm-12 col-md-11 col-lg-10">
+        <div class="card">
+            <form method="GET" action="">
+                <div class="card-header">
+                    <h4>Filter Dates</h4>
+                    <div class="card-header-action">
+                        <button type="submit" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Filter</button>
+                        <a href="{{route('portal.research_reports.summary')}}" class="btn btn-sm btn-secondary" style="border-radius: 0.25rem !important;">Reset</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="input_year">Years</label>
+                                {!! html()->select('year', $years, $selected_year, ['id' => "input_year"])->class('form-control selectric') !!}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="input_month">Months</label>
+                                {!! html()->select('month', $months, $selected_month, ['id' => "input_month"])->class('form-control selectric') !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="invoice">
             <div class="invoice-print">
                 <div class="row">
@@ -31,14 +58,14 @@
                     <div class="col-md-6">
                         <address>
                             <strong>Process By:</strong><br>
-                            Research Director<br>
-                            John Dish Doe
+                            {{Helper::capitalize_text($auth->user_info->role)}}<br>
+                            {{$auth->name}}
                         </address>
                     </div>
                     <div class="col-md-6 text-md-right">
                         <address>
                             <strong>Print Date:</strong><br>
-                            September 19, 2018<br><br>
+                            {{Carbon::now()->format('F j, Y')}}<br><br>
                         </address>
                     </div>
                 </div>
@@ -50,7 +77,7 @@
                     <div class="col-lg-4 text-right">
                         <div class="invoice-detail-item">
                         <div class="invoice-detail-name">Researches Total</div>
-                        <div class="invoice-detail-value">100</div>
+                        <div class="invoice-detail-value">{{$research_total}}</div>
                         </div>
                     </div>
                 </div>
@@ -67,25 +94,25 @@
                                 <tr>
                                     <td>1</td>
                                     <td>Pending</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$research_total_pending}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>For Revision</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$research_total_for_revision}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
                                     <td>Approved</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$research_total_approved}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>4</td>
                                     <td>Rejected</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$research_total_rejected}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                             </table>
@@ -100,7 +127,7 @@
                     <div class="col-lg-4 text-right">
                         <div class="invoice-detail-item">
                         <div class="invoice-detail-name">Complete Research Total</div>
-                        <div class="invoice-detail-value">100</div>
+                        <div class="invoice-detail-value">{{$completed_total}}</div>
                         </div>
                     </div>
                 </div>
@@ -117,25 +144,25 @@
                                 <tr>
                                     <td>1</td>
                                     <td>Pending</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$completed_total_pending}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>Re Submission</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$completed_total_re_submission}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
                                     <td>For Posting</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$completed_total_for_posting}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>4</td>
                                     <td>Rejected</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$completed_total_rejected}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                             </table>
@@ -150,7 +177,7 @@
                     <div class="col-lg-4 text-right">
                         <div class="invoice-detail-item">
                         <div class="invoice-detail-name">Posted Research Total</div>
-                        <div class="invoice-detail-value">100</div>
+                        <div class="invoice-detail-value">{{$total_posted}}</div>
                         </div>
                     </div>
                 </div>
@@ -167,7 +194,7 @@
                                 <tr>
                                     <td>1</td>
                                     <td>Posted</td>
-                                    <td class="text-center">100</td>
+                                    <td class="text-center">{{$total_posted}}</td>
                                     <td class="text-right">10/09/2024</td>
                                 </tr>
                             </table>
@@ -176,7 +203,7 @@
                 </div>
             </div><hr>
             <div class="text-md-right">
-                <button class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</button>
+                <a href="{{route('portal.index')}}" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
                 <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
             </div>
         </div>

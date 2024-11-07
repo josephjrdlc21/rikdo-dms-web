@@ -233,6 +233,35 @@ class ResearchReportsController extends Controller{
 
     public function summary(PageRequest $request){
         $this->data['page_title'] .= " - Summary Report";
+        $this->data['years'] = ['' => 'All'];
+        $this->data['months'] = ['' => 'All'];
+
+        $current_year = Carbon::now()->year;
+        for($i = 0; $i < 5; $i++){
+            $year = $current_year - $i;
+            $this->data['years'][$year] = $year;
+        }
+
+        for($month = 1; $month <= 12; $month++){
+            $month_name = Carbon::create()->month($month)->format('F');
+            $this->data['months'][$month] = $month_name;
+        }
+
+        $this->data['selected_year'] = $request->input('year');
+        $this->data['selected_month'] = $request->input('month');
+
+        $research_statuses = ['total' => "", 'total_pending' => "pending", 'total_for_revision' => "for_revision", 'total_approved' => "approved", 'total_rejected' => "rejected"];
+        $completed_statuses = ['total' => "!= posted", 'total_pending' => "pending", 'total_re_submission' => "re_submission", 'total_for_posting' => "for_posting", 'total_rejected' => "rejected"];
+
+        foreach ($research_statuses as $key => $status) {
+            $this->data["research_$key"] = $status ? Research::where('status', $status)->count() : Research::count();
+        }
+
+        foreach ($completed_statuses as $key => $status) {
+            $this->data["completed_$key"] = Str::startsWith($status, '!= ') ? CompletedResearch::where('status', '!=', trim($status, '!= '))->count() : CompletedResearch::where('status', $status)->count();
+        }
+
+        $this->data['total_posted'] = PostedResearch::count();
 
         return view('portal.research-reports.summary', $this->data);
     }
