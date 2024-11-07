@@ -89,31 +89,26 @@
                                     <th>No.</th>
                                     <th>Statuses</th>
                                     <th class="text-center">Quantity</th>
-                                    <th class="text-right">Date</th>
                                 </tr>
                                 <tr>
                                     <td>1</td>
                                     <td>Pending</td>
                                     <td class="text-center">{{$research_total_pending}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>For Revision</td>
                                     <td class="text-center">{{$research_total_for_revision}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
                                     <td>Approved</td>
                                     <td class="text-center">{{$research_total_approved}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>4</td>
                                     <td>Rejected</td>
                                     <td class="text-center">{{$research_total_rejected}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                             </table>
                         </div>
@@ -139,31 +134,26 @@
                                     <th>No.</th>
                                     <th>Statuses</th>
                                     <th class="text-center">Quantity</th>
-                                    <th class="text-right">Date</th>
                                 </tr>
                                 <tr>
                                     <td>1</td>
                                     <td>Pending</td>
                                     <td class="text-center">{{$completed_total_pending}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>Re Submission</td>
                                     <td class="text-center">{{$completed_total_re_submission}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
                                     <td>For Posting</td>
                                     <td class="text-center">{{$completed_total_for_posting}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                                 <tr>
                                     <td>4</td>
                                     <td>Rejected</td>
                                     <td class="text-center">{{$completed_total_rejected}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                             </table>
                         </div>
