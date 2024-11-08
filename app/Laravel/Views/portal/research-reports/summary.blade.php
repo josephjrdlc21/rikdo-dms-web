@@ -179,13 +179,11 @@
                                     <th>No.</th>
                                     <th>Name</th>
                                     <th class="text-center">Quantity</th>
-                                    <th class="text-right">Date</th>
                                 </tr>
                                 <tr>
                                     <td>1</td>
                                     <td>Posted</td>
                                     <td class="text-center">{{$total_posted}}</td>
-                                    <td class="text-right">10/09/2024</td>
                                 </tr>
                             </table>
                         </div>
@@ -194,7 +192,7 @@
             </div><hr>
             <div class="text-md-right">
                 <a href="{{route('portal.index')}}" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
-                <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                <a href="{{route('portal.research_reports.export')}}?report_type=summary&year={{$selected_year}}&month={{$selected_month}}" class="btn btn-warning btn-icon icon-left" target="_blank"><i class="fas fa-print"></i> Print</a>
             </div>
         </div>
     </div>

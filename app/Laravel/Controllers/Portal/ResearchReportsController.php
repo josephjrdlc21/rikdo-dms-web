@@ -237,31 +237,48 @@ class ResearchReportsController extends Controller{
         $this->data['months'] = ['' => 'All'];
 
         $current_year = Carbon::now()->year;
-        for($i = 0; $i < 5; $i++){
+        for ($i = 0; $i < 5; $i++) {
             $year = $current_year - $i;
             $this->data['years'][$year] = $year;
         }
-
-        for($month = 1; $month <= 12; $month++){
+        
+        for ($month = 1; $month <= 12; $month++) {
             $month_name = Carbon::create()->month($month)->format('F');
             $this->data['months'][$month] = $month_name;
         }
-
-        $this->data['selected_year'] = $request->input('year');
-        $this->data['selected_month'] = $request->input('month');
+        
+        $this->data['selected_year'] = $request->get('year');
+        $this->data['selected_month'] = $request->get('month');
 
         $research_statuses = ['total' => "", 'total_pending' => "pending", 'total_for_revision' => "for_revision", 'total_approved' => "approved", 'total_rejected' => "rejected"];
         $completed_statuses = ['total' => "!= posted", 'total_pending' => "pending", 'total_re_submission' => "re_submission", 'total_for_posting' => "for_posting", 'total_rejected' => "rejected"];
-
+        
         foreach ($research_statuses as $key => $status) {
-            $this->data["research_$key"] = $status ? Research::where('status', $status)->count() : Research::count();
+            $this->data["research_$key"] = Research::where(function ($query) use ($status) {
+                $this->filter_dates($query, $this->data['selected_year'], $this->data['selected_month']);
+                    if ($status) {
+                        $query->where('status', $status);
+                    }
+                })
+                ->count();
         }
-
+        
         foreach ($completed_statuses as $key => $status) {
-            $this->data["completed_$key"] = Str::startsWith($status, '!= ') ? CompletedResearch::where('status', '!=', trim($status, '!= '))->count() : CompletedResearch::where('status', $status)->count();
+            $this->data["completed_$key"] = CompletedResearch::where(function ($query) use ($status) {
+                $this->filter_dates($query, $this->data['selected_year'], $this->data['selected_month']);
+                    if (Str::startsWith($status, '!= ')) {
+                        $query->where('status', '!=', trim($status, '!= '));
+                    } else {
+                        $query->where('status', $status);
+                    }
+                })
+                ->count();
         }
 
-        $this->data['total_posted'] = PostedResearch::count();
+        $this->data['total_posted'] = PostedResearch::where(function ($query) {
+            $this->filter_dates($query, $this->data['selected_year'], $this->data['selected_month']);
+        })
+        ->count();
 
         return view('portal.research-reports.summary', $this->data);
     }
@@ -501,10 +518,63 @@ class ResearchReportsController extends Controller{
                 }
 
                 break;
+            
+            case "summary":
+                $this->data['selected_year'] = $request->get('year');
+                $this->data['selected_month'] = $request->get('month');
+
+                $research_statuses = ['total' => "", 'total_pending' => "pending", 'total_for_revision' => "for_revision", 'total_approved' => "approved", 'total_rejected' => "rejected"];
+                $completed_statuses = ['total' => "!= posted", 'total_pending' => "pending", 'total_re_submission' => "re_submission", 'total_for_posting' => "for_posting", 'total_rejected' => "rejected"];
+                
+                foreach ($research_statuses as $key => $status) {
+                    $this->data["research_$key"] = Research::where(function ($query) use ($status) {
+                        $this->filter_dates($query, $this->data['selected_year'], $this->data['selected_month']);
+                            if ($status) {
+                                $query->where('status', $status);
+                            }
+                        })
+                        ->count();
+                }
+                
+                foreach ($completed_statuses as $key => $status) {
+                    $this->data["completed_$key"] = CompletedResearch::where(function ($query) use ($status) {
+                        $this->filter_dates($query, $this->data['selected_year'], $this->data['selected_month']);
+                            if (Str::startsWith($status, '!= ')) {
+                                $query->where('status', '!=', trim($status, '!= '));
+                            } else {
+                                $query->where('status', $status);
+                            }
+                        })
+                        ->count();
+                }
+
+                $this->data['total_posted'] = PostedResearch::where(function ($query) {
+                    $this->filter_dates($query, $this->data['selected_year'], $this->data['selected_month']);
+                })
+                ->count();
+
+                $pdf = SnappyPDF::loadView('pdf.summary', $this->data)
+                    ->setPaper('a4')
+                    ->setOrientation('portrait')
+                    ->setOption('enable-local-file-access', true);
+
+                    return $pdf->stream("summary.pdf");
+                break;
             default:
                 return redirect()->back();  
 
                 break;
         }
+    }
+
+    private function filter_dates($query, $year, $month) {
+        if(!empty($year)){
+            $query->whereYear('created_at', $year);
+        }
+        if(!empty($month) && is_numeric($month) && $month >= 1 && $month <= 12){
+            $query->whereMonth('created_at', $month);
+        }
+
+        return $query;
     }
 }
