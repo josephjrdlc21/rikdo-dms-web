@@ -16,7 +16,7 @@
                 <a href="#" class="dropdown-item has-icon">
                     <i class="fas fa-user"></i> Profile
                 </a>
-                <a href="#" class="dropdown-item has-icon">
+                <a href="{{route('portal.profile.edit_password')}}" class="dropdown-item has-icon">
                     <i class="fas fa-lock"></i> Change Password
                 </a>
                 <div class="dropdown-divider"></div>

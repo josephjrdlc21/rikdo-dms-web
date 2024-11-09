@@ -168,5 +168,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
                 Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "ResearchTypesController@destroy"]);
             });
         });
+
+        Route::group(['prefix' => "profile", 'as' => "profile."], function(){
+            Route::get('/edit-password', ['as' => "edit_password", 'uses' => "ProfileController@edit_password"]);
+            Route::post('/edit-password', ['uses' => "ProfileController@update_password"]);
+        });
     });
 });

@@ -170,4 +170,23 @@ class CustomValidator extends Validator{
     
         return true;
     }
+
+    public function validateCurrentPassword($attribute, $value, $parameters){
+        if ($parameters) {
+            $user_id = (is_array($parameters) and isset($parameters[0])) ? $parameters[0] : "0";
+            $user = User::find($user_id);
+
+            return Hash::check($value, $user->password);
+        }
+
+        return false;
+    }
+
+    public function validateNewPassword($attribute, $value, $parameters){
+        $user_id = (is_array($parameters) and isset($parameters[0])) ? $parameters[0] : "0";
+        
+        $user = User::find($user_id);
+
+        return !Hash::check($value, $user->password) ? true : false;
+    }
 }
