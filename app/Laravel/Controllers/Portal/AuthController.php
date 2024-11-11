@@ -41,6 +41,9 @@ class AuthController extends Controller{
 
         if(auth($this->guard)->attempt([$field => $email, 'password' => $password], $remember_me)){
             $account = auth($this->guard)->user();
+
+            $account->last_login_at = now();
+			$account->save();
             
             session()->flash('notification-status', "success");
 			session()->flash('notification-msg', "Welcome {$account->name}!");
