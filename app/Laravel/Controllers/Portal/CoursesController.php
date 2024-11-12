@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\Course;
+use App\Laravel\Models\{Course,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CourseRequest;
@@ -70,6 +70,14 @@ class CoursesController extends Controller{
             $course->course_name = $request->input('course_name');
             $course->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "CREATE_COURSE";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has created a new course.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -116,6 +124,14 @@ class CoursesController extends Controller{
             $course->course_name = $request->input('course_name');
             $course->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "UPDATE_COURSE";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has updated a course.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -144,6 +160,14 @@ class CoursesController extends Controller{
         }
 
         if($course->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_COURSE";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a course.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Course has been deleted.");
             return redirect()->back();

@@ -22,6 +22,13 @@ class Research extends Model{
         static::deleting(function ($research) {
             $research->logs()->delete();
             $research->shared()->delete();
+            $research->shared_with_trashed()->onlyTrashed()->forceDelete();
+            $research->logs_with_trashed()->onlyTrashed()->forceDelete();
+        });
+
+        static::restored(function ($research) {
+            $research->logs_with_trashed()->restore();
+            $research->shared_with_trashed()->restore();
         });
     }
     /**

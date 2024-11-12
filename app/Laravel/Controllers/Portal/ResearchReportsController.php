@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,CompletedResearch,PostedResearch,Department,Course,Yearlevel,ResearchType};
+use App\Laravel\Models\{Research,CompletedResearch,PostedResearch,Department,Course,Yearlevel,ResearchType,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 
@@ -292,6 +292,16 @@ class ResearchReportsController extends Controller{
         $this->data['selected_type'] = strtolower($request->get('type'));
         $this->data['start_date'] = Carbon::parse($request->get('start_date'))->format("Y-m-d");
         $this->data['end_date'] = Carbon::parse($request->get('end_date', now()))->format("Y-m-d");
+
+        if($request->get('report_type')){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "GENERATE_REPORT";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has generated a research report.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+        }
 
         switch($request->get('report_type')){
             case "researches":

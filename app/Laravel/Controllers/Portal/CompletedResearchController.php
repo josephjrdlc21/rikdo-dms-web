@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{CompletedResearch,Department,Course,Yearlevel,Research,SharedResearch,User,ResearchType};
+use App\Laravel\Models\{CompletedResearch,Department,Course,Yearlevel,Research,SharedResearch,User,ResearchType,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CompletedResearchRequest;
@@ -129,6 +129,14 @@ class CompletedResearchController extends Controller{
                 $completed_research->source = $research_file['source'];
                 $completed_research->save();
             }
+
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "CREATE_FOR_POSTED_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has submitted a completed research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
            
             DB::commit();
 
@@ -197,6 +205,14 @@ class CompletedResearchController extends Controller{
                 $completed_research->save();
             }
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "UPDATE_FOR_POSTED_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has updated submitted completed research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -239,6 +255,14 @@ class CompletedResearchController extends Controller{
                     $completed_research->status = $status;
                     $completed_research->processor_id = $this->data['auth']->id;
                     $completed_research->save();
+
+                    $audit_trail = new AuditTrail;
+                    $audit_trail->user_id = $this->data['auth']->id;
+                    $audit_trail->process = "EVALUATE_COMPLETED_RESEARCH";
+                    $audit_trail->ip = $this->data['ip'];
+                    $audit_trail->remarks = "{$this->data['auth']->name} has been evaluate completed research and set status to {$completed_research->status}.";
+                    $audit_trail->type = "USER_ACTION";
+                    $audit_trail->save();
                 
                     DB::commit();
 
@@ -260,6 +284,14 @@ class CompletedResearchController extends Controller{
                     $completed_research->processor_id = $this->data['auth']->id;
                     $completed_research->remarks = $request->get('remarks');
                     $completed_research->save();
+
+                    $audit_trail = new AuditTrail;
+                    $audit_trail->user_id = $this->data['auth']->id;
+                    $audit_trail->process = "EVALUATE_COMPLETED_RESEARCH";
+                    $audit_trail->ip = $this->data['ip'];
+                    $audit_trail->remarks = "{$this->data['auth']->name} has been evaluate completed research and set status to {$completed_research->status}.";
+                    $audit_trail->type = "USER_ACTION";
+                    $audit_trail->save();
                    
                     DB::commit();
 
@@ -281,6 +313,14 @@ class CompletedResearchController extends Controller{
                     $completed_research->processor_id = $this->data['auth']->id;
                     $completed_research->remarks = $request->get('remarks');
                     $completed_research->save();
+
+                    $audit_trail = new AuditTrail;
+                    $audit_trail->user_id = $this->data['auth']->id;
+                    $audit_trail->process = "EVALUATE_COMPLETED_RESEARCH";
+                    $audit_trail->ip = $this->data['ip'];
+                    $audit_trail->remarks = "{$this->data['auth']->name} has been evaluate completed research and set status to {$completed_research->status}.";
+                    $audit_trail->type = "USER_ACTION";
+                    $audit_trail->save();
                    
                     DB::commit();
 
@@ -337,6 +377,14 @@ class CompletedResearchController extends Controller{
         }
 
         if($completed_research->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_COMPLETED_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a completed reseach.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
             return redirect()->back();
@@ -352,16 +400,27 @@ class CompletedResearchController extends Controller{
             return redirect()->route('portal.completed_research.index');
         }
 
-        $path = $completed_research->path ? "{$completed_research->path}/{$completed_research->filename}" : "{$completed_research->directory}/{$completed_research->filename}";
+        try{
+            $path = $completed_research->path ? "{$completed_research->path}/{$completed_research->filename}" : "{$completed_research->directory}/{$completed_research->filename}";
 
-        $download = FileDownloader::download($path);
+            $download = FileDownloader::download($path);
 
-        if($download){
-            return $download;
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DOWNLOAD_COMPLETED_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has downloaded a completed research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
+            if($download){
+                return $download;
+            }
+        }catch(\Exception $e){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
         }
-        
-        session()->flash('notification-status', "error");
-        session()->flash('notification-msg', "Failed to download research file.");
+
         return redirect()->route('portal.completed_research.show', [$completed_research->id]);
     }
 }

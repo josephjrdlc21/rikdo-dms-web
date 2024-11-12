@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,ResearchType};
+use App\Laravel\Models\{Research,ResearchType,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 
@@ -276,6 +276,14 @@ class AllResearchController extends Controller{
         }
 
         if($research->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
             return redirect()->back();
@@ -304,16 +312,27 @@ class AllResearchController extends Controller{
             return redirect()->route('portal.all_research.index');
         }
 
-        $path = $research->path ? "{$research->path}/{$research->filename}" : "{$research->directory}/{$research->filename}";
+        try{
+            $path = $research->path ? "{$research->path}/{$research->filename}" : "{$research->directory}/{$research->filename}";
 
-        $download = FileDownloader::download($path);
+            $download = FileDownloader::download($path);
 
-        if($download){
-            return $download;
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DOWNLOAD_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has downloaded a research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
+            if($download){
+                return $download;
+            }
+        }catch(\Exception $e){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
         }
-        
-        session()->flash('notification-status', "error");
-        session()->flash('notification-msg', "Failed to download research file.");
+
         return redirect()->route('portal.all_research.show', [$research->id]);
     }
 }

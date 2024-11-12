@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{UserKYC,User,Role,UserInfo,Department,Course,Yearlevel};
+use App\Laravel\Models\{UserKYC,User,Role,UserInfo,Department,Course,Yearlevel,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 
@@ -238,6 +238,14 @@ class UsersKYCController extends Controller{
             $user_kyc->processor_id = $this->data['auth']->id;
             $user_kyc->process_at = Carbon::now();
             $user_kyc->save();
+
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "VERIFY_USER";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} user was verified and set status to {$user_kyc->status}.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
 
             if($user_kyc->status == "rejected"){
                 if(env('MAIL_SERVICE', false)){

@@ -169,6 +169,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             });
         });
 
+        Route::group(['prefix' => "audit-trail", 'as' => "audit_trail."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "AuditTrailController@index"]);
+        });
+
         Route::group(['prefix' => "profile", 'as' => "profile."], function(){
             Route::get('/', ['as' => "index", 'uses' => "ProfileController@index"]);
             Route::post('/', ['uses' => "ProfileController@update_profile"]);

@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\Yearlevel;
+use App\Laravel\Models\{Yearlevel,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\YearlevelRequest;
@@ -68,6 +68,14 @@ class YearlevelsController extends Controller{
             $yearlevel->yearlevel_name = $request->input('yearlevel_name');
             $yearlevel->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "CREATE_YEARLEVEL";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has created a new yearlevel.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -113,6 +121,14 @@ class YearlevelsController extends Controller{
             $yearlevel->yearlevel_name = $request->input('yearlevel_name');
             $yearlevel->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "UPDATE_YEARLEVEL";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has updated a yearlevel.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -141,6 +157,14 @@ class YearlevelsController extends Controller{
         }
 
         if($yearlevel->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_YEARLEVEL";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a yearlevel.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Yearlevel has been deleted.");
             return redirect()->back();

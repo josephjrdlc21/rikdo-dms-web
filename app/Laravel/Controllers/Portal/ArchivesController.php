@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,Department,Course,Yearlevel,ResearchType,CompletedResearch,User};
+use App\Laravel\Models\{Research,Department,Course,Yearlevel,ResearchType,CompletedResearch,User,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 
@@ -205,6 +205,16 @@ class ArchivesController extends Controller{
     }
 
     public function destroy(PageRequest $request,$id = null){
+        if($request->get('type')){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_RESEARCH_PERMANENTLY";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a research permanently.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+        }
+
         switch ($request->get('type')) {
             case 'completed':
                 $research = CompletedResearch::withTrashed()->find($id);
@@ -236,8 +246,8 @@ class ArchivesController extends Controller{
                 FileRemover::remove($research->path);
 
                 if($research->forceDelete()){
-                    $research->shared_with_trashed()->forceDelete();
-                    $research->logs_with_trashed()->forceDelete();
+                    //$research->shared_with_trashed()->forceDelete();
+                    //$research->logs_with_trashed()->forceDelete();
 
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been deleted.");
@@ -255,6 +265,16 @@ class ArchivesController extends Controller{
     }
 
     public function restore(PageRequest $request,$id = null){
+        if($request->get('type')){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "RESTORE_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has retored a research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+        }
+
         switch ($request->get('type')) {
             case 'completed':
                 $research = CompletedResearch::withTrashed()->find($id);
@@ -282,8 +302,8 @@ class ArchivesController extends Controller{
                 }
 
                 if($research->restore()){
-                    $research->logs_with_trashed()->restore();
-                    $research->shared_with_trashed()->restore();
+                    //$research->logs_with_trashed()->restore();
+                    //$research->shared_with_trashed()->restore();
 
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been restored.");

@@ -2,12 +2,13 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{User,Role,UserInfo,Department,Course,Yearlevel};
+use App\Laravel\Models\{User,Role,UserInfo,Department,Course,Yearlevel,AuditTrail,CompletedResearch};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\UserRequest;
 
-use App\Laravel\Notifications\{UserAccountCreatedSuccess,UserAccountResetPasswordSuccess,UserAccountUpdated,UserAccountChangeStatus,UserAccountRemoved};
+use App\Laravel\Notifications\{UserAccountCreatedSuccess,UserAccountResetPasswordSuccess,
+UserAccountUpdated,UserAccountChangeStatus,UserAccountRemoved};
 
 use Carbon,DB,Str,Helper,Mail;
 
@@ -189,6 +190,14 @@ class UsersController extends Controller{
                         $role = Role::where('name', $user->role)->where('guard_name','web')->first();
                         $cred->assignRole($role);
 
+                        $audit_trail = new AuditTrail;
+                        $audit_trail->user_id = $this->data['auth']->id;
+                        $audit_trail->process = "REGISTER_USER";
+                        $audit_trail->ip = $this->data['ip'];
+                        $audit_trail->remarks = "{$this->data['auth']->name} has registered a new user.";
+                        $audit_trail->type = "USER_ACTION";
+                        $audit_trail->save();
+
                         if(env('MAIL_SERVICE', false)){
                             $data = [
                                 'username' => $cred->username,
@@ -322,6 +331,14 @@ class UsersController extends Controller{
                         $role = Role::where('name', $user_info->role)->where('guard_name','web')->first();
                         $user->syncRoles($role);
 
+                        $audit_trail = new AuditTrail;
+                        $audit_trail->user_id = $this->data['auth']->id;
+                        $audit_trail->process = "UPDATE_REGISTERED_USER";
+                        $audit_trail->ip = $this->data['ip'];
+                        $audit_trail->remarks = "{$this->data['auth']->name} has updated a registered user.";
+                        $audit_trail->type = "USER_ACTION";
+                        $audit_trail->save();
+
                         if(env('MAIL_SERVICE', false)){
                             $data = [
                                 'name' => $user->name,
@@ -371,6 +388,14 @@ class UsersController extends Controller{
             $user->password = bcrypt($password);
             $user->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "RESET_USER_PASSWORD";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has reset user password.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             if(env('MAIL_SERVICE', false)){
                 $data = [
                     'name' => $user->name,
@@ -409,6 +434,14 @@ class UsersController extends Controller{
         try{
             $user->status = $user->status === 'active' ? 'inactive' : 'active';
             $user->save();
+
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "UPDATE_USER_STATUS";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has updated user status to {$user->status}.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
 
             if(env('MAIL_SERVICE', false)){
                 $data = [
@@ -456,13 +489,25 @@ class UsersController extends Controller{
             session()->flash('notification-msg', "Record not found.");
             return redirect()->route('portal.users.index');
         }
-        
-        DB::beginTransaction();
-        try{
-            $user_info = UserInfo::find($user->user_info_id);
-            $user_info->delete();
 
-            $user->delete();
+        $is_has_completed = CompletedResearch::where('processor_id', $user->id)
+            ->orWhereRaw("FIND_IN_SET(?, authors)", [$user->id])
+            ->exists();
+
+        if($is_has_completed){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Unable to delete account due to completed researches.");
+            return redirect()->route('portal.users.index');
+        }
+
+        if($user->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_USER";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a user.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
 
             if(env('MAIL_SERVICE', false)){
                 $data = [
@@ -473,22 +518,10 @@ class UsersController extends Controller{
                 Mail::to($user->email)->send(new UserAccountRemoved($data));
             }
 
-            DB::commit();
-
-            session()->flash('notification-status', "success");
-            session()->flash('notification-msg', "User has been deleted.");        
-            return redirect()->route('portal.users.index');
-        }catch(\Exception $e){
-            DB::rollback();
-    
-            session()->flash('notification-status', "failed");
-            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
+            session()->flash('notification-status', 'success');
+            session()->flash('notification-msg', "User has been deleted.");
             return redirect()->back();
         }
-
-        session()->flash('notification-status', "warning");
-        session()->flash('notification-msg', "Unable to delete user.");
-        return redirect()->back();
     }
 
     public function cancel(PageRequest $request){

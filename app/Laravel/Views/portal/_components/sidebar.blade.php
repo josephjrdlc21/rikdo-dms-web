@@ -81,7 +81,7 @@
                     <li class="{{request()->segment(2) == "research-types" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.research_types.index')}}">Research Types</a></li>
                 </ul>
             </li>
-            <li><a class="nav-link" href="#"><i class="fas fa-compass"></i> <span>Audit Trail</span></a></li>
+            <li class="{{request()->segment(1) == "audit-trail" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.audit_trail.index')}}"><i class="fas fa-compass"></i> <span>Audit Trail</span></a></li>
         </ul>    
     </aside>
 </div>

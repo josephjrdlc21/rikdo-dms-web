@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\Department;
+use App\Laravel\Models\{Department,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\DepartmentRequest;
@@ -70,6 +70,14 @@ class DepartmentsController extends Controller{
             $department->dept_name = $request->input('dept_name');
             $department->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "CREATE_DEPARTMENT";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has created a new department.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -116,6 +124,14 @@ class DepartmentsController extends Controller{
             $department->dept_name = $request->input('dept_name');
             $department->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "UPDATE_DEPARTMENT";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has updated a department.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -144,6 +160,14 @@ class DepartmentsController extends Controller{
         }
 
         if($department->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_DEPARTMENT";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has deleted a department.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Department has been deleted.");
             return redirect()->back();

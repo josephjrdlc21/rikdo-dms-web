@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{User,UserInfo};
+use App\Laravel\Models\{User,UserInfo,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\{ChangePasswordRequest,ChangePictureRequest};
@@ -46,6 +46,14 @@ class ProfileController extends Controller{
                 $account->user_info->filename = $profile_picture['filename'];
                 $account->user_info->source = $profile_picture['source'];
                 $account->user_info->save();
+
+                $audit_trail = new AuditTrail;
+                $audit_trail->user_id = $this->data['auth']->id;
+                $audit_trail->process = "CHANGE_PROFILE_PICTURE";
+                $audit_trail->ip = $this->data['ip'];
+                $audit_trail->remarks = "{$this->data['auth']->name} has changed new profile picture.";
+                $audit_trail->type = "USER_ACTION";
+                $audit_trail->save();
             }
 
             DB::commit();
@@ -81,6 +89,14 @@ class ProfileController extends Controller{
 		try{
             $account->password = bcrypt($request->input('password'));
             $account->save();
+
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "CHANGE_PASSWORD";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has changed new password.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
 
 			DB::commit();
 

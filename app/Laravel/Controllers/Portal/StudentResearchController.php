@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,ResearchType,User,SharedResearch,ResearchLog};
+use App\Laravel\Models\{Research,ResearchType,User,SharedResearch,ResearchLog,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\StudentResearchRequest;
@@ -332,6 +332,14 @@ class StudentResearchController extends Controller{
             $research_log->remarks = "Research has been shared to other users";
             $research_log->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "SHARE_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has share research to other users.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -374,6 +382,14 @@ class StudentResearchController extends Controller{
                     $research_log->user_id = $this->data['auth']->id;
                     $research_log->remarks = "Research has been {$research->status}";
                     $research_log->save();
+
+                    $audit_trail = new AuditTrail;
+                    $audit_trail->user_id = $this->data['auth']->id;
+                    $audit_trail->process = "EVALUATE_RESEARCH";
+                    $audit_trail->ip = $this->data['ip'];
+                    $audit_trail->remarks = "{$this->data['auth']->name} has been evaluated the research and set status to {$research->status}.";
+                    $audit_trail->type = "USER_ACTION";
+                    $audit_trail->save();
                 
                     DB::commit();
 
@@ -408,6 +424,14 @@ class StudentResearchController extends Controller{
                     $research_log->user_id = $this->data['auth']->id;
                     $research_log->remarks = "Research has been {$research->status}";
                     $research_log->save();
+
+                    $audit_trail = new AuditTrail;
+                    $audit_trail->user_id = $this->data['auth']->id;
+                    $audit_trail->process = "EVALUATE_RESEARCH";
+                    $audit_trail->ip = $this->data['ip'];
+                    $audit_trail->remarks = "{$this->data['auth']->name} has been evaluated the research and set status to {$research->status}.";
+                    $audit_trail->type = "USER_ACTION";
+                    $audit_trail->save();
                 
                     DB::commit();
 
@@ -445,7 +469,7 @@ class StudentResearchController extends Controller{
             return redirect()->route('portal.student_research.index');
         }
 
-        if($this->check_research_title($request,$research->id)){
+        if($this->check_research_title($request, $research->id)){
             return redirect()->back();
         }
 
@@ -507,6 +531,14 @@ class StudentResearchController extends Controller{
             $research_log->remarks = "Research has been {$research->status}";
             $research_log->save();
 
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "EVALUATE_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has been evaluated the research and set status to {$research->status}.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -535,6 +567,14 @@ class StudentResearchController extends Controller{
         }
 
         if($research->delete()){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DELETE_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has been deleted a research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
             return redirect()->back();
@@ -563,16 +603,27 @@ class StudentResearchController extends Controller{
             return redirect()->route('portal.student_research.index');
         }
 
-        $path = $research->path ? "{$research->path}/{$research->filename}" : "{$research->directory}/{$research->filename}";
+        try{
+            $path = $research->path ? "{$research->path}/{$research->filename}" : "{$research->directory}/{$research->filename}";
 
-        $download = FileDownloader::download($path);
+            $download = FileDownloader::download($path);
 
-        if($download){
-            return $download;
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DOWNLOAD_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has downloaded a research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
+            if($download){
+                return $download;
+            }
+        }catch(\Exception $e){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
         }
 
-        session()->flash('notification-status', "error");
-        session()->flash('notification-msg', "Failed to download research file.");
         return redirect()->route('portal.student_research.show', [$research->id]);
     }
 }

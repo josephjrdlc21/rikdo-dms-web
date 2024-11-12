@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{PostedResearch,CompletedResearch,Department,Course,Yearlevel,ResearchType,User};
+use App\Laravel\Models\{PostedResearch,CompletedResearch,Department,Course,Yearlevel,ResearchType,User,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\PostedResearchRequest;
@@ -115,6 +115,14 @@ class PostedResearchController extends Controller{
             $posted_research->filename = $completed_research->filename;
             $posted_research->source = $completed_research->source;
             $posted_research->save();
+
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "POST_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has posted a new research.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
             
             DB::commit();
 
@@ -158,16 +166,27 @@ class PostedResearchController extends Controller{
             return redirect()->route('portal.posted_research.index');
         }
 
-        $path = $posted_research->path ? "{$posted_research->path}/{$posted_research->filename}" : "{$posted_research->directory}/{$posted_research->filename}";
+        try{
+            $path = $posted_research->path ? "{$posted_research->path}/{$posted_research->filename}" : "{$posted_research->directory}/{$posted_research->filename}";
 
-        $download = FileDownloader::download($path);
+            $download = FileDownloader::download($path);
 
-        if($download){
-            return $download;
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "DOWNLOAD_POSTED_RESEARCH";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has downloaded a posted research file.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+
+            if($download){
+                return $download;
+            }
+        }catch(\Exception $e){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Server Error: Code #{$e->getLine()}");
         }
         
-        session()->flash('notification-status', "error");
-        session()->flash('notification-msg', "Failed to download research file.");
         return redirect()->route('portal.posted_research.show', [$posted_research->id]);
     }
 }

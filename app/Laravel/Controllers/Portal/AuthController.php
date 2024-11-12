@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{User,UserKYC,Role,Department,Course,Yearlevel,PasswordReset};
+use App\Laravel\Models\{User,UserKYC,Role,Department,Course,Yearlevel,PasswordReset,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\{RegisterRequest,ForgotPasswordRequest,ResetPasswordRequest};
@@ -44,6 +44,14 @@ class AuthController extends Controller{
 
             $account->last_login_at = now();
 			$account->save();
+
+            $audit_trail = new AuditTrail;
+			$audit_trail->user_id = $account->id;
+			$audit_trail->process = "LOGIN_PORTAL_USER";
+			$audit_trail->ip = $this->data['ip'];
+			$audit_trail->remarks = "{$account->name} has logged in.";
+			$audit_trail->type = "USER_ACTION";
+			$audit_trail->save();
             
             session()->flash('notification-status', "success");
 			session()->flash('notification-msg', "Welcome {$account->name}!");
@@ -57,6 +65,14 @@ class AuthController extends Controller{
 
     public function logout(PageRequest $request){
 		auth($this->guard)->logout();
+
+        $audit_trail = new AuditTrail;
+        $audit_trail->user_id = $this->data['auth']->id;
+        $audit_trail->process = "LOGOUT_PORTAL_USER";
+        $audit_trail->ip = $this->data['ip'];
+        $audit_trail->remarks = "{$this->data['auth']->name} has logged out.";
+        $audit_trail->type = "USER_ACTION";
+        $audit_trail->save();
 
 		session()->flash('notification-status', "success");
 		session()->flash('notification-msg', "Logged out successfully.");
