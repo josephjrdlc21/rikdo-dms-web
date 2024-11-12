@@ -246,8 +246,8 @@ class ArchivesController extends Controller{
                 FileRemover::remove($research->path);
 
                 if($research->forceDelete()){
-                    //$research->shared_with_trashed()->forceDelete();
-                    //$research->logs_with_trashed()->forceDelete();
+                    $research->shared_with_trashed()->forceDelete();
+                    $research->logs_with_trashed()->forceDelete();
 
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been deleted.");
@@ -302,8 +302,8 @@ class ArchivesController extends Controller{
                 }
 
                 if($research->restore()){
-                    //$research->logs_with_trashed()->restore();
-                    //$research->shared_with_trashed()->restore();
+                    $research->logs_with_trashed()->restore();
+                    $research->shared_with_trashed()->restore();
 
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been restored.");
