@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{User,Role,UserInfo,Department,Course,Yearlevel,AuditTrail,CompletedResearch};
+use App\Laravel\Models\{User,Role,UserInfo,Department,Course,Yearlevel,AuditTrail,CompletedResearch,Research};
 
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\UserRequest;
@@ -494,9 +494,13 @@ class UsersController extends Controller{
             ->orWhereRaw("FIND_IN_SET(?, authors)", [$user->id])
             ->exists();
 
-        if($is_has_completed){
-            session()->flash('notification-status', "failed");
-            session()->flash('notification-msg', "Unable to delete account due to completed researches.");
+        $is_has_research = Research::where('submitted_by_id', $user->id)
+            ->orWhere('submitted_to_id', $user->id)
+            ->exists();
+
+        if($is_has_completed OR $is_has_research){
+            session()->flash('notification-status', 'failed');
+            session()->flash('notification-msg', 'Unable to delete account due to existing researches.');
             return redirect()->route('portal.users.index');
         }
 

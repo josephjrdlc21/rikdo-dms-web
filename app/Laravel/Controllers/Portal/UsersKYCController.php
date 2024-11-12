@@ -243,7 +243,7 @@ class UsersKYCController extends Controller{
             $audit_trail->user_id = $this->data['auth']->id;
             $audit_trail->process = "VERIFY_USER";
             $audit_trail->ip = $this->data['ip'];
-            $audit_trail->remarks = "{$this->data['auth']->name} user was verified and set status to {$user_kyc->status}.";
+            $audit_trail->remarks = "{$this->data['auth']->name} was verified the user and set status to {$user_kyc->status}.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
 

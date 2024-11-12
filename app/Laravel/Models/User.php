@@ -26,9 +26,6 @@ class User extends Authenticatable{
 
         static::deleting(function ($user) {
             $user->user_info()->delete();
-            $user->logs()->delete();
-            $user->shared()->delete();
-            $user->submitted_by()->delete();
             $user->activities()->delete();
         });
     }
@@ -67,18 +64,6 @@ class User extends Authenticatable{
     public function user_info(){
 		return $this->belongsTo('App\Laravel\Models\UserInfo', 'user_info_id', 'id');
 	}
-
-    public function logs(){
-        return $this->hasMany('App\Laravel\Models\ResearchLog', 'user_id', 'id');
-    }
-
-    public function shared(){
-        return $this->hasMany('App\Laravel\Models\SharedResearch', 'user_id', 'id');
-    }
-
-    public function submitted_by(){
-        return $this->hasMany('App\Laravel\Models\Research', 'submitted_to_id', 'id');
-    }
 
     public function activities(){
         return $this->hasMany('App\Laravel\Models\AuditTrail', 'user_id', 'id');
