@@ -9,7 +9,10 @@ use App\Laravel\Requests\Portal\ResearchRequest;
 
 use App\Laravel\Traits\{VerifyResearch,SharesResearch};
 
-use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover;
+use App\Laravel\Notifications\{ResearchSubmitted,ResearchSubmittedSuccess,ResearchSubmittedModified,
+ResearchSubmittedModifiedSuccess};
+
+use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover,Mail;
 
 class ResearchController extends Controller{
     use VerifyResearch, SharesResearch;
@@ -304,17 +307,9 @@ class ResearchController extends Controller{
     }
 
     public function store(ResearchRequest $request){
-        if($this->check_research_title($request)){
-            return redirect()->back();
-        }
-
-        if($this->check_chapter_limit($request)){
-            return redirect()->back();
-        }
-
-        if($this->check_chapter_version($request)){
-            return redirect()->back();
-        }
+        if($this->check_research_title($request)) {return redirect()->back();}
+        if($this->check_chapter_limit($request)) {return redirect()->back();}
+        if($this->check_chapter_version($request)){ return redirect()->back();}
 
         DB::beginTransaction();
         try {
@@ -357,6 +352,20 @@ class ResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has created a new research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_to' => $research->submitted_to->name,
+                    'submitted_by' => $research->submitted_by->name,
+                    'status' => $research->status ?? 'pending',
+                    'date_time' => $research->created_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_to->email)->send(new ResearchSubmitted($data));
+                Mail::to($research->submitted_by->email)->send(new ResearchSubmittedSuccess($data));
+            }
 
             DB::commit();
 
@@ -413,17 +422,9 @@ class ResearchController extends Controller{
             return redirect()->route('portal.research.index');
         }
 
-        if($this->check_research_title($request,$research->id)){
-            return redirect()->back();
-        }
-
-        if($this->check_chapter_limit($request)){
-            return redirect()->back();
-        }
-
-        if($this->check_chapter_version($request)){
-            return redirect()->back();
-        }
+        if($this->check_research_title($request,$research->id)) {return redirect()->back();}
+        if($this->check_chapter_limit($request)) {return redirect()->back();}
+        if($this->check_chapter_version($request)) {return redirect()->back();}
 
         DB::beginTransaction();
         try{
@@ -482,6 +483,20 @@ class ResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has updated a research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_to' => $research->submitted_to->name,
+                    'modified_by' => $research->modified_by->name,
+                    'status' => $research->status,
+                    'date_time' => $research->updated_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_to->email)->send(new ResearchSubmittedModified($data));
+                Mail::to($research->modified_by->email)->send(new ResearchSubmittedModifiedSuccess($data));
+            }
 
             DB::commit();
 
