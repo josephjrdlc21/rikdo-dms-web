@@ -171,6 +171,7 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
 
         Route::group(['prefix' => "audit-trail", 'as' => "audit_trail."], function(){
             Route::get('/', ['as' => "index", 'uses' => "AuditTrailController@index"]);
+            Route::get('/export', ['as' => "export", 'uses' => "AuditTrailController@export"]);
         });
 
         Route::group(['prefix' => "profile", 'as' => "profile."], function(){

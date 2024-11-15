@@ -69,4 +69,8 @@
     .border-white{
         border-color: white;
     }
+
+    .text-sm{
+        font-size: 13px;
+    }
 </style>
