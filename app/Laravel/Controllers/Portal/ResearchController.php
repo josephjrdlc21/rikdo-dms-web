@@ -10,7 +10,7 @@ use App\Laravel\Requests\Portal\ResearchRequest;
 use App\Laravel\Traits\{VerifyResearch,SharesResearch};
 
 use App\Laravel\Notifications\{ResearchSubmitted,ResearchSubmittedSuccess,ResearchSubmittedModified,
-ResearchSubmittedModifiedSuccess};
+ResearchSubmittedModifiedSuccess,ResearchShared,ResearchSharedSuccess,ResearchDeleted,ResearchDeletedSuccess};
 
 use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover,Mail;
 
@@ -580,6 +580,20 @@ class ResearchController extends Controller{
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
 
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_to' => $research->submitted_to->name,
+                    'modified_by' => $research->modified_by->name,
+                    'status' => $research->status,
+                    'date_time' => $research->updated_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_to->email)->send(new ResearchShared($data));
+                Mail::to($research->modified_by->email)->send(new ResearchSharedSuccess($data));
+            }
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -618,6 +632,20 @@ class ResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has been deleted a research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_to' => $research->submitted_to->name,
+                    'deleted_by' => $this->data['auth']->name,
+                    'status' => $research->status,
+                    'date_time' => $research->deleted_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_to->email)->send(new ResearchDeleted($data));
+                Mail::to($this->data['auth']->email)->send(new ResearchDeletedSuccess($data));
+            }
 
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
