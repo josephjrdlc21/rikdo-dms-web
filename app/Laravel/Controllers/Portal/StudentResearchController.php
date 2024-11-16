@@ -9,7 +9,10 @@ use App\Laravel\Requests\Portal\StudentResearchRequest;
 
 use App\Laravel\Traits\{VerifyResearch,SharesResearch};
 
-use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover;
+use App\Laravel\Notifications\{StudentResearchShared,StudentResearchSharedSuccess,StudentResearchEvaluated,
+StudentResearchEvaluatedSuccess,StudentResearchDeleted,StudentResearchDeletedSuccess};
+
+use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover,Mail;
 
 class StudentResearchController extends Controller{
     use VerifyResearch, SharesResearch;
@@ -340,6 +343,20 @@ class StudentResearchController extends Controller{
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
 
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_by' => $research->submitted_by->name,
+                    'modified_by' => $research->modified_by->name,
+                    'status' => $research->status,
+                    'date_time' => $research->updated_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_by->email)->send(new StudentResearchShared($data));
+                Mail::to($research->modified_by->email)->send(new StudentResearchSharedSuccess($data));
+            }
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -390,6 +407,20 @@ class StudentResearchController extends Controller{
                     $audit_trail->remarks = "{$this->data['auth']->name} has been evaluated the research and set status to {$research->status}.";
                     $audit_trail->type = "USER_ACTION";
                     $audit_trail->save();
+
+                    if(env('MAIL_SERVICE', false)){
+                        $data = [
+                            'title' => $research->title,
+                            'chapter' => $research->chapter,
+                            'version' => $research->version,
+                            'submitted_by' => $research->submitted_by->name,
+                            'processed_by' => $research->processed_by->name,
+                            'status' => $research->status,
+                            'date_time' => $research->updated_at->format('m/d/Y h:i A'),
+                        ];
+                        Mail::to($research->submitted_by->email)->send(new StudentResearchEvaluated($data));
+                        Mail::to($research->processed_by->email)->send(new StudentResearchEvaluatedSuccess($data));
+                    }
                 
                     DB::commit();
 
@@ -432,6 +463,20 @@ class StudentResearchController extends Controller{
                     $audit_trail->remarks = "{$this->data['auth']->name} has been evaluated the research and set status to {$research->status}.";
                     $audit_trail->type = "USER_ACTION";
                     $audit_trail->save();
+
+                    if(env('MAIL_SERVICE', false)){
+                        $data = [
+                            'title' => $research->title,
+                            'chapter' => $research->chapter,
+                            'version' => $research->version,
+                            'submitted_by' => $research->submitted_by->name,
+                            'processed_by' => $research->processed_by->name,
+                            'status' => $research->status,
+                            'date_time' => $research->updated_at->format('m/d/Y h:i A'),
+                        ];
+                        Mail::to($research->submitted_by->email)->send(new StudentResearchEvaluated($data));
+                        Mail::to($research->processed_by->email)->send(new StudentResearchEvaluatedSuccess($data));
+                    }
                 
                     DB::commit();
 
@@ -469,17 +514,9 @@ class StudentResearchController extends Controller{
             return redirect()->route('portal.student_research.index');
         }
 
-        if($this->check_research_title($request, $research->id)){
-            return redirect()->back();
-        }
-
-        if($this->check_chapter_limit($request)){
-            return redirect()->back();
-        }
-
-        if($this->check_chapter_version($request)){
-            return redirect()->back();
-        }
+        if($this->check_research_title($request, $research->id)) {return redirect()->back();}
+        if($this->check_chapter_limit($request)) {return redirect()->back();}
+        if($this->check_chapter_version($request)) {return redirect()->back();}
 
         DB::beginTransaction();
         try{
@@ -539,6 +576,20 @@ class StudentResearchController extends Controller{
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
 
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_by' => $research->submitted_by->name,
+                    'processed_by' => $research->processed_by->name,
+                    'status' => $research->status,
+                    'date_time' => $research->updated_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_by->email)->send(new StudentResearchEvaluated($data));
+                Mail::to($research->processed_by->email)->send(new StudentResearchEvaluatedSuccess($data));
+            }
+
             DB::commit();
 
             session()->flash('notification-status', "success");
@@ -574,6 +625,20 @@ class StudentResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has been deleted a research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_to' => $research->submitted_to->name,
+                    'deleted_by' => $this->data['auth']->name,
+                    'status' => $research->status,
+                    'date_time' => $research->deleted_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_to->email)->send(new StudentResearchDeleted($data));
+                Mail::to($this->data['auth']->email)->send(new StudentResearchDeletedSuccess($data));
+            }
 
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
