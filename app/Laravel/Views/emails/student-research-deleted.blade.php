@@ -13,7 +13,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <h4>Hello! {{$submitted_to}}</h4><br>
+                            <h4>Hello! {{$submitted_by}}</h4><br>
                             <p>This is to inform you that professor {{$deleted_by}} has deleted a research document. Below are details of research.</p><br>
                             <table>
                                 <tr>

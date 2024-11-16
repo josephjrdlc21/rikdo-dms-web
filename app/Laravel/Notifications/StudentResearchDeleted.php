@@ -34,7 +34,7 @@ class StudentResearchDeleted extends Mailable
                 'title' => $this->data['title'],
                 'chapter' => $this->data['chapter'],
                 'version' => $this->data['version'],
-                'submitted_to' => $this->data['submitted_to'],
+                'submitted_by' => $this->data['submitted_by'],
                 'deleted_by' => $this->data['deleted_by'],
                 'status' => $this->data['status'],
                 'date_time' => $this->data['date_time']

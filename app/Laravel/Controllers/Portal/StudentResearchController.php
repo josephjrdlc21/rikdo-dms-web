@@ -631,12 +631,12 @@ class StudentResearchController extends Controller{
                     'title' => $research->title,
                     'chapter' => $research->chapter,
                     'version' => $research->version,
-                    'submitted_to' => $research->submitted_to->name,
+                    'submitted_by' => $research->submitted_by->name,
                     'deleted_by' => $this->data['auth']->name,
                     'status' => $research->status,
                     'date_time' => $research->deleted_at->format('m/d/Y h:i A'),
                 ];
-                Mail::to($research->submitted_to->email)->send(new StudentResearchDeleted($data));
+                Mail::to($research->submitted_by->email)->send(new StudentResearchDeleted($data));
                 Mail::to($this->data['auth']->email)->send(new StudentResearchDeletedSuccess($data));
             }
 
