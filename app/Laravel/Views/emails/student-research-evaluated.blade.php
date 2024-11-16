@@ -13,8 +13,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <h4>Hello! {{$processed_by}}</h4><br>
-                            <p>This is to inform you that you've been successfully evaluated a research document. Below are details of research.</p><br>
+                            <h4>Hello! {{$submitted_by}}</h4><br>
+                            <p>This is to inform you that professor {{$processed_by}} has evaluated the research document. Below are details of research.</p><br>
                             <table>
                                 <tr>
                                     <td>
