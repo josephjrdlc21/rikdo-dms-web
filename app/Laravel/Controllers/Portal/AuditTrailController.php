@@ -81,6 +81,16 @@ class AuditTrailController extends Controller{
         ->orderBy('created_at','DESC')
         ->get();
 
+        if($request->get('file_type')){
+            $audit_trail = new AuditTrail;
+            $audit_trail->user_id = $this->data['auth']->id;
+            $audit_trail->process = "GENERATE_REPORT";
+            $audit_trail->ip = $this->data['ip'];
+            $audit_trail->remarks = "{$this->data['auth']->name} has generated a audit trail report.";
+            $audit_trail->type = "USER_ACTION";
+            $audit_trail->save();
+        }
+
         switch(Str::lower($request->get('file_type'))){
             case "pdf":
                 $pdf = SnappyPDF::loadView('pdf.audit-trail', $this->data)
