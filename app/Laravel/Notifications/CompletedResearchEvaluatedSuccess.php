@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CompletedResearchEvaluated extends Mailable
+class CompletedResearchEvaluatedSuccess extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -19,7 +19,7 @@ class CompletedResearchEvaluated extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
-        $this->subject("RIKDO Completed Research Evaluated");
+        $this->subject("RIKDO Completed Research Evaluated Success");
     }
     
     /**
@@ -29,10 +29,9 @@ class CompletedResearchEvaluated extends Mailable
     */
     public function build()
     {
-        return $this->view('emails.completed-research-evaluated')
+        return $this->view('emails.completed-research-evaluated-success')
             ->with([
                 'title' => $this->data['title'],
-                'authors' => $this->data['authors'],
                 'processed_by' => $this->data['processed_by'],
                 'status' => $this->data['status'],
                 'date_time' => $this->data['date_time']
