@@ -7,7 +7,9 @@ use App\Laravel\Models\{CompletedResearch,Department,Course,Yearlevel,Research,S
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CompletedResearchRequest;
 
-use Carbon,DB,FileUploader,FileDownloader,FileRemover;
+use App\Laravel\Notifications\{CompletedResearchEvaluated};
+
+use Carbon,DB,FileUploader,FileDownloader,FileRemover,Mail;
 
 class CompletedResearchController extends Controller{
     protected $data;
@@ -263,6 +265,23 @@ class CompletedResearchController extends Controller{
                     $audit_trail->remarks = "{$this->data['auth']->name} has been evaluate completed research and set status to {$completed_research->status}.";
                     $audit_trail->type = "USER_ACTION";
                     $audit_trail->save();
+
+                    if(env('MAIL_SERVICE', false)){
+                        $completed_research_authors = User::whereIn('id', explode(',', $completed_research->authors))->get();
+
+                        $data = [
+                            'title' => $completed_research->title,
+                            'submitted_by' => $completed_research->submitted_by->name,
+                            'process_by' => $completed_research->processor->name,
+                            'status' => $completed_research->status,
+                            'date_time' => $completed_research->updated_at->format('m/d/Y h:i A'),
+                        ];
+
+                        foreach($completed_research_authors as $send){
+                            Mail::to($send->email)->send(new CompletedResearchEvaluated($data));
+                        }
+                        //Mail::to($research->modified_by->email)->send(new StudentResearchSharedSuccess($data));
+                    }
                 
                     DB::commit();
 

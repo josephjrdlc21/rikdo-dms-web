@@ -6,7 +6,9 @@ use App\Laravel\Models\{Research,ResearchType,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 
-use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover;
+use App\Laravel\Notifications\{AllResearchDeleted,AllResearchDeletedSuccess};
+
+use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover,Mail;
 
 class AllResearchController extends Controller{
     protected $data;
@@ -283,6 +285,20 @@ class AllResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has deleted a research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $data = [
+                    'title' => $research->title,
+                    'chapter' => $research->chapter,
+                    'version' => $research->version,
+                    'submitted_by' => $research->submitted_by->name,
+                    'deleted_by' => $this->data['auth']->name,
+                    'status' => $research->status,
+                    'date_time' => $research->deleted_at->format('m/d/Y h:i A'),
+                ];
+                Mail::to($research->submitted_by->email)->send(new AllResearchDeleted($data));
+                Mail::to($this->data['auth']->email)->send(new AllResearchDeletedSuccess($data));
+            }
 
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
