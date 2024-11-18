@@ -44,81 +44,81 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="id_number">ID number</label>
-                            <input type="text" id="id_number" class="form-control" value="{{$auth->user_info->id_number ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->id_number ?? 'N/A'}}</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="role">Role</label>
-                            <input type="text" id="role" class="form-control" value="{{Helper::capitalize_text($auth->user_info->role) ?? 'N/A'}}" readonly>
+                            <p>{{Helper::capitalize_text($auth->user_info->role) ?? 'N/A'}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <p>{{$auth->user_info->email ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="first_name">Firstname</label>
-                            <input type="text" id="first_name" class="form-control" value="{{$auth->user_info->firstname ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->firstname ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="lastname">Lastname</label>
-                            <input type="text" id="lastname" class="form-control" value="{{$auth->user_info->lastname ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->lastname ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="middlename">Middlename</label>
-                            <input type="text" id="middlename" class="form-control" value="{{$auth->user_info->middlename ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->middlename ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="suffix">Suffix</label>
-                            <input type="text" id="suffix" class="form-control" value="{{$auth->user_info->suffix ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->suffix ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="birthdate">Birthdate</label>
-                            <input type="text" id="birthdate" class="form-control" value="{{$auth->user_info->birthdate ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->birthdate ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="contact">Contact No.</label>
-                            <input type="text" id="contact" class="form-control" value="{{$auth->user_info->contact_number ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->contact_number ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="department">Department</label>
-                            <input type="text" id="department" class="form-control" value="{{$auth->user_info->department->dept_name ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->department->dept_name ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="course">Course</label>
-                            <input type="text" id="course" class="form-control" value="{{$auth->user_info->course->course_name ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->course->course_name ?? 'N/A'}}</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="yearlevel">Yearlevel</label>
-                            <input type="text" id="yearlevel" class="form-control" value="{{$auth->user_info->yearlevel->yearlevel_name ?? 'N/A'}}" readonly>
+                            <p>{{$auth->user_info->yearlevel->yearlevel_name ?? 'N/A'}}"</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" id="email" class="form-control" value="{{$auth->user_info->email ?? 'N/A'}}" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="address">Address</label>
-                        <input type="text" id="address" class="form-control" value="{{$auth->user_info->address ?? 'N/A'}}" readonly>
+                        <p>{{$auth->user_info->address ?? 'N/A'}}</p>
                     </div>
                 </div>
             </div>
