@@ -7,7 +7,9 @@ use App\Laravel\Models\{PostedResearch,CompletedResearch,Department,Course,Yearl
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\PostedResearchRequest;
 
-use Carbon,DB,FileDownloader;
+use App\Laravel\Notifications\{PostResearch,PostResearchSuccess};
+
+use Carbon,DB,FileDownloader,Mail;
 
 class PostedResearchController extends Controller{
     protected $data;
@@ -123,6 +125,22 @@ class PostedResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has posted a new research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $posted_research_authors = User::whereIn('id', explode(',', $posted_research->authors))->get();
+
+                $data = [
+                    'title' => $posted_research->title,
+                    'authors' => $posted_research_authors,
+                    'processed_by' => $posted_research->processor->name,
+                    'date_time' => $posted_research->created_at->format('m/d/Y h:i A'),
+                ];
+
+                foreach($posted_research_authors as $send){
+                    Mail::to($send->email)->send(new PostResearch($data));
+                }
+                Mail::to($posted_research->processor->email)->send(new PostResearchSuccess($data));
+            }
             
             DB::commit();
 

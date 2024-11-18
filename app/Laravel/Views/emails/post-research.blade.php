@@ -14,7 +14,7 @@
                     <tr>
                         <td>
                             <h4>Hello!</h4><br>
-                            <p>This is to inform you that you're completed research document has been evaluated. Below are details of research.</p><br>
+                            <p>This is to inform you that you're completed research document has been posted. Below are details of research.</p><br>
                             <table>
                                 <tr>
                                     <td>
@@ -32,14 +32,6 @@
                                         @foreach($authors as $author)
                                         <p>{{$author->name}}</p> 
                                         @endforeach
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><b>Status:</b></p>
-                                    </td>
-                                    <td>
-                                        <p>{{$status}}</p>
                                     </td>
                                 </tr>
                                 <tr>
