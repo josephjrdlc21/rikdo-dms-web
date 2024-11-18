@@ -6,7 +6,11 @@ use App\Laravel\Models\{Research,Department,Course,Yearlevel,ResearchType,Comple
 
 use App\Laravel\Requests\PageRequest;
 
-use Carbon,DB,FileRemover;
+use App\Laravel\Notifications\{ArchivesResearchRestored,ArchivesResearchRestoredSuccess,ArchivesCompletedResearchRestored,
+ArchivesCompletedResearchRestoredSuccess,ArchivesResearchDeleted,ArchivesResearchDeletedSuccess,ArchivesCompletedResearchDeleted,
+ArchivesCompletedResearchDeletedSuccess};
+
+use Carbon,DB,FileRemover,Mail;
 
 class ArchivesController extends Controller{
     protected $data;
@@ -228,6 +232,23 @@ class ArchivesController extends Controller{
                 FileRemover::remove($research->path);
 
                 if($research->forceDelete()){
+                    if(env('MAIL_SERVICE', false)){
+                        $research_authors = User::whereIn('id', explode(',', $research->authors))->get();
+
+                        $data = [
+                            'title' => $research->title,
+                            'authors' => $research_authors,
+                            'deleted_by' => $this->data['auth']->name,
+                            'status' => $research->status,
+                            'date_time' => Carbon::now()->format('m/d/Y h:i A'),
+                        ];
+
+                        foreach($research_authors as $send){
+                            Mail::to($send->email)->send(new ArchivesCompletedResearchDeleted($data));
+                        }
+                        Mail::to($this->data['auth']->email)->send(new ArchivesCompletedResearchDeletedSuccess($data));
+                    }
+
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Completed research has been deleted.");
                     return redirect()->back();
@@ -248,6 +269,20 @@ class ArchivesController extends Controller{
                 if($research->forceDelete()){
                     $research->shared_with_trashed()->forceDelete();
                     $research->logs_with_trashed()->forceDelete();
+
+                    if(env('MAIL_SERVICE', false)){
+                        $data = [
+                            'title' => $research->title,
+                            'chapter' => $research->chapter,
+                            'version' => $research->version,
+                            'submitted_to' => $research->submitted_to->name,
+                            'deleted_by' => $this->data['auth']->name,
+                            'status' => $research->status,
+                            'date_time' => Carbon::now()->format('m/d/Y h:i A'),
+                        ];
+                        Mail::to($research->submitted_to->email)->send(new ArchivesResearchDeleted($data));
+                        Mail::to($this->data['auth']->email)->send(new ArchivesResearchDeletedSuccess($data));
+                    }
 
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been deleted.");
@@ -286,6 +321,23 @@ class ArchivesController extends Controller{
                 }
 
                 if($research->restore()){
+                    if(env('MAIL_SERVICE', false)){
+                        $research_authors = User::whereIn('id', explode(',', $research->authors))->get();
+
+                        $data = [
+                            'title' => $research->title,
+                            'authors' => $research_authors,
+                            'restored_by' => $this->data['auth']->name,
+                            'status' => $research->status,
+                            'date_time' => Carbon::now()->format('m/d/Y h:i A'),
+                        ];
+
+                        foreach($research_authors as $send){
+                            Mail::to($send->email)->send(new ArchivesCompletedResearchRestored($data));
+                        }
+                        Mail::to($this->data['auth']->email)->send(new ArchivesCompletedResearchRestoredSuccess($data));
+                    }
+
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Completed research has been restored.");
                     return redirect()->back();
@@ -304,6 +356,20 @@ class ArchivesController extends Controller{
                 if($research->restore()){
                     $research->logs_with_trashed()->restore();
                     $research->shared_with_trashed()->restore();
+
+                    if(env('MAIL_SERVICE', false)){
+                        $data = [
+                            'title' => $research->title,
+                            'chapter' => $research->chapter,
+                            'version' => $research->version,
+                            'submitted_to' => $research->submitted_to->name,
+                            'restored_by' => $this->data['auth']->name,
+                            'status' => $research->status,
+                            'date_time' => Carbon::now()->format('m/d/Y h:i A'),
+                        ];
+                        Mail::to($research->submitted_to->email)->send(new ArchivesResearchRestored($data));
+                        Mail::to($this->data['auth']->email)->send(new ArchivesResearchRestoredSuccess($data));
+                    }
 
                     session()->flash('notification-status', 'success');
                     session()->flash('notification-msg', "Research has been restored.");

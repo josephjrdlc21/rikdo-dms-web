@@ -7,7 +7,8 @@ use App\Laravel\Models\{CompletedResearch,Department,Course,Yearlevel,Research,S
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CompletedResearchRequest;
 
-use App\Laravel\Notifications\{CompletedResearchEvaluated,CompletedResearchEvaluatedSuccess};
+use App\Laravel\Notifications\{CompletedResearchEvaluated,CompletedResearchEvaluatedSuccess,CompletedResearchDeleted,
+CompletedResearchDeletedSuccess};
 
 use Carbon,DB,FileUploader,FileDownloader,FileRemover,Mail;
 
@@ -437,6 +438,23 @@ class CompletedResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has deleted a completed reseach.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $completed_research_authors = User::whereIn('id', explode(',', $completed_research->authors))->get();
+
+                $data = [
+                    'title' => $completed_research->title,
+                    'authors' => $completed_research_authors,
+                    'deleted_by' => $this->data['auth']->name,
+                    'status' => $completed_research->status,
+                    'date_time' => $completed_research->deleted_at->format('m/d/Y h:i A'),
+                ];
+
+                foreach($completed_research_authors as $send){
+                    Mail::to($send->email)->send(new CompletedResearchDeleted($data));
+                }
+                Mail::to($this->data['auth']->email)->send(new CompletedResearchDeletedSuccess($data));
+            }
 
             session()->flash('notification-status', 'success');
             session()->flash('notification-msg', "Research has been deleted.");
