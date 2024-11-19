@@ -34,7 +34,7 @@ class ArchivesResearchRestored extends Mailable
                 'title' => $this->data['title'],
                 'chapter' => $this->data['chapter'],
                 'version' => $this->data['version'],
-                'submitted_by' => $this->data['submitted_by'],
+                'submitted_to' => $this->data['submitted_to'],
                 'restored_by' => $this->data['restored_by'],
                 'status' => $this->data['status'],
                 'date_time' => $this->data['date_time']
