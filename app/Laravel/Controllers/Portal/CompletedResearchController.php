@@ -8,7 +8,7 @@ use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CompletedResearchRequest;
 
 use App\Laravel\Notifications\{CompletedResearchEvaluated,CompletedResearchEvaluatedSuccess,CompletedResearchDeleted,
-CompletedResearchDeletedSuccess};
+CompletedResearchDeletedSuccess,CompletedResearchSubmittedSuccess,CompletedResearchUpdatedSuccess};
 
 use Carbon,DB,FileUploader,FileDownloader,FileRemover,Mail;
 
@@ -140,6 +140,21 @@ class CompletedResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has submitted a completed research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $completed_research_authors = User::whereIn('id', explode(',', $completed_research->authors))->get();
+
+                $data = [
+                    'title' => $completed_research->title,
+                    'authors' => $completed_research_authors,
+                    'status' => $completed_research->status ?? 'pending',
+                    'date_time' => $completed_research->created_at->format('m/d/Y h:i A'),
+                ];
+
+                foreach($completed_research_authors as $send){
+                    Mail::to($send->email)->send(new CompletedResearchSubmittedSuccess($data));
+                }
+            }
            
             DB::commit();
 
@@ -215,6 +230,21 @@ class CompletedResearchController extends Controller{
             $audit_trail->remarks = "{$this->data['auth']->name} has updated submitted completed research.";
             $audit_trail->type = "USER_ACTION";
             $audit_trail->save();
+
+            if(env('MAIL_SERVICE', false)){
+                $completed_research_authors = User::whereIn('id', explode(',', $completed_research->authors))->get();
+
+                $data = [
+                    'title' => $completed_research->title,
+                    'authors' => $completed_research_authors,
+                    'status' => $completed_research->status,
+                    'date_time' => $completed_research->updated_at->format('m/d/Y h:i A'),
+                ];
+
+                foreach($completed_research_authors as $send){
+                    Mail::to($send->email)->send(new CompletedResearchUpdatedSuccess($data));
+                }
+            }
 
             DB::commit();
 

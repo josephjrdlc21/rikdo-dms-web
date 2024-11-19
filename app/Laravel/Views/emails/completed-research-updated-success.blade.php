@@ -13,8 +13,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <h4>Hello! {{$processed_by}}</h4><br>
-                            <p>This is to inform you that you've been successfully evaluated a completed research document. Below are details of research.</p><br>
+                            <h4>Hello!</h4><br>
+                            <p>This is to inform you that you've been successfully updated a completed research document. Below are details of research.</p><br>
                             <table>
                                 <tr>
                                     <td>
@@ -22,6 +22,16 @@
                                     </td>
                                     <td>
                                         <p>{{$title}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p><b>Authors:</b></p>
+                                    </td>
+                                    <td>
+                                        @foreach($authors as $author)
+                                        <p>{{$author->name}}</p> 
+                                        @endforeach
                                     </td>
                                 </tr>
                                 <tr>
