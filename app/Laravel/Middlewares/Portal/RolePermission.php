@@ -10,7 +10,7 @@ use Spatie\Permission\Guard;
 class RolePermission{
 
     public function handle($request, Closure $next, $permission, $guard = null){
-        $guard = 'portal';
+        $guard = 'web';
         $authGuard = Auth::guard($guard);
 
         $user = $authGuard->user();

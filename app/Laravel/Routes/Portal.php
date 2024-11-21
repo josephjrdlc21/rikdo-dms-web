@@ -29,18 +29,18 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
         });
 
         Route::group(['prefix' => "users", 'as' => "users."], function(){
-            Route::get('/', ['as' => "index", 'uses' => "UsersController@index"]);
-            Route::get('/create', ['as' => "create", 'uses' => "UsersController@create"]);
-            Route::post('/create', ['uses' => "UsersController@store"]);
-            Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "UsersController@edit"]);
-            Route::post('/edit/{id?}', ['uses' => "UsersController@update"]);
-            Route::get('/update-password/{id?}', ['as' => "update_password", 'uses' => "UsersController@update_password"]);
-            Route::get('/update-status/{id?}', ['as' => "update_status", 'uses' => "UsersController@update_status"]);
-            Route::get('/show/{id?}', ['as' => "show", 'uses' => "UsersController@show"]);
-            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "UsersController@destroy"]);
-            Route::get('/cancel', ['as' => "cancel", 'uses' => "UsersController@cancel"]);
-            Route::get('/success', ['as' => "success", 'uses' => "UsersController@success"]);
-            Route::get('/step-back/{step?}/{id?}', ['as' => "step_back", 'uses' => "UsersController@step_back"]);
+            Route::get('/', ['as' => "index", 'uses' => "UsersController@index", 'middleware' => "portal.permission:portal.users.index"]);
+            Route::get('/create', ['as' => "create", 'uses' => "UsersController@create", 'middleware' => "portal.permission:portal.users.create"]);
+            Route::post('/create', ['uses' => "UsersController@store", 'middleware' => "portal.permission:portal.users.create"]);
+            Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "UsersController@edit", 'middleware' => "portal.permission:portal.users.update"]);
+            Route::post('/edit/{id?}', ['uses' => "UsersController@update", 'middleware' => "portal.permission:portal.users.update"]);
+            Route::get('/update-password/{id?}', ['as' => "update_password", 'uses' => "UsersController@update_password", 'middleware' => "portal.permission:portal.users.edit_password"]);
+            Route::get('/update-status/{id?}', ['as' => "update_status", 'uses' => "UsersController@update_status", 'middleware' => "portal.permission:portal.users.update_status"]);
+            Route::get('/show/{id?}', ['as' => "show", 'uses' => "UsersController@show", 'middleware' => "portal.permission:portal.users.view"]);
+            Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "UsersController@destroy", 'middleware' => "portal.permission:portal.users.delete"]);
+            Route::get('/cancel', ['as' => "cancel", 'uses' => "UsersController@cancel", 'middleware' => ["portal.permission:portal.users.create", "portal.permission:portal.users.update"]]);
+            Route::get('/success', ['as' => "success", 'uses' => "UsersController@success", 'middleware' => ["portal.permission:portal.users.create", "portal.permission:portal.users.update"]]);
+            Route::get('/step-back/{step?}/{id?}', ['as' => "step_back", 'uses' => "UsersController@step_back", 'middleware' => ["portal.permission:portal.users.create", "portal.permission:portal.users.update"]]);
         });
 
         Route::group(['prefix' => "research", 'as' => "research."], function(){

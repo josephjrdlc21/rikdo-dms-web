@@ -23,7 +23,9 @@
                     <li class="{{request()->segment(1) == "users-kyc" && request()->segment(2) == "rejected" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users_kyc.rejected')}}">Rejected</a></li>
                 </ul>
             </li>
+            @if($auth->canAny(['portal.users.index'], 'web'))
             <li class="{{request()->segment(1) == "users" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.users.index')}}"><i class="fas fa-users-cog"></i> <span>Account Management</span></a></li>
+            @endif
             <li class="dropdown {{request()->segment(1) == "research" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-file"></i> <span>My Research</span></a>
                 <ul class="dropdown-menu">

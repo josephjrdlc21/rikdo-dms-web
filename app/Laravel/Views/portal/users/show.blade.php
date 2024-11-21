@@ -20,9 +20,15 @@
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @if($auth->canAny(['portal.users.update'], 'web'))
                             <a href="{{route('portal.users.edit', [$user->id])}}" class="dropdown-item">Edit User</a>
+                            @endif
+                            @if($auth->canAny(['portal.users.edit_password'], 'web'))
                             <a class="dropdown-item reset-password" data-url="{{route('portal.users.update_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
+                            @endif
+                            @if($auth->canAny(['portal.users.update_status'], 'web'))
                             <a class="dropdown-item status-activation" data-url="{{route('portal.users.update_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
+                            @endif
                         </div>
                     </div>
                 </div>

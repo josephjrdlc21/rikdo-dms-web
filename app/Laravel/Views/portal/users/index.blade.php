@@ -100,7 +100,11 @@
                     @forelse($record as $index => $user)
                     <tr>
                         <td>
+                            @if($auth->canAny(['portal.users.view'], 'web'))
                             {{$user->name}}<br><a href="{{route('portal.users.show', [$user->id])}}">{{$user->user_info->id_number}}</a>
+                            @else
+                            {{$user->name}}<br><a href="#">{{$user->user_info->id_number}}</a>
+                            @endif
                         </td>
                         <td>{{Helper::capitalize_text($user->user_info->role)}}</td>
                         <td><span class="badge badge-{{Helper::badge_status($user->status)}}">{{Helper::capitalize_text($user->status)}}</span></td>
@@ -113,11 +117,21 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.users.view'], 'web'))
                                     <a class="dropdown-item" href="{{route('portal.users.show', [$user->id])}}">View Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.users.update'], 'web'))
                                     <a class="dropdown-item" href="{{route('portal.users.edit', [$user->id])}}">Edit Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.users.delete'], 'web'))
                                     <a class="dropdown-item delete-record" data-url="{{route('portal.users.delete', [$user->id])}}" type="button" style="cursor: pointer;">Delete User</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.users.edit_password'], 'web'))
                                     <a class="dropdown-item reset-password" data-url="{{route('portal.users.update_password', [$user->id])}}" type="button" style="cursor: pointer;">Reset Password</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.users.update_status'], 'web'))
                                     <a class="dropdown-item status-activation" data-url="{{route('portal.users.update_status', [$user->id])}}" data-status="{{$user->status}}" type="button" style="cursor: pointer;">{{$user->status == 'active' ? 'Deactivate Account' : 'Activate Account'}}</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>
