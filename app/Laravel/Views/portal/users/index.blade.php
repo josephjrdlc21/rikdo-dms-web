@@ -78,9 +78,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.users.create'], 'web'))
         <div class="card-header-action">
             <a href="{{route('portal.users.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create User</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">

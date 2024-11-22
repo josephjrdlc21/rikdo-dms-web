@@ -72,11 +72,16 @@
                 </ul>
             </li>
             <li class="menu-header">System Settings</li>
+            @if($auth->canAny(['portal.cms.roles.index', 'portal.cms.permissions.index'], 'web'))
             <li class="dropdown {{request()->segment(1) == "cms" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i> <span>Content Management</span></a>
                 <ul class="dropdown-menu">
+                    @if($auth->canAny(['portal.cms.roles.index'], 'web'))
                     <li class="{{request()->segment(2) == "roles" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.roles.index')}}">Roles</a></li>
+                    @endif
+                    @if($auth->canAny(['portal.cms.permissions.index'], 'web'))
                     <li class="{{request()->segment(2) == "permissions" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.permissions.index')}}">Permissions</a></li>
+                    @endif
                     <li class="{{request()->segment(2) == "departments" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.departments.index')}}">Departments</a></li>
                     <li class="{{request()->segment(2) == "courses" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.courses.index')}}">Courses</a></li>
                     <li class="{{request()->segment(2) == "yearlevels" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.yearlevels.index')}}">Yearlevels</a></li>
@@ -84,6 +89,7 @@
                 </ul>
             </li>
             <li class="{{request()->segment(1) == "audit-trail" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.audit_trail.index')}}"><i class="fas fa-compass"></i> <span>Audit Trail</span></a></li>
+            @endif
         </ul>    
     </aside>
 </div>

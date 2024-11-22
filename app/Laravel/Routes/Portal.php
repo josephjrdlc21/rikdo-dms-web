@@ -121,15 +121,15 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
 
         Route::group(['prefix' => "cms", 'as' => "cms."], function(){
             Route::group(['prefix' => "roles", 'as' => "roles."], function(){
-                Route::get('/', ['as' => "index", 'uses' => "RolesController@index"]);
-                Route::get('/create', ['as' => "create", 'uses' => "RolesController@create"]);
-                Route::post('/create', ['uses' => "RolesController@store"]);
-                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "RolesController@edit"]);
-                Route::post('/edit/{id?}', ['uses' => "RolesController@update"]);
+                Route::get('/', ['as' => "index", 'uses' => "RolesController@index", 'middleware' => "portal.permission:portal.cms.roles.index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "RolesController@create", 'middleware' => "portal.permission:portal.cms.roles.create"]);
+                Route::post('/create', ['uses' => "RolesController@store", 'middleware' => "portal.permission:portal.cms.roles.create"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "RolesController@edit", 'middleware' => "portal.permission:portal.cms.roles.update"]);
+                Route::post('/edit/{id?}', ['uses' => "RolesController@update", 'middleware' => "portal.permission:portal.cms.roles.update"]);
             });
 
             Route::group(['prefix' => "permissions", 'as' => "permissions."], function(){
-                Route::get('/', ['as' => "index", 'uses' => "PermissionsController@index"]);
+                Route::get('/', ['as' => "index", 'uses' => "PermissionsController@index", 'middleware' => "portal.permission:portal.cms.permissions.index"]);
             });
 
             Route::group(['prefix' => "departments", 'as' => "departments."], function(){

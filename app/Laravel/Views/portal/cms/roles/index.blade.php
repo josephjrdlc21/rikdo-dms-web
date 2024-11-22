@@ -59,9 +59,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.cms.roles.create'], 'web'))
         <div class="card-header-action">
             <a href="{{route('portal.cms.roles.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Role</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -82,7 +84,11 @@
                     <tr>
                         <td>{{$loop->index + $record->firstItem()}}</td>
                         <td>
+                            @if($auth->canAny(['portal.cms.roles.update'], 'web'))
                             <a href="{{route('portal.cms.roles.edit', [$role->id])}}">{{Helper::capitalize_text($role->name)}}</a>
+                            @else
+                            <a href="#">{{Helper::capitalize_text($role->name)}}</a>
+                            @endif
                         </td>
                         <td class="text-center">{{$role->permissions->count()}}</td>
                         <td><span class="badge badge-{{Helper::badge_status($role->status)}}">{{$role->status}}</span></td>
@@ -94,7 +100,9 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.cms.roles.update'], 'web'))
                                     <a class="dropdown-item" href="{{route('portal.cms.roles.edit', [$role->id])}}">Edit Details</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>
