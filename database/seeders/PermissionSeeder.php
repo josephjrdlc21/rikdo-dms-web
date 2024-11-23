@@ -65,6 +65,12 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.posted_research.view", 'description' => "View Posted Research Details", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
             ['name' => "portal.posted_research.download", 'description' => "Download Posted Research File", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
 
+            ['name' => "portal.archives.index", 'description' => "List of Archives Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+            ['name' => "portal.archives.completed", 'description' => "List of Archives Completed Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+            ['name' => "portal.archives.view", 'description' => "View Archive Research Details", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+            ['name' => "portal.archives.delete", 'description' => "Delete Archive Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+            ['name' => "portal.archives.restore", 'description' => "Restore Archive Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+
             ['name' => "portal.cms.roles.index", 'description' => "List of Roles", 'module' => "cms.roles", 'module_name' => "CMS - Roles", 'guard_name' => "web"],
             ['name' => "portal.cms.roles.create", 'description' => "Create New Role", 'module' => "cms.roles", 'module_name' => "CMS - Roles", 'guard_name' => "web"],
             ['name' => "portal.cms.roles.update", 'description' => "Update Role Details", 'module' => "cms.roles", 'module_name' => "CMS - Roles", 'guard_name' => "web"],
