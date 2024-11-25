@@ -73,6 +73,7 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.research_reports.export'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.research_reports.export')}}?report_type=posted&file_type=excel&keyword={{$keyword}}&start_date={{$start_date}}
             &end_date={{$end_date}}&department={{$selected_department}}&course={{$selected_course}}&yearlevel={{$selected_yearlevel}}
@@ -81,6 +82,7 @@
             &end_date={{$end_date}}&department={{$selected_department}}&course={{$selected_course}}&yearlevel={{$selected_yearlevel}}
             &type={{$selected_type}}" class="btn btn-sm btn-danger" style="border-radius: 0.25rem !important;">Export PDF</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
