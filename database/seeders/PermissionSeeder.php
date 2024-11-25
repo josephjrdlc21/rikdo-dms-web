@@ -14,6 +14,12 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            ['name' => "portal.users_kyc.index", 'description' => "List of User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
+            ['name' => "portal.users_kyc.approved", 'description' => "List of Approved User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
+            ['name' => "portal.users_kyc.rejected", 'description' => "List of Rejected User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
+            ['name' => "portal.users_kyc.view", 'description' => "View User Application Details", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
+            ['name' => "portal.users_kyc.update_status", 'description' => "Verify User Application", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
+
             ['name' => "portal.users.index", 'description' => "List of Users", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
             ['name' => "portal.users.view", 'description' => "View User Details", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
             ['name' => "portal.users.create", 'description' => "Create New User", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
@@ -22,6 +28,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.users.search", 'description' => "Search Record", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
             ['name' => "portal.users.edit_password", 'description' => "Reset User Password", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
             ['name' => "portal.users.update_status", 'description' => "Activate or Deactivate User", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
+            ['name' => "portal.users.search", 'description' => "Search Record", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
 
             ['name' => "portal.research.index", 'description' => "List of Pending Research", 'module' => "research", 'module_name' => "Research", 'guard_name' => "web"],
             ['name' => "portal.research.approved", 'description' => "List of Approved Research", 'module' => "research", 'module_name' => "Research", 'guard_name' => "web"],
@@ -33,6 +40,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.research.update_share", 'description' => "Share Research Access", 'module' => "research", 'module_name' => "Research", 'guard_name' => "web"],
             ['name' => "portal.research.delete", 'description' => "Delete Research", 'module' => "research", 'module_name' => "Research", 'guard_name' => "web"],
             ['name' => "portal.research.download", 'description' => "Download Research File", 'module' => "research", 'module_name' => "Research", 'guard_name' => "web"],
+            ['name' => "portal.research.search", 'description' => "Search Record", 'module' => "research", 'module_name' => "Research", 'guard_name' => "web"],
 
             ['name' => "portal.student_research.index", 'description' => "List of Student Pending Research", 'module' => "student_research", 'module_name' => "Student Research", 'guard_name' => "web"],
             ['name' => "portal.student_research.approved", 'description' => "List of Student Approved Research", 'module' => "student_research", 'module_name' => "Student Research", 'guard_name' => "web"],
@@ -43,6 +51,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.student_research.update_share", 'description' => "Share Research Access", 'module' => "student_research", 'module_name' => "Student Research", 'guard_name' => "web"],
             ['name' => "portal.student_research.delete", 'description' => "Delete Student Research", 'module' => "student_research", 'module_name' => "Student Research", 'guard_name' => "web"],
             ['name' => "portal.student_research.download", 'description' => "Download Student Research File", 'module' => "student_research", 'module_name' => "Student Research", 'guard_name' => "web"],
+            ['name' => "portal.student_research.search", 'description' => "Search Record", 'module' => "student_research", 'module_name' => "Student Research", 'guard_name' => "web"],
 
             ['name' => "portal.all_research.index", 'description' => "List of All Research", 'module' => "all_research", 'module_name' => "All Research", 'guard_name' => "web"],
             ['name' => "portal.all_research.approved", 'description' => "List of All Research Approved", 'module' => "all_research", 'module_name' => "All Research", 'guard_name' => "web"],
@@ -51,6 +60,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.all_research.view", 'description' => "View Research Details", 'module' => "all_research", 'module_name' => "All Research", 'guard_name' => "web"],
             ['name' => "portal.all_research.delete", 'description' => "Delete Research", 'module' => "all_research", 'module_name' => "All Research", 'guard_name' => "web"],
             ['name' => "portal.all_research.download", 'description' => "Download Research File", 'module' => "all_research", 'module_name' => "All Research", 'guard_name' => "web"],
+            ['name' => "portal.all_research.search", 'description' => "Search Record", 'module' => "all_research", 'module_name' => "All Research", 'guard_name' => "web"],
 
             ['name' => "portal.completed_research.index", 'description' => "List of Completed Research", 'module' => "completed_research", 'module_name' => "Completed Research", 'guard_name' => "web"],
             ['name' => "portal.completed_research.view", 'description' => "View Completed Research Details", 'module' => "completed_research", 'module_name' => "Completed Research", 'guard_name' => "web"],
@@ -59,17 +69,27 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.completed_research.update_status", 'description' => "Evaluate Completed Research", 'module' => "completed_research", 'module_name' => "Completed Research", 'guard_name' => "web"],
             ['name' => "portal.completed_research.delete", 'description' => "Delete Completed Research", 'module' => "completed_research", 'module_name' => "Completed Research", 'guard_name' => "web"],
             ['name' => "portal.completed_research.download", 'description' => "Download Completed Research File", 'module' => "completed_research", 'module_name' => "Completed Research", 'guard_name' => "web"],
+            ['name' => "portal.completed_research.search", 'description' => "Search Record", 'module' => "completed_research", 'module_name' => "Completed Research", 'guard_name' => "web"],
 
             ['name' => "portal.posted_research.index", 'description' => "List of Posted Research", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
             ['name' => "portal.posted_research.create", 'description' => "Post Research Document", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
             ['name' => "portal.posted_research.view", 'description' => "View Posted Research Details", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
             ['name' => "portal.posted_research.download", 'description' => "Download Posted Research File", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
+            ['name' => "portal.posted_research.search", 'description' => "Search Record", 'module' => "posted_research", 'module_name' => "Posted Research", 'guard_name' => "web"],
 
             ['name' => "portal.archives.index", 'description' => "List of Archives Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
             ['name' => "portal.archives.completed", 'description' => "List of Archives Completed Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
             ['name' => "portal.archives.view", 'description' => "View Archive Research Details", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
             ['name' => "portal.archives.delete", 'description' => "Delete Archive Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
             ['name' => "portal.archives.restore", 'description' => "Restore Archive Research", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+            ['name' => "portal.archives.search", 'description' => "Search Record", 'module' => "archives", 'module_name' => "Archives", 'guard_name' => "web"],
+
+            ['name' => "portal.research_reports.index", 'description' => "List of Research Report", 'module' => "research_reports", 'module_name' => "Research Reports", 'guard_name' => "web"],
+            ['name' => "portal.research_reports.completed", 'description' => "List of Completed Research Report", 'module' => "research_reports", 'module_name' => "Research Reports", 'guard_name' => "web"],
+            ['name' => "portal.research_reports.posted", 'description' => "List of Posted Research Report", 'module' => "research_reports", 'module_name' => "Research Reports", 'guard_name' => "web"],
+            ['name' => "portal.research_reports.summary", 'description' => "Summary Report", 'module' => "research_reports", 'module_name' => "Research Reports", 'guard_name' => "web"],
+            ['name' => "portal.research_reports.export", 'description' => "Generate Report", 'module' => "research_reports", 'module_name' => "Research Reports", 'guard_name' => "web"],
+            ['name' => "portal.research_reports.search", 'description' => "Search Record", 'module' => "research_reports", 'module_name' => "Research Reports", 'guard_name' => "web"],
 
             ['name' => "portal.cms.roles.index", 'description' => "List of Roles", 'module' => "cms.roles", 'module_name' => "CMS - Roles", 'guard_name' => "web"],
             ['name' => "portal.cms.roles.create", 'description' => "Create New Role", 'module' => "cms.roles", 'module_name' => "CMS - Roles", 'guard_name' => "web"],
@@ -109,6 +129,7 @@ class PermissionSeeder extends Seeder
         
             ['name' => "portal.audit_trail.index", 'description' => "List of Audit Trail", 'module' => "audit_trail", 'module_name' => "Audit Trail", 'guard_name' => "web"],
             ['name' => "portal.audit_trail.export", 'description' => "Generate Report", 'module' => "audit_trail", 'module_name' => "Audit Trail", 'guard_name' => "web"],
+            ['name' => "portal.audit_trail.search", 'description' => "Search Record", 'module' => "audit_trail", 'module_name' => "Audit Trail", 'guard_name' => "web"],
         ];
 
         foreach($permissions as $permission){
