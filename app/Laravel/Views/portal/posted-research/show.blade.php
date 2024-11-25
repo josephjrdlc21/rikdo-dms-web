@@ -17,6 +17,7 @@
         <div class="card">
             <div class="card-header">
                 <h4>Details</h4>
+                @if($auth->canAny(['portal.posted_research.download'], 'web'))         
                 <div class="card-header-action">
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
@@ -25,6 +26,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row">

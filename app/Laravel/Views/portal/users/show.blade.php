@@ -16,6 +16,7 @@
         <div class="card">
             <div class="card-header">
                 <h4>User Information</h4>
+                @if($auth->canAny(['portal.users.update', 'portal.users.edit_password', 'portal.users.update_status'], 'web'))
                 <div class="card-header-action">
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
@@ -32,6 +33,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row mb-2">

@@ -67,9 +67,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.research.create'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.research.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Research</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -103,8 +105,12 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.research.view'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.research.show', [$research->id])}}">View Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.research.update_share'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.research.edit_share', [$research->id])}}">Share Research</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>

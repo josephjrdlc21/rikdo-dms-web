@@ -78,9 +78,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.completed_research.create'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.completed_research.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Submit Research</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -116,15 +118,23 @@
                                     @php
                                     $check_authenticated = in_array($auth->id, explode(',', $completed->authors));
                                     @endphp
+                                    @if($auth->canAny(['portal.completed_research.view'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.completed_research.show', [$completed->id])}}">View Details</a>
-                                    @if($completed->status == "re_submission" && $check_authenticated)
-                                    <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed->id])}}">Resubmit Research</a>
                                     @endif
-                                    @if($completed->status == "for_posting")
-                                    <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed->id])}}">Post Research</a>
+                                    @if($auth->canAny(['portal.completed_research.update'], 'web'))         
+                                        @if($completed->status == "re_submission" && $check_authenticated)
+                                        <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed->id])}}">Resubmit Research</a>
+                                        @endif
                                     @endif
-                                    @if($completed->status != "posted")
-                                    <a class="dropdown-item delete-record" data-url="{{route('portal.completed_research.delete', [$completed->id])}}" type="button" style="cursor: pointer;">Delete Research</a>
+                                    @if($auth->canAny(['portal.completed_research.create'], 'web'))         
+                                        @if($completed->status == "for_posting")
+                                        <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed->id])}}">Post Research</a>
+                                        @endif
+                                    @endif
+                                    @if($auth->canAny(['portal.completed_research.delete'], 'web'))         
+                                        @if($completed->status != "posted")
+                                        <a class="dropdown-item delete-record" data-url="{{route('portal.completed_research.delete', [$completed->id])}}" type="button" style="cursor: pointer;">Delete Research</a>
+                                        @endif
                                     @endif
                                 </div>
                             </div> 

@@ -92,7 +92,11 @@
                     <tr>
                         <td>
                             {{$application->firstname}} {{$application->middlename}} {{$application->lastname}} {{$application->suffix}}<br>
+                            @if($auth->canAny(['portal.users_kyc.view'], 'web'))         
                             <a href="{{route('portal.users_kyc.show', [$application->id])}}">{{$application->id_number}}</a>
+                            @else
+                            <a href="#">{{$application->id_number}}</a>
+                            @endif
                         </td>
                         <td>{{Helper::capitalize_text($application->role)}}</td>
                         <td>{{$application->department->dept_code ?? 'N/A'}}</td>
@@ -104,7 +108,9 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.users_kyc.view'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.users_kyc.show', [$application->id])}}">View Details</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>

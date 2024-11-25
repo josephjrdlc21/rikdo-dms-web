@@ -53,9 +53,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.cms.yearlevels.create'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.cms.yearlevels.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Yearlevel</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">

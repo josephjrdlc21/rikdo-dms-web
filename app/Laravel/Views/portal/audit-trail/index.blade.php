@@ -52,12 +52,14 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.audit_trail.export'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.audit_trail.export')}}?file_type=excel&keyword={{$keyword}}&start_date={{$start_date}}
             &end_date={{$end_date}}" class="btn btn-sm btn-success" style="border-radius: 0.25rem !important;">Export Excel</a>
             <a href="{{route('portal.audit_trail.export')}}?file_type=pdf&keyword={{$keyword}}&start_date={{$start_date}}
             &end_date={{$end_date}}" class="btn btn-sm btn-danger" style="border-radius: 0.25rem !important;">Export PDF</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">

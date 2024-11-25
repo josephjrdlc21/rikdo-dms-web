@@ -17,16 +17,18 @@
         <div class="card">
             <div class="card-header">
                 <h4>Application Details</h4>
-                @if($user_kyc->status === 'pending')
-                <div class="card-header-action">
-                    <div class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
-                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'approved'])}}" class="dropdown-item btn-approve" type="button" style="cursor: pointer;">Approve Appplication</a>
-                            <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'rejected'])}}" class="dropdown-item btn-rejected" type="button" style="cursor: pointer;">Reject Appplication</a>
+                @if($auth->canAny(['portal.users_kyc.update_status'], 'web'))         
+                    @if($user_kyc->status === 'pending')
+                    <div class="card-header-action">
+                        <div class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
+                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'approved'])}}" class="dropdown-item btn-approve" type="button" style="cursor: pointer;">Approve Appplication</a>
+                                <a data-url="{{route('portal.users_kyc.update_status', [$user_kyc->id, 'rejected'])}}" class="dropdown-item btn-rejected" type="button" style="cursor: pointer;">Reject Appplication</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    @endif
                 @endif
             </div>
             <div class="card-body">

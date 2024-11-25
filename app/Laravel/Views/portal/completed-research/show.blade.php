@@ -17,30 +17,40 @@
         <div class="card">
             <div class="card-header">
                 <h4>Details</h4>
+                @if($auth->canAny(['portal.completed_research.update_status', 'portal.completed_research.update', 'portal.completed_research.create', 'portal.completed_research.download'], 'web'))         
                 <div class="card-header-action">
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @if($completed_research->status == "re_submission" && $check_authenticated)
-                            <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed_research->id])}}">Resubmit Research</a>
+                            @if($auth->canAny(['portal.completed_research.update'], 'web'))         
+                                @if($completed_research->status == "re_submission" && $check_authenticated)
+                                <a class="dropdown-item" href="{{route('portal.completed_research.edit', [$completed_research->id])}}">Resubmit Research</a>
+                                @endif
                             @endif
-                            @if($completed_research->status == "for_posting")
-                            <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed_research->id])}}">Post Research</a>
+                            @if($auth->canAny(['portal.completed_research.create'], 'web'))         
+                                @if($completed_research->status == "for_posting")
+                                <a class="dropdown-item" href="{{route('portal.posted_research.create', [$completed_research->id])}}">Post Research</a>
+                                @endif
                             @endif
+                            @if($auth->canAny(['portal.completed_research.download'], 'web'))         
                             <a href="{{route('portal.completed_research.download', [$completed_research->id])}}" class="dropdown-item">Download File</a>
+                            @endif
                         </div>
                     </div>
                     @if($completed_research->status == "pending" && !$check_authenticated)
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @if($auth->canAny(['portal.completed_research.update_status'], 'web'))         
                             <a data-url="{{route('portal.completed_research.edit_status', ['id' => $completed_research->id, 'status' => "for_posting"])}}" class="dropdown-item status-for-posting" type="button" style="cursor: pointer;">For Posting</a>
                             <a data-url="{{route('portal.completed_research.edit_status', ['id' => $completed_research->id, 'status' => "re_submission"])}}" class="dropdown-item status-re-submission" type="button" style="cursor: pointer;">For Resubmission</a>
                             <a data-url="{{route('portal.completed_research.edit_status', ['id' => $completed_research->id, 'status' => "rejected"])}}" class="dropdown-item status-reject" type="button" style="cursor: pointer;">Reject Research</a>
+                            @endif
                         </div>
                     </div>
                     @endif
                 </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row">

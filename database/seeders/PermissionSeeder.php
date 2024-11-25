@@ -19,6 +19,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.users_kyc.rejected", 'description' => "List of Rejected User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
             ['name' => "portal.users_kyc.view", 'description' => "View User Application Details", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
             ['name' => "portal.users_kyc.update_status", 'description' => "Verify User Application", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
+            ['name' => "portal.users_kyc.search", 'description' => "Search Record", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
 
             ['name' => "portal.users.index", 'description' => "List of Users", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],
             ['name' => "portal.users.view", 'description' => "View User Details", 'module' => "users", 'module_name' => "Account Management", 'guard_name' => "web"],

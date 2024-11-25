@@ -53,9 +53,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.cms.research_types.create'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.cms.research_types.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Type</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">

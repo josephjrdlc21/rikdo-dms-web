@@ -18,25 +18,33 @@
         <div class="card">
             <div class="card-header">
                 <h4>Research Details</h4>
+                @if($auth->canAny(['portal.student_research.download', 'portal.student_research.update_share', 'portal.student_research.update_status'], 'web'))         
                 <div class="card-header-action">
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @if($auth->canAny(['portal.student_research.download'], 'web'))         
                             <a href="{{route('portal.student_research.download', [$research->id])}}" class="dropdown-item">Download File</a>
+                            @endif
+                            @if($auth->canAny(['portal.student_research.update_share'], 'web'))         
                             <a href="{{route('portal.student_research.edit_share', [$research->id])}}" class="dropdown-item">Share Research</a>
+                            @endif
                         </div>
                     </div>
                     @if($research->status == "pending")
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Remarks</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @if($auth->canAny(['portal.student_research.update_status'], 'web'))         
                             <a data-url="{{route('portal.student_research.edit_status', ['id' => $research->id, 'status' => "approved"])}}" class="dropdown-item status-approve" type="button" style="cursor: pointer;">Approve</a>
                             <a href="{{route('portal.student_research.edit_status', ['id' => $research->id, 'status' => "for_revision"])}}" class="dropdown-item">For Revision</a>
                             <a data-url="{{route('portal.student_research.edit_status', ['id' => $research->id, 'status' => "rejected"])}}" class="dropdown-item status-reject" type="button" style="cursor: pointer;">Reject</a>
+                            @endif
                         </div>
                     </div>
                     @endif
                 </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row">

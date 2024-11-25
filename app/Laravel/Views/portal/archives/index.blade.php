@@ -114,9 +114,15 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.archives.view'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.archives.show', [$researches->id])}}?type=researches">View Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.archives.restore'], 'web'))         
                                     <a class="dropdown-item restore-record" data-url="{{route('portal.archives.restore', [$researches->id])}}" data-type="researches" type="button" style="cursor: pointer;">Restore Research</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.archives.delete'], 'web'))         
                                     <a class="dropdown-item delete-record" data-url="{{route('portal.archives.delete', [$researches->id])}}" data-type="researches" type="button" style="cursor: pointer;">Delete Permanently</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>

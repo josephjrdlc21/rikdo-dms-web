@@ -18,18 +18,26 @@
         <div class="card">
             <div class="card-header">
                 <h4>Research Details</h4>
+                @if($auth->canAny(['portal.research.update', 'portal.research.download', 'portal.research.update_share'], 'web'))         
                 <div class="card-header-action">
                     <div class="dropdown">
                         <a href="#" data-toggle="dropdown" class="btn btn-light dropdown-toggle" aria-expanded="false" style="border-radius: 0.25rem !important;">Options</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @if($research->status == "pending")
-                            <a href="{{route('portal.research.edit', [$research->id])}}" class="dropdown-item">Edit Research</a>
+                            @if($auth->canAny(['portal.research.update'], 'web'))         
+                                @if($research->status == "pending")
+                                <a href="{{route('portal.research.edit', [$research->id])}}" class="dropdown-item">Edit Research</a>
+                                @endif
                             @endif
+                            @if($auth->canAny(['portal.research.download'], 'web'))         
                             <a href="{{route('portal.research.download', [$research->id])}}" class="dropdown-item">Download File</a>
+                            @endif
+                            @if($auth->canAny(['portal.research.update_share'], 'web'))         
                             <a href="{{route('portal.research.edit_share', [$research->id])}}" class="dropdown-item">Share Research</a>
+                            @endif
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row">
