@@ -20,10 +20,12 @@
 <script src="{{asset('assets/libs/jquery-selectric/jquery.selectric.min.js')}}"></script>
 
 <script src="{{asset('assets/libs/sweetalert/sweetalert.min.js')}}"></script>
+<script src="{{asset('assets/libs/chart.min.js')}}"></script>
 
 <!-- Page Specific JS File -->
 <script src="{{asset('assets/js/page/forms-advanced-forms.js')}}"></script>
 <script src="{{asset('assets/js/page/modules-sweetalert.js')}}"></script>
+<script src="{{asset('assets/js/page/modules-chartjs.js')}}"></script>
 
 <!-- Template JS File -->
 <script src="{{asset('assets/js/scripts.js')}}"></script>
