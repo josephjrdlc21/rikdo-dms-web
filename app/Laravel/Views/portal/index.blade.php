@@ -23,7 +23,7 @@
                     <h4>Research Documents</h4>
                 </div>
                 <div class="card-body">
-                    10
+                    {{$total_researches}}
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
                     <h4>Completed Research</h4>
                 </div>
                 <div class="card-body">
-                    42
+                    {{$total_completed_research}}
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                     <h4>Posted Research</h4>
                 </div>
                 <div class="card-body">
-                    1,201
+                    {{$total_posted_research}}
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                     <h4>Researchers</h4>
                 </div>
                 <div class="card-body">
-                    47
+                    {{$total_researchers}}
                 </div>
             </div>
         </div>
