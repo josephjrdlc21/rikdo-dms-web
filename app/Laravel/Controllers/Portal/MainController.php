@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,CompletedResearch,PostedResearch,User};
+use App\Laravel\Models\{Research,CompletedResearch,PostedResearch,User,UserKYC};
 
 use App\Laravel\Requests\PageRequest;
 
@@ -24,6 +24,11 @@ class MainController extends Controller{
         $this->data['total_completed_research'] = CompletedResearch::all()->count();
         $this->data['total_posted_research'] = PostedResearch::all()->count();
         $this->data['total_researchers'] = User::all()->count();
+
+        $this->data['total_personal_research'] = Research::where('submitted_by_id', $this->data['auth']->id)->count();
+        $this->data['total_student_research'] = Research::where('submitted_to_id', $this->data['auth']->id)->count();
+        $this->data['total_archives'] = Research::onlyTrashed()->count();
+        $this->data['total_applications'] = UserKYC::all()->count();
 
         return view('portal.index', $this->data);
     }

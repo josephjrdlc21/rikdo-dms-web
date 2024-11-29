@@ -4,12 +4,12 @@ var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    labels: ["2024", "2023", "2022", "2021", "2020", "2019"],
     datasets: [{
       label: 'Statistics',
-      data: [460, 458, 330, 502, 430, 610, 488],
+      data: [460, 458, 330, 502, 430, 610],
       borderWidth: 2,
-      backgroundColor: '#6777ef',
+      backgroundColor: '#8c98f3',
       borderColor: '#6777ef',
       borderWidth: 2.5,
       pointBackgroundColor: '#ffffff',
@@ -47,13 +47,13 @@ var ctx = document.getElementById("myChart2").getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    labels: ["2024", "2023", "2022", "2021", "2020", "2019"],
     datasets: [{
       label: 'Statistics',
-      data: [460, 458, 330, 502, 430, 610, 488],
+      data: [460, 458, 330, 502, 430, 610],
       borderWidth: 2,
-      backgroundColor: '#6777ef',
-      borderColor: '#6777ef',
+      backgroundColor: '#ccebff',
+      borderColor: '#99d6ff',
       borderWidth: 2.5,
       pointBackgroundColor: '#ffffff',
       pointRadius: 4
@@ -92,27 +92,15 @@ var myChart = new Chart(ctx, {
   data: {
     datasets: [{
       data: [
-        80,
-        50,
-        40,
-        30,
-        20,
+        80
       ],
       backgroundColor: [
-        '#191d21',
-        '#63ed7a',
-        '#ffa426',
-        '#fc544b',
-        '#6777ef',
+        '#3abaf4',
       ],
       label: 'Dataset 1'
     }],
     labels: [
-      'Black',
-      'Green',
-      'Yellow',
-      'Red',
-      'Blue'
+      'Completed',
     ],
   },
   options: {
@@ -133,23 +121,20 @@ var myChart = new Chart(ctx, {
         50,
         40,
         30,
-        100,
       ],
       backgroundColor: [
-        '#191d21',
+        '#6777ef',
         '#63ed7a',
         '#ffa426',
         '#fc544b',
-        '#6777ef',
       ],
       label: 'Dataset 1'
     }],
     labels: [
-      'Black',
-      'Green',
-      'Yellow',
-      'Red',
-      'Blue'
+      'Pending',
+      'Approved',
+      'For Revision',
+      'Rejected',
     ],
   },
   options: {
