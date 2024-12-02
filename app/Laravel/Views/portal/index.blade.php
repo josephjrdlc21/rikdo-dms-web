@@ -12,7 +12,10 @@
 
 @section('content')
 @include('portal._components.notification')
+@if($auth->canAny(['portal.research.documents', 'portal.completed.research', 'portal.posted.research', 'portal.researchers', 
+'portal.submitted.research', 'portal.student.research', 'portal.archives', 'portal.user.application'], 'web'))
 <div class="row">
+    @if($auth->canAny(['portal.research.documents'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -28,6 +31,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.completed.research'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -43,6 +48,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.posted.research'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -58,6 +65,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.researchers'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -73,6 +82,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.submitted.research'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -88,6 +99,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.student.research'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -103,6 +116,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.archives'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -118,6 +133,8 @@
             </div>
         </div>
     </div>   
+    @endif
+    @if($auth->canAny(['portal.user.application'], 'web'))
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon">
@@ -132,9 +149,13 @@
                 </div>
             </div>
         </div>
-    </div>                       
+    </div>   
+    @endif                    
 </div>
+@endif
+@if($auth->canAny(['portal.posted.statistics', 'portal.research.statuses'], 'web'))
 <div class="row">
+    @if($auth->canAny(['portal.posted.statistics'], 'web'))
     <div class="col-12 col-md-6 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -145,6 +166,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.research.statuses'], 'web'))
     <div class="col-12 col-md-6 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -155,8 +178,12 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
+@endif
+@if($auth->canAny(['portal.research.statistics', 'portal.completed.statistics'], 'web'))
 <div class="row">
+    @if($auth->canAny(['portal.research.statistics'], 'web'))
     <div class="col-12 col-md-6 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -167,6 +194,8 @@
             </div>
         </div>
     </div>
+    @endif
+    @if($auth->canAny(['portal.completed.statistics'], 'web'))
     <div class="col-12 col-md-6 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -177,7 +206,9 @@
             </div>
         </div>
     </div>   
+    @endif
 </div>
+@endif
 @stop
 
 @section('chart-scripts')

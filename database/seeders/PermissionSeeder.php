@@ -25,7 +25,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.posted.statistics", 'description' => "Posted Research Statistics", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
             ['name' => "portal.research.statuses", 'description' => "All Research Status", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
             ['name' => "portal.research.statistics", 'description' => "Research Statistics", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
-            ['name' => "portal.completed.research", 'description' => "Completed Research", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.completed.statistics", 'description' => "Completed Research Statistics", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
 
             ['name' => "portal.users_kyc.index", 'description' => "List of User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
             ['name' => "portal.users_kyc.approved", 'description' => "List of Approved User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
