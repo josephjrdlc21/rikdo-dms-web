@@ -14,6 +14,19 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            ['name' => "portal.research.documents", 'description' => "Research Documents", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.completed.research", 'description' => "Completed Research", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.posted.research", 'description' => "Posted Research", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.researchers", 'description' => "Researchers", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.submitted.research", 'description' => "Submitted Research", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.student.research", 'description' => "Student Research", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.archives", 'description' => "Archives", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.user.application", 'description' => "User Applications", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.posted.statistics", 'description' => "Posted Research Statistics", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.research.statuses", 'description' => "All Research Status", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.research.statistics", 'description' => "Research Statistics", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+            ['name' => "portal.completed.research", 'description' => "Completed Research", 'module' => "dashboard", 'module_name' => "Dashboard", 'guard_name' => "web"],
+
             ['name' => "portal.users_kyc.index", 'description' => "List of User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
             ['name' => "portal.users_kyc.approved", 'description' => "List of Approved User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],
             ['name' => "portal.users_kyc.rejected", 'description' => "List of Rejected User Applications", 'module' => "users_kyc", 'module_name' => "User Applications", 'guard_name' => "web"],

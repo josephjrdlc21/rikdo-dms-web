@@ -20,6 +20,7 @@
             </div>
         </div>
     </body>
+    @yield('chart-scripts')
     @include('portal._components.scripts')
     @yield('page-scripts')
 </html>

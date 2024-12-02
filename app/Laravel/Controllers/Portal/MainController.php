@@ -30,6 +30,24 @@ class MainController extends Controller{
         $this->data['total_archives'] = Research::onlyTrashed()->count();
         $this->data['total_applications'] = UserKYC::all()->count();
 
+        $this->data['posted_statistics_data'] = ['labels' => range(date('Y'), date('Y') - 5), 'data' => []];
+        
+        foreach (range(date('Y'), date('Y') - 5) as $posted_year) {
+            $this->data['posted_statistics_data']['data'][] = PostedResearch::whereYear('created_at', $posted_year)->count();
+        }
+
+        $this->data['research_statistics_data'] = ['labels' => range(date('Y'), date('Y') - 5), 'data' => []];
+        
+        foreach (range(date('Y'), date('Y') - 5) as $research_year) {
+            $this->data['research_statistics_data']['data'][] = Research::whereYear('created_at', $research_year)->count();
+        }
+
+        $this->data['research_status_data'] = ['labels' => ["pending", "approved", "for_revision", "rejected"], 'data' => []];
+
+        foreach ($this->data['research_status_data']['labels'] as $status) {
+            $this->data['research_status_data']['data'][] = Research::where('status', $status)->count();
+        }
+
         return view('portal.index', $this->data);
     }
 }

@@ -4,10 +4,10 @@ var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["2024", "2023", "2022", "2021", "2020", "2019"],
+    labels: postedStatisticsData.labels,
     datasets: [{
       label: 'Statistics',
-      data: [460, 458, 330, 502, 430, 610],
+      data: postedStatisticsData.data,
       borderWidth: 2,
       backgroundColor: '#8c98f3',
       borderColor: '#6777ef',
@@ -47,10 +47,10 @@ var ctx = document.getElementById("myChart2").getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["2024", "2023", "2022", "2021", "2020", "2019"],
+    labels: researchStatisticsData.labels,
     datasets: [{
       label: 'Statistics',
-      data: [460, 458, 330, 502, 430, 610],
+      data: researchStatisticsData.data,
       borderWidth: 2,
       backgroundColor: '#ccebff',
       borderColor: '#99d6ff',
@@ -92,7 +92,7 @@ var myChart = new Chart(ctx, {
   data: {
     datasets: [{
       data: [
-        80
+        totalCompletedResearch
       ],
       backgroundColor: [
         '#3abaf4',
@@ -116,12 +116,7 @@ var myChart = new Chart(ctx, {
   type: 'pie',
   data: {
     datasets: [{
-      data: [
-        80,
-        50,
-        40,
-        30,
-      ],
+      data: researchStatusData.data,
       backgroundColor: [
         '#6777ef',
         '#63ed7a',
@@ -130,12 +125,7 @@ var myChart = new Chart(ctx, {
       ],
       label: 'Dataset 1'
     }],
-    labels: [
-      'Pending',
-      'Approved',
-      'For Revision',
-      'Rejected',
-    ],
+    labels: researchStatusData.labels,
   },
   options: {
     responsive: true,

@@ -179,3 +179,14 @@
     </div>   
 </div>
 @stop
+
+@section('chart-scripts')
+<script type="text/javascript">
+    var totalCompletedResearch = {!! json_encode($total_completed_research) !!};
+    var postedStatisticsData = {!! json_encode($posted_statistics_data) !!};
+    var researchStatisticsData = {!! json_encode($research_statistics_data) !!};
+    var researchStatusData = {!! json_encode($research_status_data) !!};
+
+    console.log(postedStatisticsData); 
+</script>
+@stop
