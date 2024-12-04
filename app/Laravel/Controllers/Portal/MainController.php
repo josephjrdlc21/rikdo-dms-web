@@ -50,4 +50,10 @@ class MainController extends Controller{
 
         return view('portal.index', $this->data);
     }
+
+    public function home(PageRequest $request){
+        $this->data['page_title'] .= " - Home";
+
+        return view('portal.home', $this->data);
+    }
 }

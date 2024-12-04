@@ -1,6 +1,8 @@
 <?php
 
 Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"]], function(){
+    Route::get('/home', ['as' => 'home', 'uses' => "MainController@home", 'middleware' => "portal.guest"]);
+
     Route::group(['as' => "auth."], function (){
         Route::group(['middleware' => "portal.guest"], function(){
             Route::get('/login', ['as' => 'login', 'uses' => "AuthController@login"]);
