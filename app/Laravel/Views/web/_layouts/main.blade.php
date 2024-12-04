@@ -13,6 +13,7 @@
                     <section class="section">
                         @yield('content')
                     </section>
+                    @include('web._components.footer')
                 </div>
             </div>
         </div>
