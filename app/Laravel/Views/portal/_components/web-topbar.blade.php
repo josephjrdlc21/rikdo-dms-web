@@ -21,8 +21,8 @@
         </ul>
     </form>
     <ul class="navbar-nav navbar-right">
-        <li class="nav-item"><a href="#" class="nav-link">Login</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Register</a></li>
+        <li class="nav-item"><a href="{{route('portal.auth.login')}}" class="nav-link">Login</a></li>
+        <li class="nav-item"><a href="{{route('portal.auth.register')}}" class="nav-link">Register</a></li>
     </ul>
 </nav>
 <nav class="navbar navbar-secondary navbar-expand-lg">
