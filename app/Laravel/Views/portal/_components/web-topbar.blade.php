@@ -10,9 +10,9 @@
             <i class="fas fa-ellipsis-v"></i>
         </a>
         <ul class="navbar-nav">
-            <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+            <li class="nav-item {{request()->segment(1) == "home" ? "active" : ""}}"><a href="{{route('portal.home')}}" class="nav-link">Home</a></li>
+            <li class="nav-item {{request()->segment(1) == "about" ? "active" : ""}}"><a href="{{route('portal.about')}}" class="nav-link">About</a></li>
+            <li class="nav-item {{request()->segment(1) == "contact" ? "active" : ""}}"><a href="{{route('portal.contact')}}" class="nav-link">Contact</a></li>
         </ul>
     </div>
     <form class="form-inline ml-auto">
@@ -28,8 +28,8 @@
 <nav class="navbar navbar-secondary navbar-expand-lg">
     <div class="container">
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-file"></i><span>Researches</span></a>
+            <li class="nav-item {{request()->segment(1) == "researches" ? "active" : ""}}">
+                <a href="{{route('portal.researches')}}" class="nav-link"><i class="fas fa-file"></i><span>Researches</span></a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link"><i class="fas fa-signal"></i><span>Statistics</span></a>

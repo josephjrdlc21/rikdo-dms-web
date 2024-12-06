@@ -5,7 +5,7 @@
     <h1>Posted Research</h1>
     <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="#">Posted Research</a></div>
-        <div class="breadcrumb-item">Layout</div>
+        <div class="breadcrumb-item">Data</div>
     </div>
 </div>
 <div class="hero text-white hero-bg-image hero-bg-parallax mb-4" style="background-image: url('assets/img/rikdo.png');">
@@ -18,7 +18,7 @@
     <div class="card">
         <form method="GET" action="">
             <div class="card-header">
-                <h4>Search Filter</h4>
+                <h4>List of Research</h4>
                 <div class="card-header-action">
                     <button type="submit" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Apply Filter</button>
                     <a href="{{route('portal.home')}}" class="btn btn-sm btn-secondary" style="border-radius: 0.25rem !important;">Reset Filter</a>
@@ -37,7 +37,7 @@
         </div>
         <div class="card-body">
             @if($record)
-                {!!$record->abstract!!}                    
+            {!!$record->abstract!!}                    
             @endif
         </div>
     </div>
