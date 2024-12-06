@@ -15,6 +15,8 @@ class MainController extends Controller{
         parent::__construct();
 		array_merge($this->data?:[], parent::get_data());
         $this->data['page_title'] .= " - Dashboard";
+        $this->data['posted_research'] = ['' => "Search Research"] + PostedResearch::pluck('title', 'id')->toArray();
+        $this->per_page = env("DEFAULT_PER_PAGE", 10);
     }
 
     public function index(PageRequest $request){
@@ -53,6 +55,15 @@ class MainController extends Controller{
 
     public function home(PageRequest $request){
         $this->data['page_title'] .= " - Home";
+        $this->data['selected_posted_research'] = $request->get('posted_research');
+
+        $this->data['record'] = PostedResearch::where(function ($query) {
+            if (strlen($this->data['selected_posted_research']) > 0) {
+                $query->where('id', $this->data['selected_posted_research']);
+            }
+        })
+        ->latest('created_at')
+        ->first();
 
         return view('portal.home', $this->data);
     }
