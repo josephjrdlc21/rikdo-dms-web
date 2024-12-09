@@ -143,4 +143,41 @@ class MainController extends Controller{
 
         return view('portal.researches', $this->data);
     }
+
+    public function research(PageRequest $request,$id = null){
+        $this->data['page_title'] .= " - Research";
+        $this->data['research'] = PostedResearch::find($id);
+
+        if(!$this->data['research']){
+            session()->flash('notification-status', "failed");
+            session()->flash('notification-msg', "Record not found.");
+            return redirect()->route('portal.researches');
+        }
+
+        return view('portal.research', $this->data);
+    }
+
+    public function statistics(PageRequest $request){
+        $this->data['page_title'] .= " - Statistics";
+        $this->data['total_posted_research'] = PostedResearch::all()->count();
+        $this->data['posted_statistics_data'] = ['labels' => range(date('Y'), date('Y') - 5), 'data' => []];
+        
+        foreach (range(date('Y'), date('Y') - 5) as $posted_year) {
+            $this->data['posted_statistics_data']['data'][] = PostedResearch::whereYear('created_at', $posted_year)->count();
+        }
+
+        $this->data['research_status_data'] = ['labels' => ["pending", "re_submission", "for_posting", "rejected"], 'data' => []];
+
+        foreach ($this->data['research_status_data']['labels'] as $status) {
+            $this->data['research_status_data']['data'][] = CompletedResearch::where('status', $status)->count();
+        }
+
+        $this->data['researchers_statistics_data'] = ['labels' => range(date('Y'), date('Y') - 5), 'data' => []];
+        
+        foreach (range(date('Y'), date('Y') - 5) as $researchers_year) {
+            $this->data['researchers_statistics_data']['data'][] = User::whereYear('created_at', $researchers_year)->count();
+        }
+
+        return view('portal.statistics', $this->data);
+    }
 }

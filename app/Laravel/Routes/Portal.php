@@ -5,6 +5,8 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
     Route::get('/about', ['as' => 'about', 'uses' => "MainController@about", 'middleware' => "portal.guest"]);
     Route::get('/contact', ['as' => 'contact', 'uses' => "MainController@contact", 'middleware' => "portal.guest"]);
     Route::get('/researches', ['as' => 'researches', 'uses' => "MainController@researches", 'middleware' => "portal.guest"]);
+    Route::get('/research/{id?}', ['as' => 'research', 'uses' => "MainController@research", 'middleware' => "portal.guest"]);
+    Route::get('/statistics', ['as' => 'statistics', 'uses' => "MainController@statistics", 'middleware' => "portal.guest"]);
 
     Route::group(['as' => "auth."], function (){
         Route::group(['middleware' => "portal.guest"], function(){

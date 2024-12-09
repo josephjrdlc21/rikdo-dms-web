@@ -31,8 +31,8 @@
             <li class="nav-item {{request()->segment(1) == "researches" ? "active" : ""}}">
                 <a href="{{route('portal.researches')}}" class="nav-link"><i class="fas fa-file"></i><span>Researches</span></a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-signal"></i><span>Statistics</span></a>
+            <li class="nav-item {{request()->segment(1) == "statistics" ? "active" : ""}}">
+                <a href="{{route('portal.statistics')}}" class="nav-link"><i class="fas fa-signal"></i><span>Statistics</span></a>
             </li>
         </ul>
     </div>

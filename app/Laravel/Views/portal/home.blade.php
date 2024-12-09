@@ -8,10 +8,10 @@
         <div class="breadcrumb-item">Data</div>
     </div>
 </div>
-<div class="hero text-white hero-bg-image hero-bg-parallax mb-4" style="background-image: url('assets/img/rikdo.png');">
+<div class="hero text-white hero-bg-image hero-bg-parallax mb-4" style="background-image: url('{{asset('assets/img/rikdo.png')}}');">
     <div class="hero-inner">
         <h2>Research Hub</h2>
-        <p class="lead">This page is just an example for you to create your own page.</p>
+        <p class="lead">A centralized platform designed to facilitate collaboration, access, and dissemination of academic and professional research.</p>
     </div>
 </div>
 <div class="section-body">

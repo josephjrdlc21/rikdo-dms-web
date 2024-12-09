@@ -1,6 +1,7 @@
 @extends('portal._layouts.web')
 
 @section('content')
+@include('portal._components.notification')
 <div class="section-header">
     <h1>Researches</h1>
     <div class="section-header-breadcrumb">
@@ -8,10 +9,10 @@
         <div class="breadcrumb-item">Data</div>
     </div>
 </div>
-<div class="hero text-white hero-bg-image hero-bg-parallax mb-4" style="background-image: url('assets/img/cc.jpg');">
+<div class="hero text-white hero-bg-image hero-bg-parallax mb-4" style="background-image: url('{{asset('assets/img/cc.jpg')}}');">
     <div class="hero-inner">
         <h2>Research Documents</h2>
-        <p class="lead">This page is just an example for you to create your own page.</p>
+        <p class="lead">Access a diverse collection of research documents.</p>
     </div>
 </div>
 <div class="section-body">
@@ -99,7 +100,7 @@
                                         Action
                                     </button>
                                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                        <a class="dropdown-item" href="#">View Details</a>
+                                        <a class="dropdown-item" href="{{route('portal.research', [$posted->id])}}">View Details</a>
                                     </div>
                                 </div> 
                             </td>
