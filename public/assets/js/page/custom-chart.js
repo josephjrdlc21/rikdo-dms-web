@@ -18,6 +18,9 @@ var myChart = new Chart(ctx, {
     legend: {
       display: false
     },
+    tooltips: {
+      titleFontSize: 11
+    },
     scales: {
       yAxes: [{
         gridLines: {
@@ -109,6 +112,9 @@ var myChart = new Chart(ctx, {
   options: {
     legend: {
       display: false
+    },
+    tooltips: {
+      titleFontSize: 11
     },
     scales: {
       yAxes: [{
