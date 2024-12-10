@@ -85,7 +85,7 @@
                             <th>No.</th>
                             <th class="text-center">Title</th>
                             <th>Date Posted</th>
-                            <th></th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>                         
@@ -95,14 +95,7 @@
                             <td class="text-center">{{$posted->title}}<br><small>{{$posted->research_type->type}}</small></td>
                             <td>{{$posted->created_at->format("m/d/Y h:i A")}}</td>
                             <td>
-                                <div class="btn-group mb-2">
-                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action
-                                    </button>
-                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                        <a class="dropdown-item" href="{{route('portal.research', [$posted->id])}}">View Details</a>
-                                    </div>
-                                </div> 
+                                <a href="{{route('portal.research', [$posted->id])}}" class="btn btn-sm btn-outline-secondary">View</a>
                             </td>
                         </tr>
                         @empty
