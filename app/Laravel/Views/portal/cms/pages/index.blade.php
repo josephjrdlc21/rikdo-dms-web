@@ -53,9 +53,11 @@
 <div class="card">
     <div class="card-header">
         <h4>Record Data</h4>
+        @if($auth->canAny(['portal.cms.pages.create'], 'web'))         
         <div class="card-header-action">
             <a href="{{route('portal.cms.pages.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Page</a>
         </div>
+        @endif
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -84,9 +86,15 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.cms.pages.view'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.cms.pages.show', [$page->id])}}">View Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.cms.pages.update'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.cms.pages.edit', [$page->id])}}">Edit Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.cms.pages.delete'], 'web'))         
                                     <a class="dropdown-item delete-record" data-url="{{route('portal.cms.pages.delete', [$page->id])}}" type="button" style="cursor: pointer;">Delete Page</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>

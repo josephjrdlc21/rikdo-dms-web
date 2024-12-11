@@ -130,7 +130,8 @@
             </li>
             @endif
             <li class="menu-header">System Settings</li>
-            @if($auth->canAny(['portal.cms.roles.index', 'portal.cms.permissions.index', 'portal.cms.departments.index', 'portal.cms.permissions.index', 'portal.cms.courses.index', 'portal.cms.yearlevels.index', 'portal.cms.research_types.index', 'portal.audit_trail.index'], 'web'))
+            @if($auth->canAny(['portal.cms.roles.index', 'portal.cms.permissions.index', 'portal.cms.departments.index', 'portal.cms.permissions.index', 
+            'portal.cms.courses.index', 'portal.cms.yearlevels.index', 'portal.cms.research_types.index', 'portal.cms.pages.index', 'portal.audit_trail.index'], 'web'))
             <li class="dropdown {{request()->segment(1) == "cms" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i> <span>Content Management</span></a>
                 <ul class="dropdown-menu">
@@ -152,7 +153,9 @@
                     @if($auth->canAny(['portal.cms.research_types.index'], 'web'))
                     <li class="{{request()->segment(2) == "research-types" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.research_types.index')}}">Research Types</a></li>
                     @endif
+                    @if($auth->canAny(['portal.cms.pages.index'], 'web'))
                     <li class="{{request()->segment(2) == "pages" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.pages.index')}}">Pages</a></li>
+                    @endif
                 </ul>
             </li>
             @if($auth->canAny(['portal.audit_trail.index'], 'web'))

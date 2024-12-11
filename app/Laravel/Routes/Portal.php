@@ -176,13 +176,13 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             });
 
             Route::group(['prefix' => "pages", 'as' => "pages."], function(){
-                Route::get('/', ['as' => "index", 'uses' => "PagesController@index"]);
-                Route::get('/create', ['as' => "create", 'uses' => "PagesController@create"]);
-                Route::post('/create', ['uses' => "PagesController@store"]);
-                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "PagesController@edit"]);
-                Route::post('/edit/{id?}', ['uses' => "PagesController@update"]);
-                Route::get('/show/{id?}', ['as' => "show", 'uses' => "PagesController@show"]);
-                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "PagesController@destroy"]);
+                Route::get('/', ['as' => "index", 'uses' => "PagesController@index", 'middleware' => "portal.permission:portal.cms.pages.index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "PagesController@create", 'middleware' => "portal.permission:portal.cms.pages.create"]);
+                Route::post('/create', ['uses' => "PagesController@store", 'middleware' => "portal.permission:portal.cms.pages.create"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "PagesController@edit", 'middleware' => "portal.permission:portal.cms.pages.update"]);
+                Route::post('/edit/{id?}', ['uses' => "PagesController@update", 'middleware' => "portal.permission:portal.cms.pages.update"]);
+                Route::get('/show/{id?}', ['as' => "show", 'uses' => "PagesController@show", 'middleware' => "portal.permission:portal.cms.pages.view"]);
+                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "PagesController@destroy", 'middleware' => "portal.permission:portal.cms.pages.delete"]);
             });
         });
 

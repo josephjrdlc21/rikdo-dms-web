@@ -86,8 +86,12 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @if($auth->canAny(['portal.cms.departments.update'], 'web'))         
                                     <a class="dropdown-item" href="{{route('portal.cms.departments.edit', [$department->id])}}">Edit Details</a>
+                                    @endif
+                                    @if($auth->canAny(['portal.cms.departments.create'], 'web'))         
                                     <a class="dropdown-item delete-record" data-url="{{route('portal.cms.departments.delete', [$department->id])}}" type="button" style="cursor: pointer;">Delete Department</a>
+                                    @endif
                                 </div>
                             </div> 
                         </td>

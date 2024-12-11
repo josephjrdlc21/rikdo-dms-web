@@ -22,7 +22,9 @@
                 {!!$page->content!!}
             </div>
             <div class="card-footer text-right">
+                @if($auth->canAny(['portal.cms.pages.update'], 'web'))         
                 <a href="{{route('portal.cms.pages.edit', [$page->id])}}" class="btn btn-sm btn-warning">Edit</a>
+                @endif
                 <a href="{{route('portal.cms.pages.index')}}" class="btn btn-sm btn-light">Close</a>
             </div>
         </div>

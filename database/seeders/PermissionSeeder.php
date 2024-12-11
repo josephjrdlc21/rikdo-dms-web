@@ -138,6 +138,7 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.cms.research_types.search", 'description' => "Search Record", 'module' => "cms.research_types", 'module_name' => "CMS - Research Types", 'guard_name' => "web"],
         
             ['name' => "portal.cms.pages.index", 'description' => "List of Pages", 'module' => "cms.pages", 'module_name' => "CMS - Pages", 'guard_name' => "web"],
+            ['name' => "portal.cms.pages.view", 'description' => "View Page Details", 'module' => "cms.pages", 'module_name' => "CMS - Pages", 'guard_name' => "web"],
             ['name' => "portal.cms.pages.create", 'description' => "Create New Page", 'module' => "cms.pages", 'module_name' => "CMS - Pages", 'guard_name' => "web"],
             ['name' => "portal.cms.pages.update", 'description' => "Update Page Details", 'module' => "cms.pages", 'module_name' => "CMS - Pages", 'guard_name' => "web"],
             ['name' => "portal.cms.pages.delete", 'description' => "Delete Page", 'module' => "cms.pages", 'module_name' => "CMS - Pages", 'guard_name' => "web"],
