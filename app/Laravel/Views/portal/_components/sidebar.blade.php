@@ -152,6 +152,7 @@
                     @if($auth->canAny(['portal.cms.research_types.index'], 'web'))
                     <li class="{{request()->segment(2) == "research-types" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.research_types.index')}}">Research Types</a></li>
                     @endif
+                    <li class="{{request()->segment(2) == "pages" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.cms.pages.index')}}">Pages</a></li>
                 </ul>
             </li>
             @if($auth->canAny(['portal.audit_trail.index'], 'web'))

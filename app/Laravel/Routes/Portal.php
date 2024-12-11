@@ -174,6 +174,10 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
                 Route::post('/edit/{id?}', ['uses' => "ResearchTypesController@update"]);
                 Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "ResearchTypesController@destroy"]);
             });
+
+            Route::group(['prefix' => "pages", 'as' => "pages."], function(){
+                Route::get('/', ['as' => "index", 'uses' => "PagesController@index"]);
+            });
         });
 
         Route::group(['prefix' => "audit-trail", 'as' => "audit_trail."], function(){
