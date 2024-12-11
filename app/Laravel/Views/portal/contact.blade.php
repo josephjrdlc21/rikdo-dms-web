@@ -17,14 +17,10 @@
 <div class="section-body">
     <div class="card">
         <div class="card-header">
-            <h4>Contact Information</h4>
+            <h4>{{$contact->title ?? "N/A"}}</h4>
         </div>
         <div class="card-body">
-            <p class="text-center">
-                Location: 1 1st Street New Asinan , Olongapo, Philippines<br>
-                Contact: 0945 468 5377<br>
-                Email: rikdo.cci@gmail.com
-            </p>
+            {!!$contact->content ?? "N/A"!!}
         </div>
     </div>
 </div>

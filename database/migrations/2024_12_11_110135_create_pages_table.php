@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_id')->nullable()->index();
             $table->string('type')->nullable();
             $table->string('title')->nullable();
-            $table->string('content')->nullable();
+            $table->text('content')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

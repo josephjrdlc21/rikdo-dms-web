@@ -54,7 +54,7 @@
     <div class="card-header">
         <h4>Record Data</h4>
         <div class="card-header-action">
-            <a href="#" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Page</a>
+            <a href="{{route('portal.cms.pages.create')}}" class="btn btn-sm btn-primary" style="border-radius: 0.25rem !important;">Create Page</a>
         </div>
     </div>
     <div class="card-body p-0">
@@ -74,19 +74,19 @@
                     @forelse($record as $index => $page)
                     <tr>
                         <td>{{$loop->index + $record->firstItem()}}</td>
-                        <td>{{$page->type}}</td>
+                        <td>{{strtoupper($page->type)}}</td>
                         <td>{{$page->title}}</td>
-                        <td>{{$audit_trail->created_at->format("m/d/Y h:i A")}}</td>
-                        <td>{{$audit_trail->updated_at->format("m/d/Y h:i A")}}</td>
+                        <td>{{$page->created_at->format("m/d/Y h:i A")}}</td>
+                        <td>{{$page->updated_at->format("m/d/Y h:i A")}}</td>
                         <td>
                             <div class="btn-group mb-2">
                                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    <a class="dropdown-item" href="#">View Details</a>
-                                    <a class="dropdown-item" href="#">Edit Details</a>
-                                    <a class="dropdown-item" href="#">Delete Page</a>
+                                    <a class="dropdown-item" href="{{route('portal.cms.pages.show', [$page->id])}}">View Details</a>
+                                    <a class="dropdown-item" href="{{route('portal.cms.pages.edit', [$page->id])}}">Edit Details</a>
+                                    <a class="dropdown-item delete-record" data-url="{{route('portal.cms.pages.delete', [$page->id])}}" type="button" style="cursor: pointer;">Delete Page</a>
                                 </div>
                             </div> 
                         </td>
@@ -107,4 +107,24 @@
         @endif
     </div>
 </div>
+@stop
+
+@section('page-scripts')
+<script type="text/javascript">
+    $(".delete-record").on('click', function(){
+        var url = $(this).data('url');
+        
+        swal({
+            title: "Are you sure you want to delete this?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((result) => {
+            if(result){
+                window.location.href = url;
+            }
+        });
+    });
+</script>
 @stop

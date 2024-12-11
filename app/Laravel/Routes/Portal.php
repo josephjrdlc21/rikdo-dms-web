@@ -177,6 +177,12 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
 
             Route::group(['prefix' => "pages", 'as' => "pages."], function(){
                 Route::get('/', ['as' => "index", 'uses' => "PagesController@index"]);
+                Route::get('/create', ['as' => "create", 'uses' => "PagesController@create"]);
+                Route::post('/create', ['uses' => "PagesController@store"]);
+                Route::get('/edit/{id?}', ['as' => "edit", 'uses' => "PagesController@edit"]);
+                Route::post('/edit/{id?}', ['uses' => "PagesController@update"]);
+                Route::get('/show/{id?}', ['as' => "show", 'uses' => "PagesController@show"]);
+                Route::any('/delete/{id?}', ['as' => "delete", 'uses' => "PagesController@destroy"]);
             });
         });
 

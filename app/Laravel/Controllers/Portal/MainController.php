@@ -2,7 +2,7 @@
 
 namespace App\Laravel\Controllers\Portal;
 
-use App\Laravel\Models\{Research,CompletedResearch,PostedResearch,User,UserKYC,Department,Course,Yearlevel,ResearchType};
+use App\Laravel\Models\{Research,CompletedResearch,PostedResearch,User,UserKYC,Department,Course,Yearlevel,ResearchType,Page};
 
 use App\Laravel\Requests\PageRequest;
 
@@ -70,12 +70,14 @@ class MainController extends Controller{
 
     public function about(PageRequest $request){
         $this->data['page_title'] .= " - About";
+        $this->data['about'] = Page::where('type', 'about')->first();
 
         return view('portal.about', $this->data);
     }
 
     public function contact(PageRequest $request){
         $this->data['page_title'] .= " - Contact";
+        $this->data['contact'] = Page::where('type', 'contact')->first();
 
         return view('portal.contact', $this->data);
     }

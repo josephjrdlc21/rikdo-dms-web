@@ -17,14 +17,10 @@
 <div class="section-body">
     <div class="card">
         <div class="card-header">
-            <h4>About Description</h4>
+            <h4>{{$about->title ?? "N/A"}}</h4>
         </div>
         <div class="card-body">
-            <p class="text-justify">
-                The Research and Innovation Knowledge Development Office (RIKDO) plays a pivotal role in fostering a thriving research culture within the College. It serves as the cornerstone of the institution's efforts to advance research initiatives by offering strategic leadership that aligns with the College’s goals and vision. Through its guidance, RIKDO ensures that the institution remains at the forefront of research excellence.<br>
-                A key function of RIKDO is to provide clear policy direction that shapes the research agenda. By setting standards and priorities, it creates a structured environment where researchers can effectively contribute to the academic and practical needs of stakeholders. These policies act as a roadmap, ensuring that all research efforts are meaningful, impactful, and aligned with institutional objectives.<br>
-                Furthermore, RIKDO creates avenues and opportunities for research development. It bridges the gap between researchers and stakeholders by identifying and addressing specific research needs. Through these initiatives, RIKDO not only supports the professional growth of researchers but also ensures that the outcomes of their work have a lasting and meaningful impact on the community.
-            </p>
+            {!!$about->content ?? "N/A"!!}
         </div>
     </div>
 </div>
