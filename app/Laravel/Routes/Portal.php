@@ -10,8 +10,8 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
 
     Route::group(['as' => "auth."], function (){
         Route::group(['middleware' => "portal.guest"], function(){
-            Route::get('/login', ['as' => 'login', 'uses' => "AuthController@login"]);
-            Route::post('/login', ['uses' => "AuthController@authenticate"]);
+            Route::get('/login/{uri?}', ['as' => 'login', 'uses' => "AuthController@login"]);
+            Route::post('/login/{uri?}', ['uses' => "AuthController@authenticate"]);
             Route::get('/register', ['as' => 'register', 'uses' => "AuthController@register"]);
             Route::post('/register', ['uses' => "AuthController@store"]);
             Route::get('/forgot-password', ['as' => "forgot_password", 'uses' => "AuthController@forgot_password"]);

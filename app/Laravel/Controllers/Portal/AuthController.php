@@ -32,7 +32,7 @@ class AuthController extends Controller{
 		return view('portal.auth.login', $this->data);
 	}
 
-    public function authenticate(PageRequest $request){
+    public function authenticate(PageRequest $request,$uri = null){
 		$email = Str::lower($request->input('email'));
         $password = $request->input('password');
         $remember_me = $request->input('remember', 0);
@@ -52,6 +52,12 @@ class AuthController extends Controller{
 			$audit_trail->remarks = "{$account->name} has logged in.";
 			$audit_trail->type = "USER_ACTION";
 			$audit_trail->save();
+
+            if($uri AND session()->has($uri)){
+				session()->flash('notification-status', "success");
+				session()->flash('notification-msg', "Welcome {$account->name}!");
+				return redirect(session()->get($uri));
+			}
             
             session()->flash('notification-status', "success");
 			session()->flash('notification-msg', "Welcome {$account->name}!");
