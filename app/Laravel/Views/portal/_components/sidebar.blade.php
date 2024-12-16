@@ -130,8 +130,8 @@
             </li>
             @endif
             <li class="menu-header">System Settings</li>
-            @if($auth->canAny(['portal.cms.roles.index', 'portal.cms.permissions.index', 'portal.cms.departments.index', 'portal.cms.permissions.index', 
-            'portal.cms.courses.index', 'portal.cms.yearlevels.index', 'portal.cms.research_types.index', 'portal.cms.pages.index', 'portal.audit_trail.index'], 'web'))
+            @if($auth->canAny(['portal.cms.roles.index', 'portal.cms.permissions.index', 'portal.cms.departments.index', 'portal.cms.permissions.index', 'portal.cms.courses.index', 
+            'portal.cms.yearlevels.index', 'portal.cms.research_types.index', 'portal.cms.pages.index', 'portal.audit_trail.index', 'portal.notifications.index'], 'web'))
             <li class="dropdown {{request()->segment(1) == "cms" ? "active" : ""}}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i> <span>Content Management</span></a>
                 <ul class="dropdown-menu">
@@ -160,6 +160,9 @@
             </li>
             @if($auth->canAny(['portal.audit_trail.index'], 'web'))
             <li class="{{request()->segment(1) == "audit-trail" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.audit_trail.index')}}"><i class="fas fa-compass"></i> <span>Audit Trail</span></a></li>
+            @endif
+            @if($auth->canAny(['portal.notifications.index'], 'web'))
+            <li class="{{request()->segment(1) == "notifications" ? "active" : ""}}"><a class="nav-link" href="{{route('portal.notifications.index')}}"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
             @endif
             @endif
         </ul>    

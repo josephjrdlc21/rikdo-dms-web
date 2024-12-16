@@ -191,6 +191,11 @@ Route::group(['as' => "portal.", 'namespace' => "Portal", 'middleware' => ["web"
             Route::get('/export', ['as' => "export", 'uses' => "AuditTrailController@export", 'middleware' => "portal.permission:portal.audit_trail.export"]);
         });
 
+        Route::group(['prefix' => "notifications", 'as' => "notifications."], function(){
+            Route::get('/', ['as' => "index", 'uses' => "NotificationsController@index", 'middleware' => "portal.permission:portal.notifications.index"]);
+            Route::post('/', ['uses' => "NotificationsController@store", 'middleware' => "portal.permission:portal.notifications.index"]);
+        });
+
         Route::group(['prefix' => "profile", 'as' => "profile."], function(){
             Route::get('/', ['as' => "index", 'uses' => "ProfileController@index"]);
             Route::post('/', ['uses' => "ProfileController@update_profile"]);

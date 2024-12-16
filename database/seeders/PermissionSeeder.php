@@ -147,6 +147,9 @@ class PermissionSeeder extends Seeder
             ['name' => "portal.audit_trail.index", 'description' => "List of Audit Trail", 'module' => "audit_trail", 'module_name' => "Audit Trail", 'guard_name' => "web"],
             ['name' => "portal.audit_trail.export", 'description' => "Generate Report", 'module' => "audit_trail", 'module_name' => "Audit Trail", 'guard_name' => "web"],
             ['name' => "portal.audit_trail.search", 'description' => "Search Record", 'module' => "audit_trail", 'module_name' => "Audit Trail", 'guard_name' => "web"],
+        
+            ['name' => "portal.notifications.index", 'description' => "List of Notification", 'module' => "notifications", 'module_name' => "Notifications", 'guard_name' => "web"],
+            ['name' => "portal.notifications.search", 'description' => "Search Record", 'module' => "notifications", 'module_name' => "Notifications", 'guard_name' => "web"],
         ];
 
         foreach($permissions as $permission){
