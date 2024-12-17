@@ -6,11 +6,15 @@ use App\Laravel\Models\{Research,ResearchType,AuditTrail};
 
 use App\Laravel\Requests\PageRequest;
 
+use App\Laravel\Traits\CcEmail;
+
 use App\Laravel\Notifications\{AllResearchDeleted,AllResearchDeletedSuccess};
 
 use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover,Mail;
 
 class AllResearchController extends Controller{
+    use CcEmail;
+
     protected $data;
 
     public function __construct(){
@@ -296,8 +300,12 @@ class AllResearchController extends Controller{
                     'status' => $research->status,
                     'date_time' => $research->deleted_at->format('m/d/Y h:i A'),
                 ];
-                Mail::to($research->submitted_by->email)->send(new AllResearchDeleted($data));
-                Mail::to($this->data['auth']->email)->send(new AllResearchDeletedSuccess($data));
+                Mail::to($research->submitted_by->email)
+                    ->cc($this->cc_email_has_all_research())
+                    ->send(new AllResearchDeleted($data));
+                
+                Mail::to($this->data['auth']->email)
+                    ->send(new AllResearchDeletedSuccess($data));
             }
 
             session()->flash('notification-status', 'success');

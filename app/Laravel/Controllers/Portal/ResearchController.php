@@ -7,7 +7,7 @@ use App\Laravel\Models\{Research,ResearchType,User,SharedResearch,ResearchLog,Au
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\ResearchRequest;
 
-use App\Laravel\Traits\{VerifyResearch,SharesResearch};
+use App\Laravel\Traits\{VerifyResearch,SharesResearch,CcEmail};
 
 use App\Laravel\Notifications\{ResearchSubmitted,ResearchSubmittedSuccess,ResearchSubmittedModified,
 ResearchSubmittedModifiedSuccess,ResearchShared,ResearchSharedSuccess,ResearchDeleted,ResearchDeletedSuccess};
@@ -15,7 +15,7 @@ ResearchSubmittedModifiedSuccess,ResearchShared,ResearchSharedSuccess,ResearchDe
 use Carbon,DB,Helper,FileUploader,FileDownloader,FileRemover,Mail;
 
 class ResearchController extends Controller{
-    use VerifyResearch, SharesResearch;
+    use VerifyResearch, SharesResearch, CcEmail;
 
     protected $data;
 
@@ -363,8 +363,12 @@ class ResearchController extends Controller{
                     'status' => $research->status ?? 'pending',
                     'date_time' => $research->created_at->format('m/d/Y h:i A'),
                 ];
-                Mail::to($research->submitted_to->email)->send(new ResearchSubmitted($data));
-                Mail::to($research->submitted_by->email)->send(new ResearchSubmittedSuccess($data));
+                Mail::to($research->submitted_to->email)
+                    ->cc($this->cc_email_has_research())
+                    ->send(new ResearchSubmitted($data));
+                
+                Mail::to($research->submitted_by->email)
+                    ->send(new ResearchSubmittedSuccess($data));
             }
 
             DB::commit();
@@ -494,8 +498,12 @@ class ResearchController extends Controller{
                     'status' => $research->status,
                     'date_time' => $research->updated_at->format('m/d/Y h:i A'),
                 ];
-                Mail::to($research->submitted_to->email)->send(new ResearchSubmittedModified($data));
-                Mail::to($research->modified_by->email)->send(new ResearchSubmittedModifiedSuccess($data));
+                Mail::to($research->submitted_to->email)
+                    ->cc($this->cc_email_has_research())
+                    ->send(new ResearchSubmittedModified($data));
+
+                Mail::to($research->modified_by->email)
+                    ->send(new ResearchSubmittedModifiedSuccess($data));
             }
 
             DB::commit();
@@ -590,8 +598,12 @@ class ResearchController extends Controller{
                     'status' => $research->status,
                     'date_time' => $research->updated_at->format('m/d/Y h:i A'),
                 ];
-                Mail::to($research->submitted_to->email)->send(new ResearchShared($data));
-                Mail::to($research->modified_by->email)->send(new ResearchSharedSuccess($data));
+                Mail::to($research->submitted_to->email)
+                    ->cc($this->cc_email_has_research())
+                    ->send(new ResearchShared($data));
+
+                Mail::to($research->modified_by->email)
+                    ->send(new ResearchSharedSuccess($data));
             }
 
             DB::commit();
@@ -643,8 +655,12 @@ class ResearchController extends Controller{
                     'status' => $research->status,
                     'date_time' => $research->deleted_at->format('m/d/Y h:i A'),
                 ];
-                Mail::to($research->submitted_to->email)->send(new ResearchDeleted($data));
-                Mail::to($this->data['auth']->email)->send(new ResearchDeletedSuccess($data));
+                Mail::to($research->submitted_to->email)
+                    ->cc($this->cc_email_has_research())
+                    ->send(new ResearchDeleted($data));
+                
+                Mail::to($this->data['auth']->email)
+                    ->send(new ResearchDeletedSuccess($data));
             }
 
             session()->flash('notification-status', 'success');

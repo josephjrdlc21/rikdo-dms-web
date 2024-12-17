@@ -6,6 +6,8 @@ use App\Laravel\Models\{Research,Department,Course,Yearlevel,ResearchType,Comple
 
 use App\Laravel\Requests\PageRequest;
 
+use App\Laravel\Traits\CcEmail;
+
 use App\Laravel\Notifications\{ArchivesResearchRestored,ArchivesResearchRestoredSuccess,ArchivesCompletedResearchRestored,
 ArchivesCompletedResearchRestoredSuccess,ArchivesResearchDeleted,ArchivesResearchDeletedSuccess,ArchivesCompletedResearchDeleted,
 ArchivesCompletedResearchDeletedSuccess};
@@ -13,6 +15,8 @@ ArchivesCompletedResearchDeletedSuccess};
 use Carbon,DB,FileRemover,Mail;
 
 class ArchivesController extends Controller{
+    use CcEmail;
+
     protected $data;
 
     public function __construct(){
@@ -244,9 +248,13 @@ class ArchivesController extends Controller{
                         ];
 
                         foreach($research_authors as $send){
-                            Mail::to($send->email)->send(new ArchivesCompletedResearchDeleted($data));
+                            Mail::to($send->email)
+                                ->cc($this->cc_email_has_archives())
+                                ->send(new ArchivesCompletedResearchDeleted($data));
                         }
-                        Mail::to($this->data['auth']->email)->send(new ArchivesCompletedResearchDeletedSuccess($data));
+                        
+                        Mail::to($this->data['auth']->email)
+                            ->send(new ArchivesCompletedResearchDeletedSuccess($data));
                     }
 
                     session()->flash('notification-status', 'success');
@@ -280,8 +288,12 @@ class ArchivesController extends Controller{
                             'status' => $research->status,
                             'date_time' => Carbon::now()->format('m/d/Y h:i A'),
                         ];
-                        Mail::to($research->submitted_to->email)->send(new ArchivesResearchDeleted($data));
-                        Mail::to($this->data['auth']->email)->send(new ArchivesResearchDeletedSuccess($data));
+                        Mail::to($research->submitted_to->email)
+                            ->cc($this->cc_email_has_archives())
+                            ->send(new ArchivesResearchDeleted($data));
+                        
+                        Mail::to($this->data['auth']->email)
+                            ->send(new ArchivesResearchDeletedSuccess($data));
                     }
 
                     session()->flash('notification-status', 'success');
@@ -333,9 +345,13 @@ class ArchivesController extends Controller{
                         ];
 
                         foreach($research_authors as $send){
-                            Mail::to($send->email)->send(new ArchivesCompletedResearchRestored($data));
+                            Mail::to($send->email)
+                                ->cc($this->cc_email_has_archives())
+                                ->send(new ArchivesCompletedResearchRestored($data));
                         }
-                        Mail::to($this->data['auth']->email)->send(new ArchivesCompletedResearchRestoredSuccess($data));
+                        
+                        Mail::to($this->data['auth']->email)
+                            ->send(new ArchivesCompletedResearchRestoredSuccess($data));
                     }
 
                     session()->flash('notification-status', 'success');
@@ -367,8 +383,13 @@ class ArchivesController extends Controller{
                             'status' => $research->status,
                             'date_time' => Carbon::now()->format('m/d/Y h:i A'),
                         ];
-                        Mail::to($research->submitted_to->email)->send(new ArchivesResearchRestored($data));
-                        Mail::to($this->data['auth']->email)->send(new ArchivesResearchRestoredSuccess($data));
+                        
+                        Mail::to($research->submitted_to->email)
+                            ->cc($this->cc_email_has_archives())
+                            ->send(new ArchivesResearchRestored($data));
+                        
+                        Mail::to($this->data['auth']->email)
+                            ->send(new ArchivesResearchRestoredSuccess($data));
                     }
 
                     session()->flash('notification-status', 'success');

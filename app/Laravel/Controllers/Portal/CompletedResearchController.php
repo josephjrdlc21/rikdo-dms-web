@@ -7,12 +7,16 @@ use App\Laravel\Models\{CompletedResearch,Department,Course,Yearlevel,Research,S
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\CompletedResearchRequest;
 
+use App\Laravel\Traits\CcEmail;
+
 use App\Laravel\Notifications\{CompletedResearchEvaluated,CompletedResearchEvaluatedSuccess,CompletedResearchDeleted,
 CompletedResearchDeletedSuccess,CompletedResearchSubmittedSuccess,CompletedResearchUpdatedSuccess};
 
 use Carbon,DB,FileUploader,FileDownloader,FileRemover,Mail;
 
 class CompletedResearchController extends Controller{
+    use CcEmail;
+
     protected $data;
 
     public function __construct(){
@@ -152,7 +156,9 @@ class CompletedResearchController extends Controller{
                 ];
 
                 foreach($completed_research_authors as $send){
-                    Mail::to($send->email)->send(new CompletedResearchSubmittedSuccess($data));
+                    Mail::to($send->email)
+                        ->cc($this->cc_email_has_completed_research())
+                        ->send(new CompletedResearchSubmittedSuccess($data));
                 }
             }
            
@@ -242,7 +248,9 @@ class CompletedResearchController extends Controller{
                 ];
 
                 foreach($completed_research_authors as $send){
-                    Mail::to($send->email)->send(new CompletedResearchUpdatedSuccess($data));
+                    Mail::to($send->email)
+                        ->cc($this->cc_email_has_completed_research())
+                        ->send(new CompletedResearchUpdatedSuccess($data));
                 }
             }
 
@@ -309,9 +317,13 @@ class CompletedResearchController extends Controller{
                         ];
 
                         foreach($completed_research_authors as $send){
-                            Mail::to($send->email)->send(new CompletedResearchEvaluated($data));
+                            Mail::to($send->email)
+                                ->cc($this->cc_email_has_completed_research())
+                                ->send(new CompletedResearchEvaluated($data));
                         }
-                        Mail::to($completed_research->processor->email)->send(new CompletedResearchEvaluatedSuccess($data));
+                        
+                        Mail::to($completed_research->processor->email)
+                            ->send(new CompletedResearchEvaluatedSuccess($data));
                     }
                 
                     DB::commit();
@@ -355,9 +367,13 @@ class CompletedResearchController extends Controller{
                         ];
 
                         foreach($completed_research_authors as $send){
-                            Mail::to($send->email)->send(new CompletedResearchEvaluated($data));
+                            Mail::to($send->email)
+                                ->cc($this->cc_email_has_completed_research())
+                                ->send(new CompletedResearchEvaluated($data));
                         }
-                        Mail::to($completed_research->processor->email)->send(new CompletedResearchEvaluatedSuccess($data));
+                        
+                        Mail::to($completed_research->processor->email)
+                            ->send(new CompletedResearchEvaluatedSuccess($data));
                     }
                    
                     DB::commit();
@@ -401,9 +417,13 @@ class CompletedResearchController extends Controller{
                         ];
 
                         foreach($completed_research_authors as $send){
-                            Mail::to($send->email)->send(new CompletedResearchEvaluated($data));
+                            Mail::to($send->email)
+                                ->cc($this->cc_email_has_completed_research())
+                                ->send(new CompletedResearchEvaluated($data));
                         }
-                        Mail::to($completed_research->processor->email)->send(new CompletedResearchEvaluatedSuccess($data));
+                        
+                        Mail::to($completed_research->processor->email)
+                            ->send(new CompletedResearchEvaluatedSuccess($data));
                     }
                    
                     DB::commit();
@@ -481,9 +501,13 @@ class CompletedResearchController extends Controller{
                 ];
 
                 foreach($completed_research_authors as $send){
-                    Mail::to($send->email)->send(new CompletedResearchDeleted($data));
+                    Mail::to($send->email)
+                        ->cc($this->cc_email_has_completed_research())
+                        ->send(new CompletedResearchDeleted($data));
                 }
-                Mail::to($this->data['auth']->email)->send(new CompletedResearchDeletedSuccess($data));
+                
+                Mail::to($this->data['auth']->email)
+                    ->send(new CompletedResearchDeletedSuccess($data));
             }
 
             session()->flash('notification-status', 'success');

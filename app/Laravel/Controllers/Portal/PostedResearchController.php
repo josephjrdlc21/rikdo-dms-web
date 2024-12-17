@@ -7,11 +7,15 @@ use App\Laravel\Models\{PostedResearch,CompletedResearch,Department,Course,Yearl
 use App\Laravel\Requests\PageRequest;
 use App\Laravel\Requests\Portal\PostedResearchRequest;
 
+use App\Laravel\Traits\CcEmail;
+
 use App\Laravel\Notifications\{PostResearch,PostResearchSuccess};
 
 use Carbon,DB,FileDownloader,Mail;
 
 class PostedResearchController extends Controller{
+    use CcEmail;
+
     protected $data;
 
     public function __construct(){
@@ -137,9 +141,13 @@ class PostedResearchController extends Controller{
                 ];
 
                 foreach($posted_research_authors as $send){
-                    Mail::to($send->email)->send(new PostResearch($data));
+                    Mail::to($send->email)
+                        ->cc($this->cc_email_has_posted_research())
+                        ->send(new PostResearch($data));
                 }
-                Mail::to($posted_research->processor->email)->send(new PostResearchSuccess($data));
+                
+                Mail::to($posted_research->processor->email)
+                    ->send(new PostResearchSuccess($data));
             }
             
             DB::commit();
