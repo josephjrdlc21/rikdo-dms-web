@@ -24,12 +24,13 @@ class UserRequest extends RequestManager
     public function rules()
     {
         $id = $this->id ?? 0;
-
         $current_progress = $this->session()->get('current_progress', '1');
+
+        $rules = [];
 
         switch ($current_progress) {
             case '1':
-                return [
+                $rules = [
                     'firstname' => "required|name_format|min:2",
                     'middlename' => "nullable|name_format|min:2",
                     'lastname' => "required|name_format|min:2",
@@ -39,17 +40,25 @@ class UserRequest extends RequestManager
                     'email' => "required|email:rfc,dns|unique_email:{$id},portal",
                     'address' => "required"
                 ];
+
+                break;
             case '2':
-                return [
+                $rules = [
                     'id_number' => "required|id_number_format|unique_id_number:{$id},portal",
                     'role' => "required",
                     'department' => "nullable",
                     'course' => "nullable",
                     'yearlevel' => "nullable"
                 ];
+
+                break;
             default:
-                return [];
+                $rules = [];
+
+                break;
         }
+
+        return $rules;
     }
 
     public function messages()
